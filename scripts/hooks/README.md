@@ -1,16 +1,18 @@
 # Steps to set up automatic DB-dumps
 
 overview: this process will copy a "hook" called post-merge (no extension) into the .git/hooks directory for our project, this script will run after every git pull
-the scripts are available in the scripts folder that are in the project repo; depending on your os and terminal configuration, different scripts and proccess will be needed
+the scripts are available in the scripts folder that are in the project repo; depending on your os and terminal configuration, different scripts and proccesses will be needed
 
-1) pull the most recent repo ``git pull``
-
-2) go to your project directory in your terminal (i.e. directory that contains the .git, and other project files)
+1) go to your project directory in your terminal (i.e. directory that contains the .git, and other project files)
+   
+2) pull the most recent repo ``git pull``
 ### macOS/Linux/Git Bash Users: 
-3) from the project directory run the following terminal commands: ``cp scripts/hooks/post-merge.bash .git/hooks/post-merge``
+3) from the project directory run the following terminal commands:
+- ``cp scripts/hooks/post-merge.bash .git/hooks/post-merge``
 4) then give the new script executable: ``chmod +x .git/hooks/post-merge``
 ### Windows CMD / PowerShell
-3) from the project directory run the following terminal commands: ``copy scripts\hooks\post-merge.bat .git\hooks\post-merge``
+3) from the project directory run the following terminal commands:
+- ``copy scripts\hooks\post-merge.bat .git\hooks\post-merge``
 4) no need to give the script executable, continue to next steps
 ### Continue
 5) update the scripts with the correct information (newly copied script is located in .git/hooks):
