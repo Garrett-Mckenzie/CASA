@@ -6,14 +6,13 @@ the scripts are available in the scripts folder that are in the project repo; de
 1) pull the most recent repo ``git pull``
 
 2) go to your project directory in your terminal (i.e. directory that contains the .git, and other project files)
-
 ### macOS/Linux/Git Bash Users: 
-	3) from the project directory run the following terminal commands: ``cp scripts/hooks/post-merge.bash .git/hooks/post-merge``
-	4) then give the new script executable: ``chmod +x .git/hooks/post-merge``
+3) from the project directory run the following terminal commands: ``cp scripts/hooks/post-merge.bash .git/hooks/post-merge``
+4) then give the new script executable: ``chmod +x .git/hooks/post-merge``
 ### Windows CMD / PowerShell
-	3) from the project directory run the following terminal commands: ``copy scripts\hooks\post-merge.bat .git\hooks\post-merge``
-	4) no need to give the script executable, continue to next steps
-
+3) from the project directory run the following terminal commands: ``copy scripts\hooks\post-merge.bat .git\hooks\post-merge``
+4) no need to give the script executable, continue to next steps
+### Continue
 5) update the scripts with the correct information (newly copied script is located in .git/hooks):
 	a) edit the post-merge file using vim or what ever editor you use
 	b) the top of the file has information you must verify:
@@ -31,6 +30,7 @@ the scripts are available in the scripts folder that are in the project repo; de
 - The post-merge hook runs automatically.
 - It imports db.sql into the local database.
 - If MySQL isn’t running, the hook prints a warning and skips import.
+- you will then need to manually run the script to pull the db changes (see step 6)
 
 
 
