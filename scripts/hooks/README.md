@@ -31,6 +31,9 @@ edit the post-merge file using vim or what ever editor you use, the top of the f
 - If MySQL isn’t running, the hook prints a warning and skips import.
 - you will then need to manually run the script to pull the db changes (see step 6)
 
+**NOTE**
+This script will drop all db info in your local db when hydrating from an updated database, to avoid this, back up your local database using the export function in PHPmyAdmin, you can use your backup by importing it back in via the PHPmyAdmin
+
 
 
 
