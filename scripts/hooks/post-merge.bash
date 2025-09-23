@@ -2,7 +2,7 @@
 DB_NAME="casadb"   # your local DB name
 DB_USER="root"           # your MySQL username
 DB_PASS=""               # your MySQL password (empty string if none)
-SQL_FILE="./db.sql"      # expects db.sql at repo root
+SQL_FILE="./casadb.sql"      # expects casadb.sql at repo root
 
 #path to mysql
 MYSQL_BIN="/Applications/XAMPP/xamppfiles/bin/mysql"
