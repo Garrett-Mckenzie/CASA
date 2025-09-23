@@ -25,7 +25,7 @@ the scripts are available in the scripts folder that are in the project repo; de
 		  macOS XAMPP ex: `/Applications/XAMPP/xamppfiles/bin/mysql`
 		  Windows XAMPP ex:`C:\xampp\mysql\bin\mysql.exe`
 
-6) you can test and run the new script manually with the terminal cmd: ``.git/hooks/post-merge``
+6) you can test and run the new script manually with the terminal cmd and putting in your db password (see step 5: if blank just press enter): ``.git/hooks/post-merge``
 7) From now on, whenever you git pull or git merge:
 - The post-merge hook runs automatically.
 - It imports db.sql into the local database.
