@@ -4,7 +4,7 @@ setlocal
 set DB_NAME=casadb
 set DB_USER=root
 set DB_PASS=
-set SQL_FILE=sql\db.sql
+set SQL_FILE=sql\casadb.sql
 
 set MYSQL_BIN=C:\xampp\mysql\bin\mysql.exe
 
