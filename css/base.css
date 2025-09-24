@@ -311,7 +311,7 @@ h1 {
     font-size: 1.5rem;
     font-weight: 500;
     margin-bottom: 2rem;
-    background-color: var(--main-color);
+    background-color: #ffcc00 /* var(--main-color) */;
     color: var(--page-background-color);
     width: 100%;
     text-align: center;
