@@ -27,7 +27,8 @@ edit the post-merge file using vim or what ever editor you use, the top of the f
 - Windows XAMPP ex:`C:\xampp\mysql\bin\mysql.exe`
 
 6) **FROM THE PROJECT DIR** you can test and run the new script manually with the terminal cmd and putting in your db password when prompted (see step 5: if blank just press enter): ``.git/hooks/post-merge``
-7) From now on, whenever you git pull or git merge:
+- **If this doesn't work for windows users try:** `cmd /c .git\hooks\post-merge`
+8) From now on, whenever you git pull or git merge:
 - The post-merge hook runs automatically.
 - It imports db.sql into the local database.
 - If MySQL isn’t running, the hook prints a warning and skips import.
