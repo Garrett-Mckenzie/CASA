@@ -1,4 +1,4 @@
-# Steps to set up automatic DB dumps
+# Steps to set up automatic DB-dumps
 
 overview: this process will copy a "hook" called post-merge (no extension) into the .git/hooks directory for our project, this script will run after every git pull
 the scripts are available in the scripts folder that are in the project repo; depending on your os and terminal configuration, different scripts and proccesses will be needed
