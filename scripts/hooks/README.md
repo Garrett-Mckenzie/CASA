@@ -11,9 +11,8 @@ the scripts are available in the scripts folder that are in the project repo; de
 - ``cp scripts/hooks/post-merge.bash .git/hooks/post-merge``
 4) then give the new script executable: ``chmod +x .git/hooks/post-merge``
 ### Windows CMD / PowerShell
-3) from the project directory run the following terminal commands:
-- ``copy scripts\hooks\post-merge.bat .git\hooks\post-merge``
-4) no need to give the script executable, continue to next steps
+3) git doesnt like the windows script, sucks to be windows, download git bash for windows
+4) follow git bash instructions above
 ### Continue
 5) update the scripts with the correct information (newly copied script is located in .git/hooks):
 edit the post-merge file using vim or what ever editor you use, the top of the file has information you must verify:
