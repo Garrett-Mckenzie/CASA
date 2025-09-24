@@ -900,6 +900,7 @@ img.profile-pic {
 
 .link-like {
     cursor: pointer;
+    color: var(--accent-color);
 }
 
 .form-row {
