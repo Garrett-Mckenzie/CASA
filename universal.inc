@@ -12,4 +12,4 @@
         <script src="css/header.js"></script>
         
 
-        <link rel="icon" type="image/x-icon" href="images/RAPPAHANNOCK_v_RedBlue.png">
+        <link rel="icon" type="image/x-icon" href="images/Cropped-Logo-FredSPCA.png">
