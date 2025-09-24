@@ -233,7 +233,10 @@ main:not(.login):not(.calendar-view):not(.dashboard) {
 
 /* Form Controls */
 
-input[type=text], input[type=password], input[type=date], input[type=email], input[type=number], 
+input[type=text]{
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+input[type=password], input[type=date], input[type=email], input[type=number], 
 input[type=tel], select, textarea, .pseudo-input, .pseudo-input-disabled {
     border: var(--text-field-border);
     border-radius: 0;
@@ -388,7 +391,7 @@ h3:not(:first-of-type) {
 }
 
 .error-toast {
-    background-color: var(--error-toast-background-color);
+    background-color: #f8d7da;
     color: var(--error-toast-font-color);
     padding: 1rem;
     border-radius: 0.5rem;
