@@ -226,60 +226,6 @@ function can_check_in($personID, $event_info) {
     }
 
 
-function archive_volunteer($volunteer_id) {
-    $con = connect(); // Ensure this function connects to your database
-
-    // Start transaction to ensure data consistency
-    mysqli_begin_transaction($con);
-
-    try {
-        // Move data from dbpersons to dbarchived_volunteers
-        $query = "INSERT INTO dbarchived_volunteers (
-                    id, start_date, first_name, last_name, street_address, city, state, zip_code,
-                    phone1, phone1type, emergency_contact_phone, emergency_contact_phone_type, birthday, email,
-                    emergency_contact_first_name, contact_num, emergency_contact_relation, contact_method, type,
-                    status, notes, password, skills, interests, archived_date, emergency_contact_last_name, 
-                    is_new_volunteer, is_community_service_volunteer, total_hours_volunteered
-                 ) 
-                 SELECT 
-                    id, start_date, first_name, last_name, street_address, city, state, zip_code,
-                    phone1, phone1type, emergency_contact_phone, emergency_contact_phone_type, birthday, email,
-                    emergency_contact_first_name, contact_num, emergency_contact_relation, contact_method, type,
-                    status, notes, password, skills, interests, NOW(),
-                    emergency_contact_last_name, is_new_volunteer, is_community_service_volunteer, total_hours_volunteered
-                 FROM dbpersons WHERE id = ?";
-
-        $stmt = $con->prepare($query);
-        $stmt->bind_param("s", $volunteer_id);
-        $stmt->execute();
-
-        // Check if the row was inserted successfully
-        if ($stmt->affected_rows === 0) {
-            throw new Exception("Volunteer not found or already archived.");
-        }
-
-        // Delete the volunteer from dbpersons
-        $query_delete = "DELETE FROM dbpersons WHERE id = ?";
-        $stmt_delete = $con->prepare($query_delete);
-        $stmt_delete->bind_param("s", $volunteer_id);
-        $stmt_delete->execute();
-
-        // Commit transaction
-        mysqli_commit($con);
-
-        echo "Volunteer successfully archived.";
-    } catch (Exception $e) {
-        // Rollback if anything goes wrong
-        mysqli_rollback($con);
-        echo "Error archiving volunteer: " . $e->getMessage();
-    }
-
-    // Close connection
-    $stmt->close();
-    $stmt_delete->close();
-    mysqli_close($con);
-}
-
     if (!(check_if_signed_up($event_info['id'], $personID))) {
         // user is not signed up for this event
         return False;
