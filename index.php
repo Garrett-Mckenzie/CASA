@@ -593,9 +593,9 @@
         <div class="footer-right">
             <div class="footer-section">
                 <div class="footer-topic">Connect</div>
-                <a href="https://www.facebook.com/RappCASA/">Facebook</a>
-                <a href="https://www.instagram.com/rappahannock_casa/">Instagram</a>
-                <a href="https://fredspca.org">Main Website</a>
+                <a href="https://www.facebook.com/RappCASA/" target="_blank">Facebook</a>
+                <a href="https://www.instagram.com/rappahannock_casa/" target="_blank">Instagram</a>
+                <a href="https://rappahannockcasa.com/" target="_blank">Main Website</a>
             </div>
             <div class="footer-section">
                 <div class="footer-topic">Contact Us</div>
