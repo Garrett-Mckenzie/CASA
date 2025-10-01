@@ -12,9 +12,6 @@ include_once('database/dbPersons.php');
 include_once('domain/Person.php');
 include_once('dbEvents.php');
 
-include_once('database/dbShifts.php');
-include_once('domain/Shift.php');
-
 if (isset($_POST['_form_submit'])) {
 	if  ($_POST['_form_submit'] == 'reportportland')
 		show_report('portland');
@@ -61,8 +58,6 @@ function report_volunteer_hours_by_day($from, $to, $venue) {
 	if ($to!="")
 		echo " through ".pretty_date($to);
 
-	$report = get_volunteer_hours($from, $to, $venue);
-	display_totals_table($report, $venue);	
 }
 
 function report_shifts_staffed_vacant_by_day($from, $to, $venue) {
@@ -75,8 +70,7 @@ function report_shifts_staffed_vacant_by_day($from, $to, $venue) {
 	if ($to!="")
 		echo " through ".pretty_date($to);
 
-	$report = get_shifts_staffed($from, $to, $venue);
-	display_vacancies_table($report, $venue);
+
 }
 
 // used for email info

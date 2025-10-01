@@ -48,7 +48,6 @@ $loggedIn = false;
     require_once('database/dbPersons.php');
     if (isset($_GET['removePic'])) {
       if ($_GET['removePic'] === 'true') {
-        remove_profile_picture($id);
       }
     }
 

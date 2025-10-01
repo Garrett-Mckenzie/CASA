@@ -93,16 +93,16 @@ require_once('header.php');
         <form id="person-search" method="get" class="space-y-6">
 
         <?php
-            if (isset($_GET['role']) || isset($_GET['status']) || isset($_GET['event']) || isset($_GET['group_name']) || isset($_GET['event_name'])) {
+            if (isset($_GET['role']) || isset($_GET['status']) || isset($_GET['event']) || isset($_GET['event_name'])) {
                 require_once('include/input-validation.php');
                 require_once('database/dbPersons.php');
                 require_once('domain/Person.php');
-                require_once('database/dbGroups.php');
+                
                 $args = sanitize($_GET);
                 $role = $args['role'];
                 $status = $args['status'];
                 $event = $args['event'];
-                $group_name = $args['group'];
+               
 
 
                 if (!valueConstrainedTo($role, ['admin', 'participant', 'superadmin', 'volunteer', '']) ||
@@ -123,21 +123,6 @@ require_once('header.php');
                     } else {
                         $persons = find_users('', '', '', '', $role, $status);
                         $filteredPersons = array_merge($persons, $filteredPersons);
-                    }
-
-                    /* if group was set, get members of group */
-                    if ($group_name != "") {
-                        $members = get_users_in_group($group_name);
-
-                        /* move only people of group */
-                        foreach ($persons as $person) { // person objects
-                            foreach ($members as $member) { // associate arrays with some person data
-                                if ($person->get_id() == $member["id"]) {
-                                    $filteredPersons[] = $person;
-                                    break; // escape to next $person
-                                }
-                            }
-                        }
                     }
 
 
@@ -219,19 +204,6 @@ require_once('header.php');
                 <label for="event">Event</label>
                 <select id="event" name="event">
                     <option value="">Any</option>
-                    <?php foreach ($filteredEvents as $event) {
-                        echo '<option value="' . $event->get_id() . '">' . htmlspecialchars($event->get_name()) . ' - ' . (new DateTime($event->getDate()))->format('M d, Y') . '</option>';
-                    } ?>
-                </select>
-            </div>
-
-            <div>
-                <label for="group">Group</label>
-                <select id="group" name="group">
-                    <option value="">Any</option>
-                    <?php foreach ($groups as $group) {
-                        echo '<option value="' . $group->get_group_name() . '">' . htmlspecialchars($group->get_group_name()) . '</option>';
-                    } ?>
                 </select>
             </div>
 

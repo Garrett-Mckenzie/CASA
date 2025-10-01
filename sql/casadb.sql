@@ -69,26 +69,6 @@ INSERT INTO `dbarchived_volunteers` (`id`, `start_date`, `first_name`, `last_nam
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `dbdiscussions`
---
-
-DROP TABLE IF EXISTS `dbdiscussions`;
-CREATE TABLE `dbdiscussions` (
-  `author_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `body` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `time` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `dbdiscussions`
---
-
-INSERT INTO `dbdiscussions` (`author_id`, `title`, `body`, `time`) VALUES
-('vmsroot', 'test', 'this is test', '2025-04-30-10:13');
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `dbeventmedia`
@@ -175,23 +155,7 @@ INSERT INTO `dbevents` (`id`, `name`, `date`, `startTime`, `endTime`, `descripti
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `dbgroups`
---
 
-DROP TABLE IF EXISTS `dbgroups`;
-CREATE TABLE `dbgroups` (
-  `group_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `color_level` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `dbgroups`
---
-
-INSERT INTO `dbgroups` (`group_name`, `color_level`) VALUES
-('cool guys', 'green'),
-('test', 'green');
 
 -- --------------------------------------------------------
 
@@ -583,77 +547,9 @@ INSERT INTO `dbpersons` (`id`, `start_date`, `first_name`, `last_name`, `street_
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `dbshifts`
---
 
-DROP TABLE IF EXISTS `dbshifts`;
-CREATE TABLE `dbshifts` (
-  `shift_id` int NOT NULL,
-  `person_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date` date NOT NULL,
-  `startTime` time NOT NULL,
-  `endTime` time DEFAULT NULL,
-  `totalHours` decimal(5,2) DEFAULT NULL,
-  `description` text COLLATE utf8mb4_general_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `dbshifts`
---
 
-INSERT INTO `dbshifts` (`shift_id`, `person_id`, `date`, `startTime`, `endTime`, `totalHours`, `description`) VALUES
-(14, 'maddiev', '2025-04-29', '20:22:29', '00:30:40', 0.13, 'a'),
-(15, 'ameyer3', '2025-04-29', '20:24:27', '00:30:36', 0.10, 'a'),
-(16, 'jane_doe', '2025-04-29', '20:26:29', '00:30:40', 0.07, 'a'),
-(17, 'ameyer3', '2025-04-29', '20:31:30', '00:32:09', 0.00, 'a'),
-(18, 'jane_doe', '2025-04-29', '20:31:31', '00:32:09', 0.00, 'a'),
-(19, 'ameyer3', '2025-04-29', '20:32:14', '00:32:39', 0.00, 'hello'),
-(20, 'ameyer3', '2025-04-29', '21:25:49', '01:26:17', 0.00, 'hello'),
-(21, 'ameyer32', '2025-04-29', '21:35:01', '01:35:25', 0.00, 'hello'),
-(22, 'ameyer123', '2025-04-29', '21:48:53', '01:49:13', 0.00, 'hello'),
-(23, 'ameyer3', '2025-04-29', '21:56:37', '01:56:54', 0.00, 'hello'),
-(24, 'ameyer3', '2025-04-29', '22:03:00', '02:03:18', 0.00, 'hello'),
-(25, 'michellevb', '2025-04-29', '22:08:04', '02:08:36', 0.00, 'yay'),
-(26, 'ameyer3', '2025-04-29', '22:24:27', '02:24:43', 0.00, 'hello'),
-(27, 'test_acc', '2025-04-29', '23:44:58', '23:45:40', -23.99, 'test'),
-(28, 'BobVolunteer', '2025-04-30', '08:14:55', '12:15:09', 0.00, 'good job'),
-(29, 'BobVolunteer', '2025-04-30', '08:15:29', NULL, NULL, NULL),
-(30, 'Volunteer25', '2025-04-30', '10:21:39', '14:22:09', 0.00, 'test'),
-(31, 'ameyer3', '2025-05-01', '11:37:23', '15:37:49', 0.00, 'hello'),
-(32, 'lukeg', '2025-07-09', '10:57:46', '10:57:57', 0.00, 'Laundry'),
-(33, 'lukeg', '2025-07-09', '11:04:46', NULL, NULL, NULL),
-(34, 'vmsroot', '2025-09-10', '11:36:05', NULL, NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `discussion_replies`
---
-
-DROP TABLE IF EXISTS `discussion_replies`;
-CREATE TABLE `discussion_replies` (
-  `reply_id` int NOT NULL,
-  `user_reply_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `author_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `discussion_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `reply_body` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `parent_reply_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `discussion_replies`
---
-
-INSERT INTO `discussion_replies` (`reply_id`, `user_reply_id`, `author_id`, `discussion_title`, `reply_body`, `parent_reply_id`, `created_at`) VALUES
-(12, 'Volunteer25', 'Volunteer25', 'test', 'great idea!', '9', '2025-04-30-10:24'),
-(13, 'vmsroot', 'vmsroot', 'test', 'test', NULL, '2025-05-01-11:31'),
-(14, 'ameyer3', 'ameyer3', 'test', 'hello', '13', '2025-05-01-11:38'),
-(15, 'ameyer3', 'vmsroot', 'test', 'hello', NULL, '2025-05-01-11:38'),
-(16, 'vmsroot', 'vmsroot', 'test', 'testt', NULL, '2025-09-10-11:40');
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `monthly_hours_snapshot`
@@ -685,24 +581,6 @@ INSERT INTO `monthly_hours_snapshot` (`id`, `person_id`, `month_year`, `hours`) 
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `user_groups`
---
-
-DROP TABLE IF EXISTS `user_groups`;
-CREATE TABLE `user_groups` (
-  `user_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `group_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `user_groups`
---
-
-INSERT INTO `user_groups` (`user_id`, `group_name`) VALUES
-('ameyer3', 'test'),
-('BobVolunteer', 'test'),
-('vmsroot', 'cool guys');
 
 --
 -- Indexes for dumped tables
@@ -714,11 +592,6 @@ INSERT INTO `user_groups` (`user_id`, `group_name`) VALUES
 ALTER TABLE `dbarchived_volunteers`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `dbdiscussions`
---
-ALTER TABLE `dbdiscussions`
-  ADD PRIMARY KEY (`author_id`(255),`title`);
 
 --
 -- Indexes for table `dbeventpersons`
@@ -733,11 +606,6 @@ ALTER TABLE `dbeventpersons`
 ALTER TABLE `dbevents`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `dbgroups`
---
-ALTER TABLE `dbgroups`
-  ADD PRIMARY KEY (`group_name`);
 
 --
 -- Indexes for table `dbmessages`
@@ -759,31 +627,10 @@ ALTER TABLE `dbpersons`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `dbshifts`
---
-ALTER TABLE `dbshifts`
-  ADD PRIMARY KEY (`shift_id`);
-
---
--- Indexes for table `discussion_replies`
---
-ALTER TABLE `discussion_replies`
-  ADD PRIMARY KEY (`reply_id`),
-  ADD KEY `fk_author` (`author_id`),
-  ADD KEY `fk_user` (`user_reply_id`),
-  ADD KEY `fk_parent` (`parent_reply_id`);
-
---
 -- Indexes for table `monthly_hours_snapshot`
 --
 ALTER TABLE `monthly_hours_snapshot`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `user_groups`
---
-ALTER TABLE `user_groups`
-  ADD PRIMARY KEY (`user_id`,`group_name`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -801,17 +648,6 @@ ALTER TABLE `dbevents`
 ALTER TABLE `dbmessages`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=429;
 
---
--- AUTO_INCREMENT for table `dbshifts`
---
-ALTER TABLE `dbshifts`
-  MODIFY `shift_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
-
---
--- AUTO_INCREMENT for table `discussion_replies`
---
-ALTER TABLE `discussion_replies`
-  MODIFY `reply_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `monthly_hours_snapshot`

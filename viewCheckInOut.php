@@ -2,7 +2,6 @@
     session_cache_expire(30);
     session_start();
 
-    include 'database/dbShifts.php';
     include 'database/dbPersons.php';
 
     $loggedIn = false;
@@ -21,9 +20,6 @@
     		die();
 	}
 
-    if ($loggedIn) {
-        $existingShift = get_shift_today($userID, $today);
-    }
 
 include 'infoBox.php';
 ?>
