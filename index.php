@@ -593,14 +593,14 @@
         <div class="footer-right">
             <div class="footer-section">
                 <div class="footer-topic">Connect</div>
-                <a href="https://www.facebook.com/share/g/15X2tqwFkA/">Facebook</a>
-                <a href="https://www.instagram.com/fredspca/?hl=en">Instagram</a>
+                <a href="https://www.facebook.com/RappCASA/">Facebook</a>
+                <a href="https://www.instagram.com/rappahannock_casa/">Instagram</a>
                 <a href="https://fredspca.org">Main Website</a>
             </div>
             <div class="footer-section">
                 <div class="footer-topic">Contact Us</div>
-                <a href="mailto:volunteer@fredspca.org">volunteer@fredspca.org</a>
-                <a href="tel:5408981500">540-898-1500 (ext 117)</a>
+                <a href="mailto:rappcasa@gmail.com">rappcasa@gmail.com</a>
+                <a href="tel:5407106199">540-710-6199</a>
             </div>
         </div>
     </footer>
