@@ -40,7 +40,7 @@ function add_person($person) {
             phone1, phone1type, emergency_contact_phone, emergency_contact_phone_type, 
             birthday, email, emergency_contact_first_name, emergency_contact_last_name, 
             emergency_contact_relation, type, status, password, skills, interests, 
-            archived, is_new_volunteer, is_community_service_volunteer, total_hours_volunteered, training_level
+            archived, is_new_volunteer, is_community_service_volunteer, total_hours_volunteered,
         ) VALUES ("' .
             $person->get_id() . '","' .
             $person->get_start_date() . '","' .
@@ -67,8 +67,7 @@ function add_person($person) {
             $person->get_archived() . '","' .                
             $person->get_is_new_volunteer() . '","' .
             $person->get_is_community_service_volunteer() . '","' .
-            $person->get_total_hours_volunteered() . '","' .
-            $person->get_training_level() . '");';
+            $person->get_total_hours_volunteered() . '");';
     
         // Check if the query is properly built
         if (empty($insert_query)) {
@@ -592,10 +591,8 @@ function make_a_person($result_row) {
         $result_row['archived'],
         $result_row['skills'],
         $result_row['interests'],
-        $result_row['training_level'],
         //$result_row['disability_accomodation_needs'],
-        //$result_row['training_complete'],
-        //$result_row['training_date'],
+       
         //$result_row['orientation_complete'],
         //$result_row['orientation_date'],
         //$result_row['background_complete'],
@@ -1245,23 +1242,6 @@ function find_user_names($name) {
         return $row['first_name'] . ' ' . $row['last_name'];
     }
 
-    function checkIfTrainingComplete($id, $training) {
-        $con = connect();
-        $query = "SELECT * FROM `dbtrainingpersons` WHERE `persons_id='$id'";
-        $result = mysqli_query($con, $query);
-        if(!$result) {
-            return false;
-        }
-
-        $row = mysqli_fetch_assoc($result);
-        mysqli_close($con);
-        foreach($row as $completed_training) {
-            if($completed_training == $training) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 
 

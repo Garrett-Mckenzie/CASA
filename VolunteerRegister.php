@@ -5,7 +5,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php require_once('database/dbMessages.php'); ?>
     <title>Fredericksburg SPCA | Register</title>
     <link href="css/normal_tw.css" rel="stylesheet">
 <!-- BANDAID FIX FOR HEADER BEING WEIRD -->
@@ -129,7 +128,7 @@ require_once('header.php');
         $type = ($is_community_service_volunteer === 1) ? 'volunteer' : 'participant';
         $archived = 0;
         $status = "Inactive";
-        $training_level = "None";
+       
 
         $id = $args['username'];
 
@@ -154,7 +153,7 @@ require_once('header.php');
             $emergency_contact_first_name, $emergency_contact_last_name,
             $emergency_contact_phone, $emergency_contact_phone_type,
             $emergency_contact_relation, $type, $status, $archived, 
-            $skills, $interests, $training_level,
+            $skills, $interests,
             $is_community_service_volunteer, $is_new_volunteer,
             $total_hours_volunteered
         );
@@ -166,7 +165,6 @@ require_once('header.php');
             echo '<script>document.location = "login.php?registerSuccess";</script>';
             $title = $id . " has been added as a volunteer";
             $body = "New volunteer account has been created";
-            system_message_all_admins($title, $body);
         }
     } else {
         require_once('registrationForm.php');

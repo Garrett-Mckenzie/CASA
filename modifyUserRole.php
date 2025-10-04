@@ -40,7 +40,6 @@
         die();
     } else if ($_SERVER["REQUEST_METHOD"] == "POST"){
         require_once('database/dbPersons.php');
-        require_once('database/dbMessages.php');
         $post = sanitize($_POST);
         $new_role = $post['s_role'];
         if (!valueConstrainedTo($new_role, ['volunteer', 'participant'])) {
@@ -73,8 +72,7 @@
                 // Notify Admins about archived volunteers - Implemented by Aidan Meyer 
 
                 $archive_title = $thePerson->get_id() . " has been archived.";
-                $archive_message = "This user has been archived. For reinstatement, navigate to volunteer search and select Archive, then modify the field to Active";
-                system_message_all_admins($archive_title, $archive_message);
+               
             }
         }
         if (isset($notesChange) || isset($statusChange) || isset($typeChange)) {

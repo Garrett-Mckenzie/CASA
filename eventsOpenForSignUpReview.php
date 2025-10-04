@@ -30,9 +30,8 @@
         <main class="general">
             <h2>Open for Sign-Up</h2>
             <!--<?php 
-                //equire_once('database/dbMessages.php');
-                //$messages = get_message_by_id($userID);
-                //if (count($messages) > 0): ?>
+                
+                 ?>
                 <div class="table-wrapper">
                     <table class="general">
                         <thead>

@@ -65,7 +65,6 @@ class Person {
 	//private $gender;
 	//YALDA AGAIN
       private $total_hours_volunteered;
-	  private $training_level;
 	/*
 	 * This is a temporary mini constructor for testing purposes. It will be expanded later.
 	 */
@@ -74,7 +73,7 @@ class Person {
     	$state, $zip_code, $phone1, $phone1type, $email, $emergency_contact_first_name,
     	$emergency_contact_last_name, $emergency_contact_phone, $emergency_contact_phone_type,
     	$emergency_contact_relation, $type, $status, $archived, 
-    	$skills, $interests, $training_level,  
+    	$skills, $interests,  
    	 	$is_community_service_volunteer,           // required param FIRST
     	$is_new_volunteer = 1,                     // optional
     	$total_hours_volunteered = 0.00    		     // optional
@@ -118,7 +117,6 @@ class Person {
         $this->is_community_service_volunteer = $is_community_service_volunteer;
 		$this->is_new_volunteer = $is_new_volunteer;
         $this->total_hours_volunteered = $total_hours_volunteered;
-		$this->training_level = $training_level;
         // Access level
         $this->access_level = ($id == 'vmsroot') ? 3 : 1;
 
@@ -259,9 +257,7 @@ class Person {
 		return $this->interests;
 	}
 
-	function get_training_level() {
-		return $this->training_level;
-	}
+
 
 	//function get_disability_accomodation_needs() {
 	//	return $this->disability_accomodation_needs;

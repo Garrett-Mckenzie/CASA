@@ -26,7 +26,6 @@
         if (wereRequiredFieldsSubmitted($args, $required)) {
             require_once('domain/Person.php');
             require_once('database/dbPersons.php');
-            /*@require_once('database/dbMessages.php');*/
             /*@dateChecker();*/
             $username = strtolower($args['username']);
             $password = $args['password'];

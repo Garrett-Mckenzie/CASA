@@ -42,9 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $event_name = fetch_event_name($event_id);
 
         if (remove_user_from_event($event_id, $user_id)) {
-            require_once('database/dbMessages.php');
-            send_system_message("vmsroot", "$user_id cancelled their sign up for $event_name", "$user_id cancelled their sign up for $event_name");
-            send_system_message($user_id, "Your sign up for $event_name has been cancelled.", "$user_id cancelled their sign up for $event_name");
             $cancel_success = "Successfully canceled your registration for event: $event_name.";
         } else {
             $cancel_error = "Failed to cancel registration for event $event_id.";

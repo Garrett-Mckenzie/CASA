@@ -514,12 +514,7 @@
             <button class="arrow-button">→</button>
         </div>
                 <?php
-                    require_once('database/dbMessages.php');
-                    $unreadMessageCount = get_user_unread_count($person->get_id());
-                    $inboxIcon = 'inbox.svg';
-                    if ($unreadMessageCount) {
-                        $inboxIcon = 'inbox-unread.svg';
-                    }
+                    
                 ?>
         <div class="content-box-test" onclick="window.location.href='inbox.php'">
             <div class="icon-overlay">
@@ -527,9 +522,7 @@
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
             <div class="large-text-sub">System Notifications<?php 
-                        if ($unreadMessageCount > 0) {
-                            echo ' (' . $unreadMessageCount . ')';
-                        }
+                        
                     ?></div>
             <div class="graph-text">Stay up to date.</div>
             <button class="arrow-button">→</button>
@@ -716,14 +709,7 @@
             <button class="arrow-button">→</button>
         </div>
 
-               <?php
-                    require_once('database/dbMessages.php');
-                    $unreadMessageCount = get_user_unread_count($person->get_id());
-                    $inboxIcon = 'inbox.svg';
-                    if ($unreadMessageCount) {
-                        $inboxIcon = 'inbox-unread.svg';
-                    }   
-                ?>  
+        
 
         <div class="content-box-test" onclick="window.location.href='viewResources.php'">
             <div class="icon-overlay">
