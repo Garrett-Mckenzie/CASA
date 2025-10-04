@@ -34,11 +34,7 @@ class Person {
 	private $phone1;
 	private $phone1type;
 	private $email;
-	private $emergency_contact_first_name;
-	private $emergency_contact_last_name;
-	private $emergency_contact_phone;
-	private $emergency_contact_phone_type;
-	private $emergency_contact_relation;
+
 	//private $tshirt_size;
 	//private $school_affiliation;
 	//private $photo_release;
@@ -70,9 +66,7 @@ class Person {
 	 */
 	function __construct(
         $id, $password, $start_date, $first_name, $last_name, $birthday, $street_address, $city,
-    	$state, $zip_code, $phone1, $phone1type, $email, $emergency_contact_first_name,
-    	$emergency_contact_last_name, $emergency_contact_phone, $emergency_contact_phone_type,
-    	$emergency_contact_relation, $type, $status, $archived, 
+    	$state, $zip_code, $phone1, $phone1type, $email, $type, $status, $archived, 
     	$skills, $interests,  
    	 	$is_community_service_volunteer,           // required param FIRST
     	$is_new_volunteer = 1,                     // optional
@@ -91,11 +85,7 @@ class Person {
         $this->phone1 = $phone1;
         $this->phone1type = $phone1type;
         $this->email = $email;
-        $this->emergency_contact_first_name = $emergency_contact_first_name;
-        $this->emergency_contact_last_name = $emergency_contact_last_name;
-        $this->emergency_contact_phone = $emergency_contact_phone;
-        $this->emergency_contact_phone_type = $emergency_contact_phone_type;
-        $this->emergency_contact_relation = $emergency_contact_relation;
+      
         //$this->tshirt_size = $tshirt_size;
         //$this->school_affiliation = $school_affiliation;
         //$this->photo_release = $photo_release;
@@ -189,65 +179,21 @@ class Person {
 		return $this->email;
 	}
 
-	function get_emergency_contact_first_name() {
-		return $this->emergency_contact_first_name;
-	}
 
-	function get_emergency_contact_last_name() {
-		return $this->emergency_contact_last_name;
-	}
 
-	function get_emergency_contact_phone() {
-		return $this->emergency_contact_phone;
-	}
-
-	function get_emergency_contact_phone_type() {
-		return $this->emergency_contact_phone_type;
-	}
-
-	function get_emergency_contact_relation() {
-		return $this->emergency_contact_relation;
-	}
-
-	//function get_tshirt_size() {
-	//	return $this->tshirt_size;
-	//}
-
-	//function get_school_affiliation() {
-	//	return $this->school_affiliation;
-	//}
-
-	//function get_photo_release() {
-	//	return $this->photo_release;
-	//}
-
-	//function get_photo_release_notes() {
-	//	return $this->photo_release_notes;
-	//}
 
 	function get_type() {
 		return $this->type;
 	}
 
-	function get_status() {
-		return $this->status;
-	}
+	
 
-	function get_archived() {
-		return $this->archived;
-	}
+	
 
 	function get_access_level() {
 		return $this->access_level;
 	}
 
-	//function get_how_you_heard_of_stepva() {
-	//	return $this->how_you_heard_of_stepva;
-	//}
-
-	//function get_preferred_feedback_method() {
-	//	return $this->preferred_feedback_method;
-	//}
 
 	function get_skills() {
 		return $this->skills;
@@ -259,37 +205,4 @@ class Person {
 
 
 
-	//function get_disability_accomodation_needs() {
-	//	return $this->disability_accomodation_needs;
-	//}
-
-	//function get_training_complete() {
-        //return $this->training_complete;
-   // }
-
-    //function get_training_date() {
-      //  return $this->training_date;
-    //}
-
-	//function get_orientation_complete() {
-	//	return $this->orientation_complete;
-	//}
-	
-	//function get_orientation_date() {
-	//	return $this->orientation_date;
-	//}
-	
-	//function get_background_complete() {
-	//	return $this->background_complete;
-	//}
-	
-	//function get_background_date() {
-	//	return $this->background_date;
-	//}
-	//function get_gender(){
-	//	return $this->gender;
-	//}
-	//function get_race(){
-	//	return $this->race;
-	//}
 }

@@ -38,8 +38,7 @@ function add_person($person) {
         $insert_query = 'INSERT INTO dbpersons (
             id, start_date, first_name, last_name, street_address, city, state, zip_code, 
             phone1, phone1type, emergency_contact_phone, emergency_contact_phone_type, 
-            birthday, email, emergency_contact_first_name, emergency_contact_last_name, 
-            emergency_contact_relation, type, status, password, skills, interests, 
+            birthday, email, type, status, password, skills, interests, 
             archived, is_new_volunteer, is_community_service_volunteer, total_hours_volunteered,
         ) VALUES ("' .
             $person->get_id() . '","' .
@@ -52,19 +51,14 @@ function add_person($person) {
             $person->get_zip_code() . '","' .
             $person->get_phone1() . '","' .
             $person->get_phone1type() . '","' .
-            $person->get_emergency_contact_phone() . '","' .
-            $person->get_emergency_contact_phone_type() . '","' .
             $person->get_birthday() . '","' .
             $person->get_email() . '","' .
-            $person->get_emergency_contact_first_name() . '","' .
-            $person->get_emergency_contact_last_name() . '","' .
-            $person->get_emergency_contact_relation() . '","' .
+            
             $person->get_type() . '","' .
-            $person->get_status() . '","' .
             $person->get_password() . '","' .
             $person->get_skills() . '","' .
             $person->get_interests() . '","' .     
-            $person->get_archived() . '","' .                
+                  
             $person->get_is_new_volunteer() . '","' .
             $person->get_is_community_service_volunteer() . '","' .
             $person->get_total_hours_volunteered() . '");';
@@ -196,178 +190,20 @@ function update_volunteer_hours($eventname, $username, $new_start_time, $new_end
 	return $result;
 }
 
-/*@@@ Thomas */
-
-/* Check-in a user by adding a new row and with start_time to dbpersonhours */
-function check_in($personID, $eventID, $start_time) {
-    $con=connect();
-    $query = "INSERT INTO dbpersonhours (personID, eventID, start_time) VALUES ( '" .$personID. "', '" .$eventID. "', '" .$start_time. "')";
-    $result = mysqli_query($con,$query);
-    mysqli_close($con);
-    return $result;
-}
-
-/* Check-out a user by adding their end_time to dbpersonhours */
-function check_out($personID, $eventID, $end_time) {
-    $con=connect();
-    $query = "UPDATE dbpersonhours SET end_time = '" . $end_time . "' WHERE eventID = '" .$eventID. "' AND personID = '" .$personID. "' and end_time IS NULL";
-    $result = mysqli_query($con,$query);
-    mysqli_close($con);
-    return $result;
-}
-
-/* Return true if a given user is currently able to check-in to a given event */
-function can_check_in($personID, $event_info) {
-
-    if (!(time() > strtotime($event_info['date']) && time() < strtotime($event_info['date']) + 86400)) {
-        // event is not ongoing
-        return False;
-    }
 
 
-function archive_volunteer($volunteer_id) {
-    $con = connect(); // Ensure this function connects to your database
-
-    // Start transaction to ensure data consistency
-    mysqli_begin_transaction($con);
-
-    try {
-        // Move data from dbpersons to dbarchived_volunteers
-        $query = "INSERT INTO dbarchived_volunteers (
-                    id, start_date, first_name, last_name, street_address, city, state, zip_code,
-                    phone1, phone1type, emergency_contact_phone, emergency_contact_phone_type, birthday, email,
-                    emergency_contact_first_name, contact_num, emergency_contact_relation, contact_method, type,
-                    status, notes, password, skills, interests, archived_date, emergency_contact_last_name, 
-                    is_new_volunteer, is_community_service_volunteer, total_hours_volunteered
-                 ) 
-                 SELECT 
-                    id, start_date, first_name, last_name, street_address, city, state, zip_code,
-                    phone1, phone1type, emergency_contact_phone, emergency_contact_phone_type, birthday, email,
-                    emergency_contact_first_name, contact_num, emergency_contact_relation, contact_method, type,
-                    status, notes, password, skills, interests, NOW(),
-                    emergency_contact_last_name, is_new_volunteer, is_community_service_volunteer, total_hours_volunteered
-                 FROM dbpersons WHERE id = ?";
-
-        $stmt = $con->prepare($query);
-        $stmt->bind_param("s", $volunteer_id);
-        $stmt->execute();
-
-        // Check if the row was inserted successfully
-        if ($stmt->affected_rows === 0) {
-            throw new Exception("Volunteer not found or already archived.");
-        }
-
-        // Delete the volunteer from dbpersons
-        $query_delete = "DELETE FROM dbpersons WHERE id = ?";
-        $stmt_delete = $con->prepare($query_delete);
-        $stmt_delete->bind_param("s", $volunteer_id);
-        $stmt_delete->execute();
-
-        // Commit transaction
-        mysqli_commit($con);
-
-        echo "Volunteer successfully archived.";
-    } catch (Exception $e) {
-        // Rollback if anything goes wrong
-        mysqli_rollback($con);
-        echo "Error archiving volunteer: " . $e->getMessage();
-    }
-
-    // Close connection
-    $stmt->close();
-    $stmt_delete->close();
-    mysqli_close($con);
-}
-
-    if (!(check_if_signed_up($event_info['id'], $personID))) {
-        // user is not signed up for this event
-        return False;
-    }
-
-    if (can_check_out($personID, $event_info)) {
-        // user is already checked-in
-        return False;
-    }
-
-    // validation passed
-    return True;
-
-}
-
-    function get_community_service_volunteers_count($dateFrom, $dateTo) {
-    $con = connect(); // Ensure connection is established
-
-    // Corrected SQL Query
-    $query = "SELECT COUNT(*) AS count FROM dbpersons 
-              WHERE is_community_service_volunteer = 1 
-              AND STR_TO_DATE(start_date, '%Y-%m-%d') BETWEEN ? AND ?";
-
-    // Prepare the statement
-    $stmt = $con->prepare($query);
-    
-    if (!$stmt) {
-        die("MySQLi prepare() failed: " . $con->error);
-    }
-
-    // Bind the parameters
-    if (!$stmt->bind_param("ss", $dateFrom, $dateTo)) {
-        die("MySQLi bind_param() failed: " . $stmt->error);
-    }
-
-    // Execute the query
-    if (!$stmt->execute()) {
-        die("MySQLi execute() failed: " . $stmt->error);
-    }
-
-    // Fetch the result
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-    
-    return $row['count'] ?? 0; // Return the count, or 0 if null
-}
 
 
-/* Return true if a user is able to check out from a given event (they have already checked in) */
-function can_check_out($personID, $event_info) {
-    $con=connect();
-    $query = "SELECT * FROM dbpersonhours WHERE personID = '" .$personID. "' AND eventID = '" .$event_info['id']. "' AND end_time IS NULL";
-    $result = mysqli_query($con, $query);
-    $row = mysqli_fetch_assoc($result);
-    if ($row) {
-        // user is checked-in and can now check-out
-        return True;
-    }
-    // user cannot current check-out
-    return False;
-}
 
-/* Return number of seconds a volunteer worked for a specific event */
-function fetch_volunteering_hours($personID, $eventID) {
-    $con=connect();
-    $query = "SELECT start_time, end_time FROM dbpersonhours WHERE personID = '" .$personID. "' AND eventID = '" .$eventID. "' AND end_time IS NOT NULL";
-    $result = mysqli_query($con, $query);
-    $total_time = 0;
 
-    if ($result) {
-        // for each check-in/check-out pair
-        while ($row = mysqli_fetch_assoc($result)) {
-            $start_time = strtotime($row['start_time']);
-            $end_time = strtotime($row['end_time']);
-            $total_time += $end_time - $start_time; // add time to total
-        }
-        return $total_time;
-    }
-    return -1; // no check-ins found
-}
+
+
+
+
 
 
 /* Delete a single check-in/check-out pair as defined by the given parameters */
-function delete_check_in($userID, $eventID, $start_time, $end_time) {
-    $con=connect();
-    $query = "DELETE FROM dbpersonhours WHERE personID = '" .$userID. "' AND eventID = '" .$eventID. "' AND start_time = '" .$start_time. "' AND end_time = '" .$end_time. "' LIMIT 1";
-    $result = mysqli_query($con, $query);
-    mysqli_close($con);
-}
+
 
 /*@@@ end Thomas */
 
@@ -581,11 +417,7 @@ function make_a_person($result_row) {
         $result_row['phone1'],
         $result_row['phone1type'],
         $result_row['email'],
-        $result_row['emergency_contact_first_name'],
-        $result_row['emergency_contact_last_name'],
-        $result_row['emergency_contact_phone'],
-        $result_row['emergency_contact_phone_type'],
-        $result_row['emergency_contact_relation'],
+        
         $result_row['type'],
         $result_row['status'],
         $result_row['archived'],
@@ -746,16 +578,12 @@ function get_people_for_export($attr, $first_name, $last_name, $type, $status, $
             $person->get_zip_code() . '","' .
             $person->get_phone1() . '","' .
             $person->get_phone1type() . '","' .
-            $person->get_emergency_contact_phone() . '","' .
-            $person->get_emergency_contact_phone_type() . '","' .
             $person->get_birthday() . '","' .
             $person->get_email() . '","' .
-            $person->get_emergency_contact_first_name() . '","' .
+        
             'n/a' . '","' . /* ("contact_num", we don't use this) 
-            $person->get_emergency_contact_relation() . '","' .
             'n/a' . '","' . /* ("contact_method", we don't use this) 
             $person->get_type() . '","' .
-            $person->get_status() . '","' .
             'n/a' . '","' . /* ("notes", we don't use this) 
             $person->get_password() . '","' .
             'n/a' . '","' . /* ("profile_pic", we don't use this) 
@@ -769,28 +597,21 @@ function get_people_for_export($attr, $first_name, $last_name, $type, $status, $
             'preferred_feedback_method' . '","' .
             'hobbies' . '","' .
             'professional_experience' . '","' .
-            $person->get_archived() . '","' .
-            $person->get_emergency_contact_last_name() . '","' .
+            
             $person->get_photo_release() . '","' .
             $person->get_photo_release_notes() . '");'
 */
     // updates the required fields of a person's account
     function update_person_required(
         $id, $first_name, $last_name, $birthday, $street_address, $city, $state,
-        $zip_code, $email, $phone1, $phone1type, $emergency_contact_first_name,
-        $emergency_contact_last_name, $emergency_contact_phone,
-        $emergency_contact_phone_type, $emergency_contact_relation, $type,
+        $zip_code, $email, $phone1, $phone1type, $type,
         $skills, $interests
     ) {
         $query = "update dbpersons set 
             first_name='$first_name', last_name='$last_name', birthday='$birthday',
             street_address='$street_address', city='$city', state='$state',
             zip_code='$zip_code', email='$email', phone1='$phone1', phone1type='$phone1type', 
-            emergency_contact_first_name='$emergency_contact_first_name', 
-            emergency_contact_last_name='$emergency_contact_last_name', 
-            emergency_contact_phone='$emergency_contact_phone', 
-            emergency_contact_phone_type='$emergency_contact_phone_type', 
-            emergency_contact_relation='$emergency_contact_relation', type='$type',
+             type='$type',
             
            
             skills='$skills', interests='$interests'

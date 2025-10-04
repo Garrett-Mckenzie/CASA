@@ -44,9 +44,7 @@ require_once('header.php');
             'first_name', 'last_name', 'birthdate',
             'street_address', 'city', 'state', 'zip', 
             'email', 'phone', 'phone_type',
-            'emergency_contact_first_name', 'emergency_contact_last_name',
-            'emergency_contact_relation', 'emergency_contact_phone',
-            'emergency_contact_phone_type',
+            
             'username', 'password',
             'is_community_service_volunteer',
             'is_new_volunteer', 
@@ -102,21 +100,6 @@ require_once('header.php');
             $errors = true;
         }
 
-        $emergency_contact_first_name = $args['emergency_contact_first_name'];
-        $emergency_contact_last_name = $args['emergency_contact_last_name'];
-        $emergency_contact_relation = $args['emergency_contact_relation'];
-
-        $emergency_contact_phone = validateAndFilterPhoneNumber($args['emergency_contact_phone']);
-        if (!$emergency_contact_phone) {
-            echo "<p>Invalid emergency contact phone.</p>";
-            $errors = true;
-        }
-
-        $emergency_contact_phone_type = $args['emergency_contact_phone_type'];
-        if (!valueConstrainedTo($emergency_contact_phone_type, array('cellphone', 'home', 'work'))) {
-            echo "<p>Invalid emergency phone type.</p>";
-            $errors = true;
-        }
 
         $skills = isset($args['skills']) ? $args['skills'] : '';
         $interests = isset($args['interests']) ? $args['interests'] : '';
@@ -150,9 +133,7 @@ require_once('header.php');
             $first_name, $last_name, $birthday,
             $street_address, $city, $state, $zip_code,
             $phone1, $phone1type, $email,
-            $emergency_contact_first_name, $emergency_contact_last_name,
-            $emergency_contact_phone, $emergency_contact_phone_type,
-            $emergency_contact_relation, $type, $status, $archived, 
+            $type, $status, $archived, 
             $skills, $interests,
             $is_community_service_volunteer, $is_new_volunteer,
             $total_hours_volunteered

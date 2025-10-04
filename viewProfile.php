@@ -154,15 +154,7 @@
           <div class="flex justify-between py-2">
             <span class="font-medium">Role</span><span>Volunteer</span>
           </div>
-          <div class="flex justify-between py-2">
-            <span class="font-medium">Status</span><span><?php
-                 if ($user->get_archived()) {
-                     echo 'Archived';
-                 } else {
-                     echo 'Active';
-                 }
-                     ?></span>
-          </div>
+          
         </div>
       </div>
       <div class="mt-6 space-y-2">
@@ -231,18 +223,7 @@
           <span class="block text-sm font-medium text-blue-900">Phone Number</span>
           <p class="text-gray-900 font-medium text-xl"><a href="tel:<?php echo $user->get_phone1() ?>"><?php echo formatPhoneNumber($user->get_phone1()) ?></a> (<?php echo ucfirst($user->get_phone1type()) ?>)</p>
         </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Emergency Contact Name</span>
-          <p class="text-gray-900 font-medium text-xl"><?php echo $user->get_emergency_contact_first_name() . ' ' . $user->get_emergency_contact_last_name() ?></p>
-        </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Emergency Contact Relation</span>
-          <p class="text-gray-900 font-medium text-xl"><?php echo $user->get_emergency_contact_relation() ?></p>
-        </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Emergency Contact Phone Number</span>
-          <p class="text-gray-900 font-medium text-xl"><a href="tel:<?php echo $user->get_emergency_contact_phone() ?>"><?php echo formatPhoneNumber($user->get_emergency_contact_phone()) ?></a> (<?php echo ucfirst($user->get_emergency_contact_phone_type()) ?>)</p>
-        </div>
+        
  
       </div>
 

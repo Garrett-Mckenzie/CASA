@@ -607,7 +607,7 @@ date_default_timezone_set('America/New_York');
         $permission_array['viewprofile.php'] = 1;
         $permission_array['viewnotification.php'] = 1;
         $permission_array['volunteerreport.php'] = 1;
-        $permission_array['viewmyupcomingevents.php'] = 1;
+        
 	    $permission_array['viewcheckinout.php'] = 1;
         $permission_array['viewresources.php'] = 1;
         $permission_array['milestonepoints.php'] = 1;
@@ -621,7 +621,6 @@ date_default_timezone_set('America/New_York');
         $permission_array['log.php'] = 2;
         $permission_array['reports.php'] = 2;
         $permission_array['eventedit.php'] = 2;
-        $permission_array['modifyuserrole.php'] = 2;
         $permission_array['addevent.php'] = 2;
         $permission_array['editevent.php'] = 2;
         // $permission_array['roster.php'] = 2; //TODO DELETE
@@ -650,7 +649,7 @@ date_default_timezone_set('America/New_York');
         $permission_array['volunteermanagement.php'] = 2;
         
         $permission_array['eventmanagement.php'] = 2;
-        $permission_array['checkedinvolunteers.php'] = 2;
+       
         $permission_array['deletediscussion.php'] = 2;
         $permission_array['generatereport.php'] = 2; //adding this to the generate report page
         $permission_array['generateemaillist.php'] = 2; //adding this to the generate report page
@@ -716,12 +715,7 @@ date_default_timezone_set('America/New_York');
     <span>Search Volunteers</span>
   </div>
 </a>
-<a href="checkedInVolunteers.php" style="text-decoration: none;">
-  <div class="in-nav">
-    <img src="images/clipboard-regular.svg">
-    <span>View Check-Ins</span>
-  </div>
-</a>
+
 			
                     </div>
                 </div>
@@ -802,7 +796,7 @@ date_default_timezone_set('America/New_York');
             <div class="nav-links">
                 <div class="nav-item">Events
                     <div class="dropdown">
-<a href="viewMyUpcomingEvents.php" style="text-decoration: none;">
+
   <div class="in-nav">
     <img src="images/list-solid.svg">
     <span>My Upcoming</span>

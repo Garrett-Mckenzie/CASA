@@ -671,10 +671,7 @@
                 <span class="arrow"><img src="images/new-event.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 10px;"></span>
                 <span class="text">Sign-Up</span>
             </button>
-            <button class="nav-button" onclick="window.location.href='viewMyUpcomingEvents.php'">
-                <span class="arrow"><img src="images/list-solid.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 10px;"></span>
-                <span class="text">Upcoming</span>
-            </button>
+            
             <button class="nav-button" onclick="window.location.href='editHours.php'">
                 <span class="arrow"><img src="images/clock-regular.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 10px;"></span>
                 <span class="text">Hours</span>

@@ -42,8 +42,6 @@
 		$formatted_start_time = $date . ' ' . validate12hTimeAndConvertTo24h($startTime);
 		$formatted_end_time = $date . ' ' . validate12hTimeAndConvertTo24h($endTime);
 
-		check_in($userID, $eventID, $formatted_start_time);
-		check_out($userID, $eventID, $formatted_end_time);
 
 		$success = 1;
 

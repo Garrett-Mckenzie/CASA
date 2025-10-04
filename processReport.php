@@ -65,7 +65,7 @@ if ($reportType === "monthly" && isset($fiscalMonths[$month])) {
         "total_volunteers" => get_total_volunteers_count($dateTo),
         "new_volunteers" => get_new_volunteers_count($dateFrom, $dateTo),
         "new_dog_walkers" => get_new_dog_walkers_count($dateFrom, $dateTo),
-        "community_service_volunteers" => get_community_service_volunteers_count($dateFrom, $dateTo),
+        
     ];
 } else {
     // Fetch for Full Fiscal Year (Annual Report)
@@ -77,7 +77,6 @@ if ($reportType === "monthly" && isset($fiscalMonths[$month])) {
             "total_volunteers" => get_total_volunteers_count($dateTo),
             "new_volunteers" => get_new_volunteers_count($dateFrom, $dateTo),
             "new_dog_walkers" => get_new_dog_walkers_count($dateFrom, $dateTo),
-            "community_service_volunteers" => get_community_service_volunteers_count($dateFrom, $dateTo),
         ];
     }
 }

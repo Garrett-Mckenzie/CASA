@@ -23,49 +23,6 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `dbarchived_volunteers`
---
-
-DROP TABLE IF EXISTS `dbarchived_volunteers`;
-CREATE TABLE `dbarchived_volunteers` (
-  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `start_date` text,
-  `first_name` text NOT NULL,
-  `last_name` text,
-  `street_address` text,
-  `city` text,
-  `state` text,
-  `zip_code` text,
-  `phone1` varchar(12) NOT NULL,
-  `phone1type` text,
-  `emergency_contact_phone` varchar(12) DEFAULT NULL,
-  `emergency_contact_phone_type` text,
-  `birthday` text,
-  `email` text,
-  `emergency_contact_first_name` text NOT NULL,
-  `contact_num` varchar(12) NOT NULL,
-  `emergency_contact_relation` text NOT NULL,
-  `contact_method` text,
-  `type` text,
-  `status` text,
-  `notes` text,
-  `password` text,
-  `skills` text NOT NULL,
-  `interests` text NOT NULL,
-  `archived_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `emergency_contact_last_name` text NOT NULL,
-  `is_new_volunteer` tinyint(1) NOT NULL DEFAULT '1',
-  `is_community_service_volunteer` tinyint(1) NOT NULL DEFAULT '0',
-  `total_hours_volunteered` decimal(5,2) DEFAULT '0.00'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `dbarchived_volunteers`
---
-
-INSERT INTO `dbarchived_volunteers` (`id`, `start_date`, `first_name`, `last_name`, `street_address`, `city`, `state`, `zip_code`, `phone1`, `phone1type`, `emergency_contact_phone`, `emergency_contact_phone_type`, `birthday`, `email`, `emergency_contact_first_name`, `contact_num`, `emergency_contact_relation`, `contact_method`, `type`, `status`, `notes`, `password`, `skills`, `interests`, `archived_date`, `emergency_contact_last_name`, `is_new_volunteer`, `is_community_service_volunteer`, `total_hours_volunteered`) VALUES
-('stephen_davies', '2022-05-10', 'Stephen', 'Davies', '456 Maple Avenue', 'Fredericksburg', 'VA', '22401', '5405557890', 'mobile', '5405551111', 'home', '1988-11-02', 'stephendavies@email.com', 'Robert', '5405551111', 'Father', 'phone', 'volunteer', 'Inactive', 'Archived due to relocation', '$2y$10$ABC789xyz456LMN123DEF', 'Music, Painting', 'Event Coordination', '2025-03-18 16:56:44', 'Davies', 0, 1, 0.00);
 
 -- --------------------------------------------------------
 
@@ -298,13 +255,6 @@ INSERT INTO `monthly_hours_snapshot` (`id`, `person_id`, `month_year`, `hours`) 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `dbarchived_volunteers`
---
-ALTER TABLE `dbarchived_volunteers`
-  ADD PRIMARY KEY (`id`);
-
 
 --
 -- Indexes for table `dbeventpersons`

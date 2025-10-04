@@ -134,9 +134,8 @@ require_once('header.php');
                                         <td><a href="tel:' . $person->get_phone1() . '" class="text-blue-700 underline">' . formatPhoneNumber($person->get_phone1()) . '</a></td>
                                         <td>' . $person->get_zip_code() . '</td>
                                         <td>' . ucfirst($person->get_type()) . '</td>
-                                        <td>' . ucfirst($person->get_status()) . '</td>
+                                       
                                         <td><a href="viewProfile.php?id=' . $person->get_id() . '" class="text-blue-700 underline">Profile</a></td>
-                                        <td><a href="modifyUserRole.php?id=' . $person->get_id() . '" class="text-blue-700 underline">Update Status</a></td>
                                     </tr>';
                         }
                         echo '
