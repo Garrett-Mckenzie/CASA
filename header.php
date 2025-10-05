@@ -8,10 +8,6 @@ date_default_timezone_set('America/New_York');
  * of the GNU General Public License as published by the Free Software Foundation
  * (see <http://www.gnu.org/licenses/ for more information).
  * 
-if (date("H:i:s") > "18:19:59") {
-	require_once 'database/dbShifts.php';
-	auto_checkout_missing_shifts();
-}
  */
 
 // check if we are in locked mode, if so,
@@ -611,16 +607,11 @@ if (date("H:i:s") > "18:19:59") {
         $permission_array['viewprofile.php'] = 1;
         $permission_array['viewnotification.php'] = 1;
         $permission_array['volunteerreport.php'] = 1;
-        $permission_array['viewmyupcomingevents.php'] = 1;
-        $permission_array['volunteerviewgroup.php'] = 1;
+        
 	    $permission_array['viewcheckinout.php'] = 1;
         $permission_array['viewresources.php'] = 1;
-        $permission_array['discussionmain.php'] = 1;
-        $permission_array['viewdiscussions.php'] = 1;
-        $permission_array['discussioncontent.php'] = 1;
         $permission_array['milestonepoints.php'] = 1;
         $permission_array['selectvotm.php'] = 1;
-        $permission_array['volunteerviewgroupmembers.php'] = 1;
         //pages only managers can view
         $permission_array['viewallevents.php'] = 0;
         $permission_array['personsearch.php'] = 2;
@@ -630,7 +621,6 @@ if (date("H:i:s") > "18:19:59") {
         $permission_array['log.php'] = 2;
         $permission_array['reports.php'] = 2;
         $permission_array['eventedit.php'] = 2;
-        $permission_array['modifyuserrole.php'] = 2;
         $permission_array['addevent.php'] = 2;
         $permission_array['editevent.php'] = 2;
         // $permission_array['roster.php'] = 2; //TODO DELETE
@@ -653,16 +643,13 @@ if (date("H:i:s") > "18:19:59") {
         $permission_array['resources.php'] = 2;
         $permission_array['uploadresources.php'] = 2;        
         $permission_array['deleteresources.php'] = 2;
-        $permission_array['creategroup.php'] = 2;
-        $permission_array['showgroups.php'] = 2;
-        $permission_array['groupview.php'] = 2;
+        
         $permission_array['managemembers.php'] = 2;
-        $permission_array['deleteGroup.php'] = 2;
+       
         $permission_array['volunteermanagement.php'] = 2;
-        $permission_array['groupmanagement.php'] = 2;
+        
         $permission_array['eventmanagement.php'] = 2;
-        $permission_array['creatediscussion.php'] = 2;
-        $permission_array['checkedinvolunteers.php'] = 2;
+       
         $permission_array['deletediscussion.php'] = 2;
         $permission_array['generatereport.php'] = 2; //adding this to the generate report page
         $permission_array['generateemaillist.php'] = 2; //adding this to the generate report page
@@ -710,7 +697,6 @@ if (date("H:i:s") > "18:19:59") {
             <div class="logo-container">
                 <a href="index.php"><img src="images/actual_log.png" alt="Logo"></a>
             </div>
-                <a href="viewCheckInOut.php" style="color: white; text-decoration: none;"><div class="date-box">Check In/Out</div></a>
             <div class="nav-links">
                 <div class="nav-item">Volunteers
                     <div class="dropdown">
@@ -728,12 +714,7 @@ if (date("H:i:s") > "18:19:59") {
     <span>Search Volunteers</span>
   </div>
 </a>
-<a href="checkedInVolunteers.php" style="text-decoration: none;">
-  <div class="in-nav">
-    <img src="images/clipboard-regular.svg">
-    <span>View Check-Ins</span>
-  </div>
-</a>
+
 			
                     </div>
                 </div>
@@ -774,25 +755,7 @@ if (date("H:i:s") > "18:19:59") {
 
                     </div>
                 </div>
-                <div class="nav-item">Groups
-                    <div class="dropdown">
-
-<a href="createGroup.php" style="text-decoration: none;">
-  <div class="in-nav">
-    <img src="images/creategroup.svg">
-    <span>Create Group</span>
-  </div>
-</a>
-
-<a href="showGroups.php" style="text-decoration: none;">
-  <div class="in-nav">
-    <img src="images/group.svg">
-    <span>View Groups</span>
-  </div>
-</a>
-
-                    </div>
-               </div>
+                
             </div>
         </div>
 
@@ -832,7 +795,7 @@ if (date("H:i:s") > "18:19:59") {
             <div class="nav-links">
                 <div class="nav-item">Events
                     <div class="dropdown">
-<a href="viewMyUpcomingEvents.php" style="text-decoration: none;">
+
   <div class="in-nav">
     <img src="images/list-solid.svg">
     <span>My Upcoming</span>
@@ -852,16 +815,7 @@ if (date("H:i:s") > "18:19:59") {
 </a>
                    </div>
                 </div>
-                <div class="nav-item">Groups
-                    <div class="dropdown">
-<a href="volunteerViewGroup.php" style="text-decoration: none;">
-  <div class="in-nav">
-    <img src="images/group.svg">
-    <span>My Groups</span>
-  </div>
-</a>
-                    </div>
-               </div>
+                
             </div>
         </div>
 

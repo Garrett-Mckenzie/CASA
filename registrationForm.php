@@ -123,36 +123,7 @@
 
         </fieldset>
 
-        <fieldset class="section-box mb-4">
-            <h3>Emergency Contact</h3>
-            <p class="mb-2">Please provide us with someone to contact on your behalf in case of an emergency.</p>
-	    <div class="blue-div"></div>
-
-            <label for="emergency_contact_first_name" required><em>* </em>Contact First Name</label>
-            <input type="text" id="emergency_contact_first_name" name="emergency_contact_first_name" required placeholder="Enter emergency contact first name">
-
-            <label for="emergency_contact_last_name" required><em>* </em>Contact Last Name</label>
-            <input type="text" id="emergency_contact_last_name" name="emergency_contact_last_name" required placeholder="Enter emergency contact last name">
-
-            <label for="emergency_contact_relation"><em>* </em>Contact Relation to You</label>
-            <input type="text" id="emergency_contact_relation" name="emergency_contact_relation" required placeholder="Ex. Spouse, Mother, Father, Sister, Brother, Friend">
-
-            <label for="emergency_contact_phone"><em>* </em>Contact Phone Number</label>
-            <input type="tel" id="emergency_contact_phone" name="emergency_contact_phone" pattern="\([0-9]{3}\) [0-9]{3}-[0-9]{4}" required placeholder="Enter emergency contact phone number. Ex. (555) 555-5555">
-
-            <label><em>* </em>Contact Phone Type</label>
-            <div class="radio-group">
-	      <div class="radio-element">
-                <input type="radio" id="phone-type-cellphone" name="emergency_contact_phone_type" value="cellphone" required><label for="phone-type-cellphone">Cell</label>
-	      </div>
-	      <div class="radio-element">
-                <input type="radio" id="phone-type-home" name="emergency_contact_phone_type" value="home" required><label for="phone-type-home">Home</label>
-	      </div>
-	      <div class="radio-element">
-                <input type="radio" id="phone-type-work" name="emergency_contact_phone_type" value="work" required><label for="phone-type-work">Work</label>
-	      </div>
-            </div>
-        </fieldset>
+        
 
         <fieldset class="section-box mb-4">
             <h3 class="mb-2">Other Required Information</h3>

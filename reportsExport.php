@@ -93,7 +93,7 @@ function process_form() {
 			$returned_people[] = $person;
 		}
 		$_SESSION['returned_people'] = serialize($returned_people);
-		error_log("returns ".count($_SESSION['returned_people']). "people");
+		
 		include('dataResults.inc.php');
 	} else if ($_POST['_form_submit'] == 2) {
 		error_log("Exporting data step 2");
@@ -158,9 +158,7 @@ function export_data($current_time, $search_attr, $export_data) {
 	   if (count($person_data)>1 && $person_data[1]!="") // anything more than the id, export it, otherwise skip it
 	       fputcsv($handle, $person_data, ',','"');
 	if (in_array("history",$search_attr)) { // split history into several lines per person 
-	   $people_in_past_shifts = get_all_peoples_histories();
-	   foreach ($people_in_past_shifts as $p=>$history) 
-	        fputcsv($handle, array($p,$history),',','"');  
+	  
 	}
 	fclose($handle);
 }
