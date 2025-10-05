@@ -45,7 +45,6 @@ $quarters = [
 ];
 
 // Update new volunteer status before fetching report data
-update_new_volunteer_status();
 
 // Fetch Data
 $reportData = [];
@@ -64,7 +63,6 @@ if ($reportType === "monthly" && isset($fiscalMonths[$month])) {
     $reportData[$monthName] = [
         "total_volunteers" => get_total_volunteers_count($dateTo),
         "new_volunteers" => get_new_volunteers_count($dateFrom, $dateTo),
-        "new_dog_walkers" => get_new_dog_walkers_count($dateFrom, $dateTo),
         
     ];
 } else {
@@ -76,7 +74,6 @@ if ($reportType === "monthly" && isset($fiscalMonths[$month])) {
         $reportData[$monthName] = [
             "total_volunteers" => get_total_volunteers_count($dateTo),
             "new_volunteers" => get_new_volunteers_count($dateFrom, $dateTo),
-            "new_dog_walkers" => get_new_dog_walkers_count($dateFrom, $dateTo),
         ];
     }
 }
@@ -100,7 +97,6 @@ if ($format === 'csv') {
             $month,
             $data["total_volunteers"],
             $data["new_volunteers"],
-            $data["new_dog_walkers"],
             
             $data["community_service_volunteers"],
             $data["total_volunteer_hours"]
@@ -140,7 +136,6 @@ foreach ($reportData as $month => $data) {
             <td style='background-color: #EAEAEA; padding: 5px; text-align: center;'>$month</td>
             <td style='padding: 5px;'>{$data["total_volunteers"]}</td>
             <td style='padding: 5px;'>{$data["new_volunteers"]}</td>
-            <td style='padding: 5px;'>{$data["new_dog_walkers"]}</td>
       
             <td style='padding: 5px;'>{$data["community_service_volunteers"]}</td>
             <td style='padding: 5px;'>{$data["total_volunteer_hours"]}</td>

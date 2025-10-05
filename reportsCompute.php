@@ -379,9 +379,7 @@ function display_volunteers ($report, $export, $venue) {
 	$export_data = array();			       
 	foreach($report as $person){
 		$p = array($person->get_last_name() . ", ". $person->get_first_name(), 
-				$person->get_address(), $person->get_city(), $person->get_state(), $person->get_zip(),
-			    $person->get_phone1(), $person->get_email(),
-			    $person->get_start_date(), $person->get_notes());
+				$person->get_address(),  $person->get_zip(), $person->get_email(), $person->get_notes());
 		$export_data[] = $p;
 		$res .= "<tr>";
 		foreach ($p as $info)
@@ -420,9 +418,7 @@ function display_volunteers_full ($report, $export, $venue) {
 	$export_data = array();			       
 	foreach($report as $person){
 		$p = array($person->get_last_name() . ", ". $person->get_first_name(), 
-				$person->get_address(), $person->get_city(), $person->get_state(), $person->get_zip(),
-			    $person->get_phone1(), $person->get_email(),
-			    $person->get_start_date(), $person->get_phone1type(), $person->get_birthday(),
+				$person->get_address(),$person->get_zip(), $person->get_email(), 
 				//$person->get_computer(), $person->get_camera(), $person->get_transportation(), 
 				$person->get_contact_name(),$person->get_contact_num(),$person->get_relation(), $person->get_notes());
 		$export_data[] = $p;

@@ -71,15 +71,6 @@
 
     $viewingOwnProfile = $id == $userID;
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset($_POST['url'])) {
-        if (!update_profile_pic($id, $_POST['url'])) {
-          header('Location: viewProfile.php?id='.$id.'&picsuccess=False');
-        } else {
-          header('Location: viewProfile.php?id='.$id.'&picsuccess=True');
-        }
-      }
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -203,14 +194,7 @@
           <span class="block text-sm font-medium text-blue-900">Name</span>
           <p class="text-gray-900 font-medium text-xl"><?php echo $user->get_first_name() ?> <?php echo $user->get_last_name() ?></p>
         </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Date of Birth</span>
-          <p class="text-gray-900 font-medium text-xl"><?php echo date('m/d/Y', strtotime($user->get_birthday())) ?></p>
-        </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Address</span>
-          <p class="text-gray-900 font-medium text-xl"><?php echo $user->get_street_address() . ', ' . $user->get_city() . ', ' . $user->get_state() . ' ' . $user->get_zip_code() ?></p>
-        </div>
+       
       </div>
 
       <!-- Contact Section -->
@@ -219,55 +203,12 @@
           <span class="block text-sm font-medium text-blue-900">Email</span>
           <p class="text-gray-900 font-medium text-xl"><a href="mailto:<?php echo $user->get_email() ?>"><?php echo $user->get_email() ?></a></p>
         </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Phone Number</span>
-          <p class="text-gray-900 font-medium text-xl"><a href="tel:<?php echo $user->get_phone1() ?>"><?php echo formatPhoneNumber($user->get_phone1()) ?></a> (<?php echo ucfirst($user->get_phone1type()) ?>)</p>
-        </div>
+        
         
  
       </div>
 
-      <!-- Volunteer Section -->
-      <div id="volunteer" class="profile-section space-y-4 hidden">
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Account Type</span>
-          <p class="text-gray-900 font-medium text-xl"><?php
-                if ($user->get_is_community_service_volunteer()) {
-                    echo 'Community Service Volunteer';
-                } else {
-                    echo 'Standard Volunteer';
-                }
-                    ?></p>
-        </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Skills</span>
-          <p class="text-gray-900 font-medium text-xl"><?php echo ucfirst($user->get_skills() ?: "Not specified") ?></p>
-        </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Interests</span>
-          <p class="text-gray-900 font-medium text-xl"><?php echo ucfirst($user->get_interests() ?: "Not specified") ?></p>
-        </div>
-	      <div>
-          <span class="block text-sm font-medium text-blue-900">Total Hours Volunteered</span>
-          <?php if ($isAdmin && !$viewingOwnProfile): ?>
-            <form method="POST" class="mt-2 flex items-center gap-4">
-              <input type="number" step="0.01" name="new_hours" min="0" value="<?= htmlspecialchars($user->get_total_hours_volunteered()) ?>" required
-                    class="border border-gray-300 px-3 py-1 rounded-md w-32 shadow-sm">
-            
-
-              <button type="submit" class="bg-blue-900 text-white px-4 py-1 rounded-md hover:bg-blue-700">
-                Update
-              </button>
-            </form>
-          <?php else: ?>
-            <p class="text-gray-900 font-medium text-xl">
-              <?= number_format($user->get_total_hours_volunteered(), 2) ?> hours
-            </p>
-          <?php endif; ?>
-        </div>
-
-	      
-      </div>
+      
     </div>
   </div>
 </body>

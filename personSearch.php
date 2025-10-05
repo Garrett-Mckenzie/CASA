@@ -131,9 +131,6 @@ require_once('header.php');
                                         <td>' . $person->get_first_name() . '</td>
                                         <td>' . $person->get_last_name() . '</td>
                                         <td><a href="mailto:' . $person->get_id() . '" class="text-blue-700 underline">' . $person->get_id() . '</a></td>
-                                        <td><a href="tel:' . $person->get_phone1() . '" class="text-blue-700 underline">' . formatPhoneNumber($person->get_phone1()) . '</a></td>
-                                        <td>' . $person->get_zip_code() . '</td>
-                                        <td>' . ucfirst($person->get_type()) . '</td>
                                        
                                         <td><a href="viewProfile.php?id=' . $person->get_id() . '" class="text-blue-700 underline">Profile</a></td>
                                     </tr>';

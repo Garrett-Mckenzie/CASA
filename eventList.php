@@ -43,10 +43,9 @@
 // require_once('domain/Person.php');
 
 // // Fetch events attended by the user
-// //$events = get_events_attended_by_2($username);
 
 // // Fetch eventIDs attended by the user
-// $event_ids = get_attended_event_ids($username);
+
 ?>
 
 <!-- <!DOCTYPE html>

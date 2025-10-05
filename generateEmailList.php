@@ -160,7 +160,7 @@ require_once('header.php');
                                     <td>' . $person->get_last_name() . '</td>
                                     <td>' . $person->get_id() . '</td>
                                     <td><a href="mailto:' . $person->get_email() . '" class="text-blue-700 underline">' . $person->get_email() . '</a></td>
-                                    <td>' . ucfirst($person->get_type()) . '</td>
+                                    
                                     
                                 </tr>';
                         }

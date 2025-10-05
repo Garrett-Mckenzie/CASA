@@ -132,9 +132,7 @@
         }
         
         $result = update_person_required(
-            $id, $first_name, $last_name, $birthday, $street_address, $city, $state,
-            $zip_code, $email, $phone1, $phone1type, $type,
-             $skills, $interests
+            $id, $first_name, $last_name
         );
         if ($result) {
             if ($editingSelf) {

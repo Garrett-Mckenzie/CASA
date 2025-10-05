@@ -697,7 +697,6 @@ date_default_timezone_set('America/New_York');
             <div class="logo-container">
                 <a href="index.php"><img src="images/actual_log.png" alt="Logo"></a>
             </div>
-                <a href="viewCheckInOut.php" style="color: white; text-decoration: none;"><div class="date-box">Check In/Out</div></a>
             <div class="nav-links">
                 <div class="nav-item">Volunteers
                     <div class="dropdown">

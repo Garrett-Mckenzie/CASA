@@ -477,15 +477,7 @@
 </button>
     </div>
 
-    <div class="content-box">
-        <img src="images/GrM.png" />
-        <div class="small-text">Our team makes this all possible.</div>
-        <div class="large-text">Group Management</div>
-<button class="circle-arrow-button" onclick="window.location.href='groupManagement.php'">
-    <span class="button-text">Go</span>
-    <div class="circle">&gt;</div>
-</button>
-    </div>
+    
 
 </div>
 
