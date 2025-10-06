@@ -477,15 +477,7 @@
 </button>
     </div>
 
-    <div class="content-box">
-        <img src="images/GrM.png" />
-        <div class="small-text">Our team makes this all possible.</div>
-        <div class="large-text">Group Management</div>
-<button class="circle-arrow-button" onclick="window.location.href='groupManagement.php'">
-    <span class="button-text">Go</span>
-    <div class="circle">&gt;</div>
-</button>
-    </div>
+    
 
 </div>
 
@@ -514,12 +506,7 @@
             <button class="arrow-button">→</button>
         </div>
                 <?php
-                    require_once('database/dbMessages.php');
-                    $unreadMessageCount = get_user_unread_count($person->get_id());
-                    $inboxIcon = 'inbox.svg';
-                    if ($unreadMessageCount) {
-                        $inboxIcon = 'inbox-unread.svg';
-                    }
+                    
                 ?>
         <div class="content-box-test" onclick="window.location.href='inbox.php'">
             <div class="icon-overlay">
@@ -527,9 +514,7 @@
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
             <div class="large-text-sub">System Notifications<?php 
-                        if ($unreadMessageCount > 0) {
-                            echo ' (' . $unreadMessageCount . ')';
-                        }
+                        
                     ?></div>
             <div class="graph-text">Stay up to date.</div>
             <button class="arrow-button">→</button>
@@ -580,7 +565,7 @@
     <footer class="footer" style="margin-top: 100px;">
         <!-- Left Side: Logo & Socials -->
         <div class="footer-left">
-            <img src="images/actual_log.png" alt="Logo" class="footer-logo">
+            <img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -593,14 +578,14 @@
         <div class="footer-right">
             <div class="footer-section">
                 <div class="footer-topic">Connect</div>
-                <a href="https://www.facebook.com/share/g/15X2tqwFkA/">Facebook</a>
-                <a href="https://www.instagram.com/fredspca/?hl=en">Instagram</a>
-                <a href="https://fredspca.org">Main Website</a>
+                <a href="https://www.facebook.com/RappCASA/" target="_blank">Facebook</a>
+                <a href="https://www.instagram.com/rappahannock_casa/" target="_blank">Instagram</a>
+                <a href="https://rappahannockcasa.com/" target="_blank">Main Website</a>
             </div>
             <div class="footer-section">
                 <div class="footer-topic">Contact Us</div>
-                <a href="mailto:volunteer@fredspca.org">volunteer@fredspca.org</a>
-                <a href="tel:5408981500">540-898-1500 (ext 117)</a>
+                <a href="mailto:rappcasa@gmail.com">rappcasa@gmail.com</a>
+                <a href="tel:5407106199">540-710-6199</a>
             </div>
         </div>
     </footer>
@@ -678,10 +663,7 @@
                 <span class="arrow"><img src="images/new-event.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 10px;"></span>
                 <span class="text">Sign-Up</span>
             </button>
-            <button class="nav-button" onclick="window.location.href='viewMyUpcomingEvents.php'">
-                <span class="arrow"><img src="images/list-solid.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 10px;"></span>
-                <span class="text">Upcoming</span>
-            </button>
+            
             <button class="nav-button" onclick="window.location.href='editHours.php'">
                 <span class="arrow"><img src="images/clock-regular.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 10px;"></span>
                 <span class="text">Hours</span>
@@ -716,14 +698,7 @@
             <button class="arrow-button">→</button>
         </div>
 
-               <?php
-                    require_once('database/dbMessages.php');
-                    $unreadMessageCount = get_user_unread_count($person->get_id());
-                    $inboxIcon = 'inbox.svg';
-                    if ($unreadMessageCount) {
-                        $inboxIcon = 'inbox-unread.svg';
-                    }   
-                ?>  
+        
 
         <div class="content-box-test" onclick="window.location.href='viewResources.php'">
             <div class="icon-overlay">
@@ -768,7 +743,7 @@
     <footer class="footer" style="margin-top: 100px;">
         <!-- Left Side: Logo & Socials -->
         <div class="footer-left">
-            <img src="images/actual_log.png" alt="Logo" class="footer-logo">
+            <img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>

@@ -16,8 +16,8 @@ session_write_close();
         <nav>
             <span id="nav-top">
                 <span class="logo">
-                    <img src="images/FredSPCAlogo.png">
-                        <span id="vms-logo"> Fredericksburg SPCA Volunteer </span>
+                    <img src="images/RAPPAHANNOCK_v_RedBlue.png">
+                        <span id="vms-logo"> CASA Donation Management Web Application </span>
                         </span>
                     <img id="menu-toggle" src="images/menu.png">
                 </span>

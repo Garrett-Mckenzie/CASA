@@ -58,12 +58,4 @@
 		die();
 	}
 
-	delete_check_in($userID, $eventID, $start_time, $end_time);
-
-	if ($accessLevel == 1) {
-		header('Location: eventList.php');
-	} else {
-		header('Location: eventList.php?username=' . $userID);
-	}
-
  ?>

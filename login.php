@@ -26,16 +26,13 @@
         if (wereRequiredFieldsSubmitted($args, $required)) {
             require_once('domain/Person.php');
             require_once('database/dbPersons.php');
-            /*@require_once('database/dbMessages.php');*/
             /*@dateChecker();*/
             $username = strtolower($args['username']);
             $password = $args['password'];
             $user = retrieve_person($username);
             if (!$user) {
                 $badLogin = true;
-            } else if ($user->get_status() === "Inactive") {
-                // If the user is archived, block login
-                $archivedAccount = true;
+            
             } else if (password_verify($password, $user->get_password())) {
                 $_SESSION['logged_in'] = true;
 
@@ -100,14 +97,14 @@
 }
 * { font-family: Quicksand, sans-serif; }
 	</style>
-        <title>Fredericksburg SPCA Volunteer System | Log In</title>
+        <title>CASA Donation Management Web Application | Log In</title>
     </head>
     <body>
 <div class="h-screen flex">
 
   <!-- Left: Image Section (Hidden on small screens) -->
   <div class="hidden md:block md:w-1/2 bg-center rounded-r-[50px]"
-       style="background-image: url(images/login_background.jpg);">
+       style="background-image: url(images/xavier-mouton-photographie-ry_sD0P1ZL0-unsplash-scaled.jpg); background-size: 150%; background-repeat: no-repeat; ">
   </div>
 
   <!-- Right: Form Section -->
@@ -119,7 +116,7 @@
 
       <!-- Logo Placeholder (Now the same width as inputs and centered) -->
       <div class="w-full flex justify-center mb-6">
-        <img src="images/drawn_logo.png"
+        <img src="images/RAPPAHANNOCK_v_RedBlue.png"
              alt="Logo"
              class="w-full max-w-xs">
       </div>
@@ -150,7 +147,7 @@
         </div>
         <div class="flex justify-between items-center mb-4">
           <a href="#" class="text-blue-500 text-sm hover:underline">Forgot password?</a>
-          <a href="https://fredspca.org/" class="text-blue-500 text-sm hover:underline">Fredericksburg SPCA Website</a>
+          <a href="https://rappahannockcasa.com/" target="_blank" class="text-blue-500 text-sm hover:underline">Rappahannock CASA Website</a>
         </div>
         <button class="cursor-pointer w-full bg-[#345284] hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition duration-300">Login</button>
       </form>

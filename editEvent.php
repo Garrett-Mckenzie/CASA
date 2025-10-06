@@ -44,11 +44,7 @@
             $endTime = $args['end-time'] = $validated[1];
             $date = $args['date'] = validateDate($args["date"]);
             $capacity = intval($args["capacity"]);
-            $assignedVolunteerCount = count(getvolunteers_byevent($id));
-            $difference = $assignedVolunteerCount - $capacity;
-            if ($capacity < $assignedVolunteerCount) {
-               $errors .= "<p>There are currently $assignedVolunteerCount volunteers assigned to this event. The new capacity must not exceed this number. You must remove $difference volunteer(s) from the event to reduce the capacity to $capacity.</p>";
-            }
+            
             if (!$startTime || !$date > 11){
                 $errors .= '<p>Your request was missing arguments.</p>';
             }
