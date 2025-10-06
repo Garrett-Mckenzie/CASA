@@ -25,7 +25,7 @@
 @layer components {
 	.hero-header {
 		@apply h-40 w-full bg-auto bg-center relative z-0;
-		background-image: url('../images/login_background.jpg');
+		background-image: url('../images/xavier-mouton-photographie-ry_sD0P1ZL0-unsplash-scaled.jpg');
 	}
 	.sections {
 		@apply flex flex-col lg:flex-row gap-12 w-full max-w-6xl;
