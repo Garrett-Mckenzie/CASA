@@ -56,7 +56,7 @@
         <style>
             .volunteer-stat {
                 background-color: #f8f9fc;
-                border: 2px solid #294877;
+                border: 2px solid #00447b;
                 padding: 15px 20px;
                 border-radius: 10px;
                 width: fit-content;
@@ -64,7 +64,7 @@
                 margin: 20px 0;
             }
             .volunteer-stat h3 {
-                color: #294877;
+                color: #00447b;
                 margin-bottom: 5px;
                 font-size: 20px;
             }

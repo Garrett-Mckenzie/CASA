@@ -51,7 +51,7 @@
 
         .full-width-bar {
             width: 100%;
-            background: #294877;
+            background: #00447b;
             padding: 17px 5%;
             display: flex;
             flex-wrap: wrap;
@@ -114,7 +114,7 @@
             left: 30px;
             font-size: 14px;
             font-weight: 700;
-            color: #294877;
+            color: #00447b;
         }
 
         .large-text {
@@ -144,7 +144,7 @@
             left: 10%;
             font-size: 14px;
             font-weight: 700;
-            color: #294877;
+            color: #00447b;
             max-width: 90%;
         }
 
@@ -172,7 +172,7 @@
 
         /* Logo */
         .logo-container {
-            background: #294877;
+            background: #00447b;
             padding: 10px 20px;
             border-radius: 50px;
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25) inset;
@@ -259,7 +259,7 @@
     .circle {
         width: 30px;
         height: 30px;
-        background-color: #294877; /* Blue color */
+        background-color: #00447b; /* Blue color */
         color: white;
         border-radius: 50%;
         display: flex;
@@ -274,7 +274,7 @@
     }
 .colored-box {
     display: inline-block; /* Ensures it wraps tightly around the text */
-    background-color: #294877; /* Change to any color */
+    background-color: #00447b; /* Change to any color */
     color: white; /* Text color */
     padding: 1px 5px; /* Adds space inside the box */
     border-radius: 5px; /* Optional: Rounds the corners */
@@ -285,7 +285,7 @@
         /* Footer */
         .footer {
             width: 100%;
-            background: #294877;
+            background: #00447b;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -439,14 +439,26 @@
 
     <div class="full-width-bar">
     <div class="content-box">
-        <img src="images/VolM.png" />
+<!--         <img src="images/VolM.png" />
         <div class="small-text">Make a difference.</div>
         <div class="large-text">Volunteer Management</div>
 <button class="circle-arrow-button" onclick="window.location.href='volunteerManagement.php'">
     <span class="button-text">Go</span>
     <div class="circle">&gt;</div>
-</button>
-
+</button> */
+-->
+<!--
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="window.location.href='personSearch.php'">
+                <span>Find</span>
+                <span class="arrow"><img src="images/person-search.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 20px;"></span>
+            </button>
+            <button class="nav-button" onclick="window.location.href='VolunteerRegister.php'">
+                <span>Register</span>
+                <span class="arrow"><img src="images/add-person.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 20px;"></span>
+            </button>
+        </div>
+-->
     </div>
 
     <div class="content-box">
@@ -487,23 +499,40 @@
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
             <div class="large-text-sub">Manage Documents</div>
-            <div class="graph-text">Resources for volunteers.</div>
+            <div class="graph-text">Resources for donors.</div>
             <button class="arrow-button">→</button>
         </div>
-                <?php
-                    
-                ?>
-        <div class="content-box-test" onclick="window.location.href='inbox.php'">
+
+        <div class="content-box-test" onclick="window.location.href='generateReport.php'">
             <div class="icon-overlay">
-                <img style="border-radius: 5px;" src="images/<?php echo $inboxIcon ?>" alt="Notification Icon">
+                <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">System Notifications<?php 
-                        
-                    ?></div>
-            <div class="graph-text">Stay up to date.</div>
+            <div class="large-text-sub">Generate Report</div>
+            <div class="graph-text">From this quarter or annual.</div>
             <button class="arrow-button">→</button>
         </div>
+    <div class="content-box-test" onclick="window.location.href='generateEmailList.php'">
+            <div class="icon-overlay">
+                <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
+            </div>
+            <img class="background-image" src="images/blank-white-background.jpg" />
+            <div class="large-text-sub">Generate Emails</div>
+            <div class="graph-text">Volunteer Emails</div>
+            <button class="arrow-button">→</button>
+        </div>
+
+        <div class="content-box-test" onclick="window.location.href='viewDiscussions.php'">
+            <div class="icon-overlay">
+                <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
+            </div>
+            <img class="background-image" src="images/blank-white-background.jpg" />
+            <div class="large-text-sub">Discussions</div>
+            <div class="graph-text">See the latest.</div>
+            <button class="arrow-button">→</button>
+        </div>
+    </div>
+
 
     
 
@@ -564,7 +593,7 @@
 
     <!-- Volunteer of the Month Icon -->
     <a href="selectVOTM.php" style="text-decoration: none;">
-        <div style="font-size: 12px; font-weight: bold; color: #294877; margin-bottom: 5px;">
+        <div style="font-size: 12px; font-weight: bold; color: #00447b; margin-bottom: 5px;">
             🎖 Volunteer of the Month
         </div>
         <img src="images/star-icon.svg" alt="Volunteer of the Month Icon" style="width: 55px; height: auto; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
@@ -572,7 +601,7 @@
 
     <!-- Leaderboard Icon -->
     <a href="leaderboard.php" style="text-decoration: none;">
-        <div style="font-size: 12px; font-weight: bold; color: #294877; margin-bottom: 5px;">
+        <div style="font-size: 12px; font-weight: bold; color: #00447b; margin-bottom: 5px;">
             👑 Leaderboard
         </div>
         <img src="images/crown.png" alt="Leaderboard Icon" style="width: 55px; height: auto; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
