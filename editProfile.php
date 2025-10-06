@@ -14,7 +14,6 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["modify_access"]) && isset($_POST["id"])) {
         $id = $_POST['id'];
-        header("Location: /gwyneth/modifyUserRole.php?id=$id");
     } else if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["profile-edit-form"])) {
         require_once('domain/Person.php');
         require_once('database/dbPersons.php');
@@ -39,9 +38,7 @@
 
         $required = array(
             'first_name', 'last_name', 'birthday', 'street_address', 'city', 'state',
-            'zip_code', 'email', 'phone1', 'phone1type', 'emergency_contact_first_name',
-            'emergency_contact_last_name', 'emergency_contact_phone',
-            'emergency_contact_phone_type', 'emergency_contact_relation'
+            'zip_code', 'email', 'phone1', 'phone1type'
         );
         $errors = false;
         if (!wereRequiredFieldsSubmitted($args, $required)) {
@@ -104,23 +101,9 @@
         }
         @*/
 
-        $emergency_contact_first_name = $args['emergency_contact_first_name'];
         
-        $emergency_contact_last_name = $args['emergency_contact_last_name'];
         
-        $emergency_contact_phone = validateAndFilterPhoneNumber($args['emergency_contact_phone']);
-        if (!$emergency_contact_phone) {
-            $errors = true;
-            // echo 'bad e-contact phone';
-        }
-
-        $emergency_contact_phone_type = $args['emergency_contact_phone_type'];
-        if (!valueConstrainedTo($emergency_contact_phone_type, array('cellphone', 'home', 'work'))) {
-            $errors = true;
-            // echo 'bad phone type';
-        }
-
-        $emergency_contact_relation = $args['emergency_contact_relation'];
+      
 
         /*@
         $gender = $args['gender'];
@@ -149,11 +132,7 @@
         }
         
         $result = update_person_required(
-            $id, $first_name, $last_name, $birthday, $street_address, $city, $state,
-            $zip_code, $email, $phone1, $phone1type, $emergency_contact_first_name,
-            $emergency_contact_last_name, $emergency_contact_phone,
-            $emergency_contact_phone_type, $emergency_contact_relation, $type,
-             $skills, $interests
+            $id, $first_name, $last_name
         );
         if ($result) {
             if ($editingSelf) {

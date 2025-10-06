@@ -37,7 +37,6 @@
     // include_once('database/dbPersons.php');
     // $access_level = $_SESSION['access_level'];
     // $user = retrieve_person($_SESSION['_id']);
-    // $active = $user->get_status() == 'Active';
 
     // ini_set("display_errors",1);
     // error_reporting(E_ALL);

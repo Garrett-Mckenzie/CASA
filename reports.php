@@ -23,8 +23,6 @@ include_once('database/dbPersons.php');
 include_once('domain/Person.php');
 include_once('database/dbEvents.php');
 
-include_once('database/dbShifts.php');
-include_once('domain/Shift.php');
 ?>
 
 <html>

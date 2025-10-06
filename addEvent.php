@@ -41,7 +41,7 @@
             $startTime = $args['start-time'] = $validated[0];
             $endTime = $args['end-time'] = $validated[1];
             $date = $args['date'] = validateDate($args["date"]);
-            $args["training_level_required"] = $_POST['training_level_required'];
+            
     
             if (!$startTime || !$endTime || !$date > 11){
                 echo 'bad args';
@@ -100,13 +100,8 @@
                 <input type="text" id="location" name="location" required placeholder="Enter location">
                 <label for="name">Capacity </label>
                 <input type="number" id="capacity" name="capacity" required placeholder="Enter capacity (e.g. 1-99)">
-                <label for="training">* Training Type:</label>
-                <select id="training_level_required" name="training_level_required">
-                    <option value="None">None</option>
-                    <option value="Green">Green</option>
-                    <option value="Orange">Orange</option>
-                    <option value="Pink">Pink</option>
-                </select>
+                
+                
                 <input type="submit" value="Create Event">
                 
             </form>

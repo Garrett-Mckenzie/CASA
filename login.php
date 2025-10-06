@@ -26,16 +26,13 @@
         if (wereRequiredFieldsSubmitted($args, $required)) {
             require_once('domain/Person.php');
             require_once('database/dbPersons.php');
-            /*@require_once('database/dbMessages.php');*/
             /*@dateChecker();*/
             $username = strtolower($args['username']);
             $password = $args['password'];
             $user = retrieve_person($username);
             if (!$user) {
                 $badLogin = true;
-            } else if ($user->get_status() === "Inactive") {
-                // If the user is archived, block login
-                $archivedAccount = true;
+            
             } else if (password_verify($password, $user->get_password())) {
                 $_SESSION['logged_in'] = true;
 

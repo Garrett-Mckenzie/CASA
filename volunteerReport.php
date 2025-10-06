@@ -110,7 +110,7 @@
                             require_once('include/output.php');
                             $total_hours = 0;
                             foreach ($events as $event) {
-                                $time = fetch_volunteering_hours($id, $event['id']);
+                                $time = -1; //value set from purge pt3
                                 $hours = ($time / 60) / 60;
                                 if ($time == -1) {
                                     continue;
