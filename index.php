@@ -32,7 +32,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <title>Frederickburg SPCA Volunteer Management | Dashboard</title>
+    <title>CASA Donation Management Web Application</title>
     <style>
         * {
             box-sizing: border-box;
@@ -439,7 +439,23 @@
 
     <div class="full-width-bar">
     <div class="content-box">
-<!--         <img src="images/VolM.png" />
+        <img src="images/VolM.png" />
+        <div class="small-text">Look at the data.</div>
+        <div class="large-text">Generate Report</div>
+<button class="circle-arrow-button" onclick="window.location.href='generateReport.php'">
+    <span class="button-text">Go</span>
+    <div class="circle">&gt;</div>
+</button>
+<!--        <div class="content-box-test" onclick="window.location.href='generateReport.php'">
+                    <div class="icon-overlay">
+                        <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
+                    </div>
+                    <img class="background-image" src="images/blank-white-background.jpg" />
+                    <div class="large-text-sub">Generate Report</div>
+                    <div class="graph-text">From this quarter or annual.</div>
+                    <button class="arrow-button">→</button>
+                </div>
+         <img src="images/VolM.png" />
         <div class="small-text">Make a difference.</div>
         <div class="large-text">Volunteer Management</div>
 <button class="circle-arrow-button" onclick="window.location.href='volunteerManagement.php'">
@@ -503,15 +519,6 @@
             <button class="arrow-button">→</button>
         </div>
 
-        <div class="content-box-test" onclick="window.location.href='generateReport.php'">
-            <div class="icon-overlay">
-                <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
-            </div>
-            <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Generate Report</div>
-            <div class="graph-text">From this quarter or annual.</div>
-            <button class="arrow-button">→</button>
-        </div>
     <div class="content-box-test" onclick="window.location.href='generateEmailList.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
@@ -522,7 +529,7 @@
             <button class="arrow-button">→</button>
         </div>
 
-        <div class="content-box-test" onclick="window.location.href='viewDiscussions.php'">
+       <!-- <div class="content-box-test" onclick="window.location.href='viewDiscussions.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
             </div>
@@ -530,7 +537,7 @@
             <div class="large-text-sub">Discussions</div>
             <div class="graph-text">See the latest.</div>
             <button class="arrow-button">→</button>
-        </div>
+        </div>-->
     </div>
 
 

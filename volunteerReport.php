@@ -51,7 +51,7 @@
 <html>
     <head>
         <?php require_once('universal.inc') ?>
-        <title>Fredericksburg SPCA | Volunteer History</title>
+        <title>Rappahannock CASA | Volunteer History</title>
         <link rel="stylesheet" href="css/hours-report.css">
         <style>
             .volunteer-stat {
