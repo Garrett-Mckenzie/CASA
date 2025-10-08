@@ -56,7 +56,7 @@
         <?php require('universal.inc'); ?>
         <?php require('header.php'); ?>
         <script src="js/calendar.js"></script>
-        <title>Fredericksburg SPCA | Events Calendar</title>
+        <title>Rappahannock CASA | Events Calendar</title>
         <style>.happy-toast { margin: 0 1rem 1rem 1rem; }</style>
     </head>
     <body>
