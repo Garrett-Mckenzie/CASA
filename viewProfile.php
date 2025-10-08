@@ -134,8 +134,6 @@
 	<?php if ($viewingOwnProfile): ?>
           <h2 class="text-xl font-semibold mb-4">My Profile</h2>
 	  <h2 class="mb-4">Edit Icon Placeholder</h2>
-	<?php else: ?>
-	  <h2 class="text-xl font-semibold mb-4">Viewing <?php echo $user->get_first_name() . ' ' . $user->get_last_name() ?></h2>
 	<?php endif ?>
 	</div>
         <div class="space-y-2 divide-y divide-gray-300">
@@ -167,8 +165,6 @@
 
 <?php if ($accessLevel < 2) : ?>
         <button onclick="window.location.href='volunteerReport.php?id=<?php echo $user->get_id() ?>';" class="text-lg font-medium w-full px-4 py-2 border-2 border-gray-300 text-black rounded-md hover:border-blue-700 cursor-pointer">My Volunteering Report</button>
-<?php else : ?>
-        <button onclick="window.location.href='volunteerReport.php?id=<?php echo $user->get_id() ?>';" class="text-lg font-medium w-full px-4 py-2 border-2 border-gray-300 text-black rounded-md hover:border-blue-700 cursor-pointer"><?php echo $user->get_first_name() ?> <?php echo $user->get_last_name() ?>'s Volunteering Report</button>
 <?php endif ?>
         <button onclick="window.location.href='index.php';" class="text-lg font-medium w-full px-4 py-2 border-2 border-gray-300 text-black rounded-md hover:border-blue-700 cursor-pointer">Return to Dashboard</button>
       </div>
@@ -189,24 +185,11 @@
           <span class="block text-sm font-medium text-blue-900">Username</span>
           <p class="text-gray-900 font-medium text-xl"><?php echo $user->get_id() ?></p>
         </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Name</span>
-          <p class="text-gray-900 font-medium text-xl"><?php echo $user->get_first_name() ?> <?php echo $user->get_last_name() ?></p>
-        </div>
+      
        
       </div>
 
-      <!-- Contact Section -->
-      <div id="contact" class="profile-section space-y-4 hidden">
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Email</span>
-          <p class="text-gray-900 font-medium text-xl"><a href="mailto:<?php echo $user->get_email() ?>"><?php echo $user->get_email() ?></a></p>
-        </div>
-        
-        
- 
-      </div>
-
+      
       
     </div>
   </div>
