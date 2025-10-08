@@ -17,8 +17,8 @@
         die();
     }
         
-    include_once('database/dbPersons.php');
-    include_once('domain/Person.php');
+    require 'database/dbPersons.php';
+    require 'domain/Person.php';
     // Get date?
     if (isset($_SESSION['_id'])) {
         $person = retrieve_person($_SESSION['_id']);
@@ -418,7 +418,7 @@
 
     <!-- Dummy content to enable scrolling -->
     <div style="margin-top: 0px; padding: 30px 20px;">
-        <h2><b>Welcome <?php echo $person->get_first_name() ?>!</b> Let's get started.</h2>
+        <h2><b>Welcome <?php echo $person->get_name() ?>!</b> Let's get started.</h2>
     </div>
 
             <?php if (isset($_GET['pcSuccess'])): ?>
@@ -457,10 +457,6 @@
     <span class="button-text"><?php 
                         require_once('database/dbEvents.php');
                         require_once('database/dbPersons.php');
-                        $pendingsignups = all_pending_names();
-                        if (sizeof($pendingsignups) > 0) {
-                            echo '<span class="colored-box">' . sizeof($pendingsignups) . '</span>';
-                        }   
                     ?> Sign-Ups </span>
     <div class="circle">&gt;</div>
 </button>

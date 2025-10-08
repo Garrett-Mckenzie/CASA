@@ -18,30 +18,24 @@
 class Person {
 
 	private $access_level; // normal user = 1, admin = 2, superadmin = 3
-	
 
-   	// REQUIRED FIELDS
+
+	// REQUIRED FIELDS
 	private $id; // (username)
 	private $password;
-	private $first_name;
-	private $last_name;
-	
-	private $email;
+	private $name;
+	private $accessLevel;
 
 	/*
 	 * This is a temporary mini constructor for testing purposes. It will be expanded later.
 	 */
-	function __construct(
-        $id, $password, $first_name, $last_name
-    ) {
-        $this->id = $id;
-        $this->password = $password;
-        $this->first_name = $first_name;
-        $this->last_name = $last_name;
-        // Access level
-        $this->access_level = ($id == 'vmsroot') ? 3 : 1;
-
-    }
+	function __construct($id, $password,$name,$accessLevel){
+		$this->id = $id;
+		$this->password = $password;
+		$this->name = $name;
+		// Access level
+		$this->access_level = $accessLevel;
+	}
 
 
 
@@ -54,16 +48,8 @@ class Person {
 	}
 
 
-	function get_first_name() {
-		return $this->first_name;
-	}
-
-	function get_last_name() {
-		return $this->last_name;
-	}
-
-	function get_email() {
-		return $this->email;
+	function get_name() {
+		return $this->name;
 	}
 
 	function get_access_level() {
