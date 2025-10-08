@@ -4,11 +4,16 @@ SET FOREIGN_KEY_CHECKS = 0;
 /*
 Table structure for table `dbevents`
 */
+DROP TABLE IF EXISTS `dbevents`; 
 CREATE TABLE `dbevents` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`name` text,
+	`goalAmount` DECIMAL(12,2),
+	`date` char(10),
 	`startDate` char(10),
 	`endDate` char(10), 
+	`startTime` char(5) DEFAULT '00:00',
+	`endTime` char(5) DEFAULT '00:00',
 	`description` text,
 	`completed` text,
 	`location` text,
@@ -18,10 +23,11 @@ CREATE TABLE `dbevents` (
 /*
 Table structure for table `dbpersons`
 */
+DROP TABLE IF EXISTS `dbpersons`; 
 CREATE TABLE `dbpersons` (
 	`id` varchar(256) NOT NULL,
 	`name` text,
-       	`password` text,
+   	`password` text,
 	`accessLevel` int,
 	PRIMARY KEY (`id`)
 );
@@ -29,6 +35,7 @@ CREATE TABLE `dbpersons` (
 /*
 Table structure for table `donations`
 */
+DROP TABLE IF EXISTS `donations`; 
 CREATE TABLE `donations` (
 	`amount` DECIMAL(12,2),
 	`id` int NOT NULL AUTO_INCREMENT,
@@ -46,6 +53,7 @@ CREATE TABLE `donations` (
 /*
 Table structure for table `files`
 */
+DROP TABLE IF EXISTS `files`; 
 CREATE TABLE `files` (
 	`filePath` varchar(256) NOT NULL,
 	`linkToDrive` varchar(256) NOT NULL,
@@ -55,6 +63,7 @@ CREATE TABLE `files` (
 /*
 Table structure for table `donors`
 */
+DROP TABLE IF EXISTS `donors`; 
 CREATE TABLE `donors` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`first` varchar(30),
@@ -73,6 +82,7 @@ CREATE TABLE `donors` (
 /*
 Table structure for table `reports`
 */
+DROP TABLE IF EXISTS `reports`; 
 CREATE TABLE `reports` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`reportType` varchar(30),
@@ -87,6 +97,7 @@ CREATE TABLE `reports` (
 /*
 Table structure for table `emails`
 */
+DROP TABLE IF EXISTS `emails`; 
 CREATE TABLE `emails` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`message` text,
@@ -97,6 +108,7 @@ CREATE TABLE `emails` (
 /*
 Table structure for table `associations`
 */
+DROP TABLE IF EXISTS `associations`; 
 CREATE TABLE `associations` (
 	`eventID` int DEFAULT NULL,
 	`donationID` int DEFAULT NULL,
@@ -110,6 +122,8 @@ CREATE TABLE `associations` (
 	FOREIGN KEY (`filePath`) REFERENCES files(`filePath`),
 	PRIMARY KEY (`eventID`,`donationID`,`donorID`,`emailID`,`filePath`)
 );
+
+INSERT INTO dbpersons (`id`,`name`,`password`,`accessLevel`) VALUES ('vmsroot','SUPER ADMIN', '$2y$10$.3p8xvmUqmxNztEzMJQRBesLDwdiRU3xnt/HOcJtsglwsbUk88VTO', '0');
 
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
