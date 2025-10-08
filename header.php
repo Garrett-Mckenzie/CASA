@@ -614,7 +614,6 @@ date_default_timezone_set('America/New_York');
         $permission_array['selectvotm.php'] = 1;
         //pages only managers can view
         $permission_array['viewallevents.php'] = 0;
-        $permission_array['personsearch.php'] = 2;
         $permission_array['personedit.php'] = 0; // changed to 0 so that applicants can apply
         $permission_array['viewschedule.php'] = 2;
         $permission_array['addweek.php'] = 2;
@@ -651,8 +650,6 @@ date_default_timezone_set('America/New_York');
         $permission_array['eventmanagement.php'] = 2;
        
         $permission_array['deletediscussion.php'] = 2;
-        $permission_array['generatereport.php'] = 2; //adding this to the generate report page
-        $permission_array['generateemaillist.php'] = 2; //adding this to the generate report page
         $permission_array['clockoutbulk.php'] = 2;
         $permission_array['clockOut.php'] = 2;
         $permission_array['edithours.php'] = 2;
@@ -707,14 +704,6 @@ date_default_timezone_set('America/New_York');
     <span style="font-size:24px;">Register Volunteer</span>
   </div>
 </a>
-
-<a href="personSearch.php" style="text-decoration: none;">
-  <div class="in-nav">
-    <img src="images/person-search.svg">
-    <span>Search Volunteers</span>
-  </div>
-</a>
-
 			
                     </div>
                 </div>
