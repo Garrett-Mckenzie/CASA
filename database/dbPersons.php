@@ -13,15 +13,10 @@ function add_person($person) {
 	if (mysqli_num_rows($result) == 0) {
 		// Prepare the insert query
 		$insert_query = 'INSERT INTO dbpersons (
-			id, start_date, first_name, last_name, street_address, city, state, zip_code, 
-			phone1, phone1type, emergency_contact_phone, emergency_contact_phone_type, 
-			birthday, email, type, status, password, skills, interests, 
-			archived, is_new_volunteer, is_community_service_volunteer, total_hours_volunteered,
+			id, name, password,
 	) VALUES ("' .
 	$person->get_id() . '","' .
-	$person->get_first_name() . '","' .
-	$person->get_last_name() . '","' .
-	$person->get_email() . '","' .
+	$person->get_name() . '","' .
 	$person->get_password()  . '");';
 
 		// Check if the query is properly built
