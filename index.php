@@ -439,7 +439,7 @@
 
     <div class="full-width-bar">
     <div class="content-box">
-        <img src="images/VolM.png" />
+        <img src="images/VolM.png" style="filter: contrast(150%);"/>
         <div class="small-text">Look at the data.</div>
         <div class="large-text">Generate Report</div>
 <button class="circle-arrow-button" onclick="window.location.href='generateReport.php'">
@@ -478,7 +478,7 @@
     </div>
 
     <div class="content-box">
-        <img src="images/EvM.png" />
+        <img src="images/EvM.png" style="filter: contrast(150%);" />
         <div class="small-text">Let’s have some fun!</div>
         <div class="large-text">Event Management</div>
 <button class="circle-arrow-button" onclick="window.location.href='eventManagement.php'">
@@ -579,7 +579,6 @@
             </div>
         </div>
     </footer>
-    <p>_</p>
 
     <!-- Font Awesome for Icons -->
     <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
@@ -625,7 +624,7 @@
 
     <div class="full-width-bar">
     <div class="content-box">
-        <img src="images/VolM.png" />
+        <img src="images/VolM.png" style="filter: contrast(150%);"/>
         <div class="small-text">Make a difference.</div>
         <div class="large-text">My Profile</div>
         <div class="nav-buttons">
