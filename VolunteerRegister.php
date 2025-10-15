@@ -56,13 +56,7 @@ require_once('header.php');
 
         $id = $args['username'];
 
-        $password = isSecurePassword($args['password']);
-        if (!$password) {
-            echo "<p>Password is not secure enough.</p>";
-            $errors = true;
-        } else {
-            $password = password_hash($args['password'], PASSWORD_BCRYPT);
-        }
+        $password = password_hash($args['password'], PASSWORD_BCRYPT);
 
         if ($errors) {
             echo '<p class="error">Your form submission contained unexpected or invalid input.</p>';

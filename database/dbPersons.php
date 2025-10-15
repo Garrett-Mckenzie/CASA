@@ -12,12 +12,7 @@ function add_person($person) {
 	// If the result is empty, it means the person doesn't exist, so we can add the person
 	if (mysqli_num_rows($result) == 0) {
 		// Prepare the insert query
-		$insert_query = 'INSERT INTO dbpersons (
-			id, name, password,
-	) VALUES ("' .
-	$person->get_id() . '","' .
-	$person->get_name() . '","' .
-	$person->get_password()  . '");';
+		$insert_query = 'INSERT INTO dbpersons (id, name, password) VALUES ("'.$person->get_id().'","'.$person->get_name(). '","'.$person->get_password().'");';
 
 		// Check if the query is properly built
 		if (empty($insert_query)) {
