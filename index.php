@@ -446,18 +446,7 @@
     <span class="button-text">Go</span>
     <div class="circle">&gt;</div>
 </button>
-<!--
-        <div class="nav-buttons">
-            <button class="nav-button" onclick="window.location.href='personSearch.php'">
-                <span>Find</span>
-                <span class="arrow"><img src="images/person-search.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 20px;"></span>
-            </button>
-            <button class="nav-button" onclick="window.location.href='VolunteerRegister.php'">
-                <span>Register</span>
-                <span class="arrow"><img src="images/add-person.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 20px;"></span>
-            </button>
-        </div>
--->
+
     </div>
 
     <div class="content-box">
@@ -515,37 +504,6 @@
             <div class="graph-text">Stay up to date.</div>
             <button class="arrow-button">→</button>
         </div>
-
-        <div class="content-box-test" onclick="window.location.href='generateReport.php'">
-            <div class="icon-overlay">
-                <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
-            </div>
-            <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Generate Report</div>
-            <div class="graph-text">From this quarter or annual.</div>
-            <button class="arrow-button">→</button>
-        </div>
-    <div class="content-box-test" onclick="window.location.href='generateEmailList.php'">
-            <div class="icon-overlay">
-                <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
-            </div>
-            <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Generate Email List</div>
-            <div class="graph-text">Volunteer Emails</div>
-            <button class="arrow-button">→</button>
-        </div>
-
-        <div class="content-box-test" onclick="window.location.href='viewDiscussions.php'">
-            <div class="icon-overlay">
-                <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
-            </div>
-            <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Discussions</div>
-            <div class="graph-text">See the latest.</div>
-            <button class="arrow-button">→</button>
-        </div>
-    </div>
-
 
     
 
@@ -626,7 +584,7 @@
 
     <!-- Dummy content to enable scrolling -->
     <div style="margin-top: 0px; padding: 30px 20px;">
-        <h2><b>Welcome <?php echo $person->get_first_name() ?>!</b> Let's get started.</h2>
+        <h2><b>Welcome <?php echo $person->get_name() ?>!</b> Let's get started.</h2>
     </div>
 
     <div class="full-width-bar">

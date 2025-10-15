@@ -52,8 +52,7 @@ require_once('header.php');
             $errors = true;
         }
 
-        $first_name = $args['first_name'];
-        $last_name = $args['last_name'];
+        $name = $args['first_name'] + " "+ $args['last_name'];
 
         $id = $args['username'];
 
@@ -71,8 +70,7 @@ require_once('header.php');
         }
 
         $newperson = new Person(
-            $id, $password, date("Y-m-d"),
-            $first_name, $last_name
+            $id, $password, $name, 0 //temp access level for all new users ~ Ethan
         );
 
         $result = add_person($newperson);
@@ -80,8 +78,8 @@ require_once('header.php');
             $showPopup = true;
         } else {
             echo '<script>document.location = "login.php?registerSuccess";</script>';
-            $title = $id . " has been added as a volunteer";
-            $body = "New volunteer account has been created";
+            $title = $id . " has been added as a user";
+            $body = "New user account has been created";
         }
     } else {
         require_once('registrationForm.php');
