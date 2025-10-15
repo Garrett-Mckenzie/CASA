@@ -52,7 +52,7 @@ require_once('header.php');
             $errors = true;
         }
 
-        $name = $args['first_name'] + " "+ $args['last_name'];
+        $name = $args['first_name']." ".$args['last_name'];
 
         $id = $args['username'];
 
