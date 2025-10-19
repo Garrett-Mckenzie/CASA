@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html">
+        <title>Import/Export | Rappahannock CASA</title>
+        <link rel="stylesheet" href="styler.sass">
+        <script type="text/javascript">
+            
+
+            var files;
+            function displayImport(event){
+                files = event.target.files;
+                const fileList = event.target.files;
+                const fileDisplay = document.getElementById('fileDisplay');
+                fileDisplay.innerHTML = '';
+
+                for(let i = 0; i < fileList.length; i++){
+                    const listItem = document.createElement('li');
+                    listItem.textContent = fileList[i].name;
+                    fileDisplay.appendChild(listItem);
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <table></table>
+            </nav>
+        </header>
+        <main>
+            <form action="ImportHandler.php" method="post" enctype="">
+                <input type="file" multiple="multiple" onchange="displayImport(event)">
+                <ul id="fileDisplay" class="display"></ul>
+                <button type="submit">Import</button>
+            </form>
+        </main>
+    </body>
+</html>
