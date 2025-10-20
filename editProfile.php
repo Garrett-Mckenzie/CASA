@@ -149,7 +149,7 @@
 <html>
 <head>
     <?php require_once('universal.inc'); ?>
-    <title>Fredericksburg SPCA | Manage Profile</title>
+    <title>Rappahannock CASA | Manage Profile</title>
 </head>
 <body>
     <?php

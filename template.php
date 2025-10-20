@@ -20,7 +20,7 @@
 <html>
     <head>
         <?php require_once('universal.inc') ?>
-        <title>Fredericksburg SPCA | Template Page</title>
+        <title>Rappahannock CASA | Template Page</title>
     </head>
     <body>
         <?php require_once('header.php') ?>
