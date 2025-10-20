@@ -188,10 +188,10 @@ date_default_timezone_set('America/New_York');
 
         /* Logo */
         .logo-container {
-            background: #00447b;
+            background: white;
             padding: 10px 20px;
             border-radius: 50px;
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25) inset;
+            border: 1px solid black;
         }
 
         .logo-container img {
@@ -692,7 +692,7 @@ date_default_timezone_set('America/New_York');
         <!-- Left Section: Logo & Nav Links -->
         <div class="left-section">
             <div class="logo-container">
-                <a href="index.php"><img src="images/edited-photo.png" alt="Logo"></a>
+                <a href="index.php"><img src="images/RAPPAHANNOCK_v_RedBlue2.png" alt="Logo"></a>
             </div>
             <div class="nav-links">
                 <div class="nav-item">Volunteers
