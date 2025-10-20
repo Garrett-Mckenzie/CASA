@@ -76,7 +76,7 @@ $(function() {
 });
 </script>
 	<?php require_once('universal.inc') ?>
-        <title>Fredericksburg SPCA | Reports</title>
+        <title>Rappahannock CASA | Reports</title>
         <style>
             .report_select{
                 display: flex;
