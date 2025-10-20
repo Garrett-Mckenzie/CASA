@@ -1,13 +1,15 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    header('Content-Type: application/json');
+
     $reason = $_POST['reason'] ?? '';
     $recipient_email = $_POST['recipient_email'] ?? '';
     $recipient_name = $_POST['recipient_name'] ?? '';
     $sender = $_POST['sender'] ?? '';
 
-    $prompt = "You are an assistant that writes short, professional, and warm emails.\n".
-              "Sender: $sender\nRecipient name: $recipient_name\n".
-              "Reason: $reason\n".
+    $prompt = "You are an assistant that writes short, professional, and warm emails.\n" .
+              "Sender: $sender\nRecipient name: $recipient_name\n" .
+              "Reason: $reason\n" .
               "Write a concise, friendly email that could be sent to this recipient.";
 
     $data = [
@@ -16,19 +18,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         "stream" => false
     ];
 
-    $ch = curl_init('http://localhost:11434/api/generate');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-    $response = curl_exec($ch);
-    curl_close($ch);
+    try {
+        $ch = curl_init('http://localhost:11434/api/generate');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_TIMEOUT, 20); // prevent hanging
+        $response = curl_exec($ch);
+        $error = curl_error($ch);
+        curl_close($ch);
 
-    header('Content-Type: application/json');
-    echo $response;
-    exit;
+        if ($error) {
+            echo json_encode([
+                'success' => false,
+                'response' => "Connection error: $error"
+            ]);
+            exit;
+        }
+
+        // Handle empty or invalid response
+        if (!$response || trim($response) === '') {
+            echo json_encode([
+                'success' => false,
+                'response' => "Model returned no output. Make sure the Ollama container and qwen3:14b are running."
+            ]);
+            exit;
+        }
+
+        // Try to parse Ollama’s response JSON
+        $decoded = json_decode($response, true);
+        if (!$decoded || !isset($decoded['response'])) {
+            echo json_encode([
+                'success' => false,
+                'response' => "Invalid JSON from Ollama. Full output:\n" . substr($response, 0, 200)
+            ]);
+            exit;
+        }
+
+        echo json_encode([
+            'success' => true,
+            'response' => $decoded['response']
+        ]);
+        exit;
+
+    } catch (Throwable $e) {
+        echo json_encode([
+            'success' => false,
+            'response' => "Server error: " . $e->getMessage()
+        ]);
+        exit;
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
