@@ -1,4 +1,20 @@
 <?php
+set_time_limit(120);                // allow script up to 2 minutes
+ini_set('max_execution_time', 120);
+// Always return JSON, even for PHP warnings/errors
+ini_set('display_errors', 0);
+set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'response' => "PHP error: $errstr"]);
+    exit;
+});
+set_exception_handler(function ($e) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'response' => "Exception: " . $e->getMessage()]);
+    exit;
+});
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
 
@@ -10,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prompt = "You are an assistant that writes short, professional, and warm emails.\n" .
               "Sender: $sender\nRecipient name: $recipient_name\n" .
               "Reason: $reason\n" .
-              "Write a concise, friendly email that could be sent to this recipient.";
+              "Write a concise, friendly email that could be sent to this recipient. Do not include any bracketed info for me to fill out, if you don't know information leave it out!";
 
     $data = [
         "model" => "qwen3:14b",
@@ -19,12 +35,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     try {
-        $ch = curl_init('http://localhost:11434/api/generate');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($ch, CURLOPT_TIMEOUT, 20); // prevent hanging
+        //use IPv4 loopback (faster + avoids IPv6/localhost timeout)
+        $ch = curl_init('http://127.0.0.1:11434/api/generate');
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_TIMEOUT => 120,                // allow long model load
+            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4 // force IPv4
+        ]);
+
         $response = curl_exec($ch);
         $error = curl_error($ch);
         curl_close($ch);
@@ -37,7 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        // Handle empty or invalid response
         if (!$response || trim($response) === '') {
             echo json_encode([
                 'success' => false,
@@ -46,7 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        // Try to parse Ollama’s response JSON
         $decoded = json_decode($response, true);
         if (!$decoded || !isset($decoded['response'])) {
             echo json_encode([

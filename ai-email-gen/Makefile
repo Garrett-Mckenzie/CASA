@@ -15,14 +15,16 @@ PHP_PORT        := 8080
 # Platform detection
 # ------------------------------------------------------
 ifeq ($(OS),Windows_NT)
-    SHELL := powershell.exe
+    SHELL := cmd.exe
+    .SHELLFLAGS := /C
     NULL := >NUL 2>&1
     MKDIR := if not exist
     RM := del /Q
     PY := python
     CURL := curl.exe
-    OPEN := start
     VOLUME_PATH := $(shell powershell -Command "(Resolve-Path .\\ollama-data).Path")
+    OPEN_CMD := powershell -Command "Start-Process"
+    CONTAINER_ENGINE := $(shell powershell -Command "if (Get-Command podman -ErrorAction SilentlyContinue) { Write-Host podman } elseif (Get-Command docker -ErrorAction SilentlyContinue) { Write-Host docker } else { Write-Host none }")
 else
     SHELL := /bin/bash
     NULL := >/dev/null 2>&1
@@ -30,18 +32,10 @@ else
     RM := rm -rf
     PY := python3
     CURL := curl
-    # macOS uses 'open', Linux uses 'xdg-open'
-    OPEN := $(shell if command -v open >/dev/null 2>&1; then echo open; else echo xdg-open; fi)
     VOLUME_PATH := $(shell pwd)/ollama-data
+    OPEN_CMD := $(shell if command -v open >/dev/null 2>&1; then echo open; else echo xdg-open; fi)
+    CONTAINER_ENGINE := $(shell if command -v podman >/dev/null 2>&1; then echo podman; elif command -v docker >/dev/null 2>&1; then echo docker; else echo none; fi)
 endif
-
-# ------------------------------------------------------
-# Determine container engine (Podman or Docker)
-# ------------------------------------------------------
-CONTAINER_ENGINE := $(shell \
-	if command -v podman >/dev/null 2>&1; then echo podman; \
-	elif command -v docker >/dev/null 2>&1; then echo docker; \
-	else echo none; fi)
 
 ifeq ($(CONTAINER_ENGINE),none)
 $(error Neither Podman nor Docker found. Please install one to continue.)
@@ -66,16 +60,26 @@ build:
 run:
 ifeq ($(OS),Windows_NT)
 	@if not exist "ollama-data" mkdir ollama-data
-	-$(CONTAINER_ENGINE) stop $(CONTAINER_NAME) $(NULL) || powershell -Command "exit 0"
-	-$(CONTAINER_ENGINE) rm $(CONTAINER_NAME) $(NULL) || powershell -Command "exit 0"
+	-$(CONTAINER_ENGINE) stop $(CONTAINER_NAME) $(NULL)
+	-$(CONTAINER_ENGINE) rm $(CONTAINER_NAME) $(NULL)
+	$(CONTAINER_ENGINE) run -d -p $(PORT):11434 -v "$(VOLUME_PATH):/root/.ollama" -e OLLAMA_HOST=0.0.0.0:11434 -e OLLAMA_KEEP_ALIVE=1h --name $(CONTAINER_NAME) $(IMAGE_NAME)
+	@echo "Preloading model and starting keep-alive ping loop..."
+	powershell -Command "podman exec -d $(CONTAINER_NAME) ollama generate -m $(MODEL) 'Ready check' | Out-Null"
+	powershell -Command "podman exec -d $(CONTAINER_NAME) sh -c 'while true; do ollama generate -m $(MODEL) \"ping\" >/dev/null 2>&1; sleep 1800; done' | Out-Null"
 else
 	@$(MKDIR) ollama-data
 	-$(CONTAINER_ENGINE) stop $(CONTAINER_NAME) $(NULL) || true
 	-$(CONTAINER_ENGINE) rm $(CONTAINER_NAME) $(NULL) || true
-endif
 	$(CONTAINER_ENGINE) run -d -p $(PORT):11434 \
 		-v "$(VOLUME_PATH):/root/.ollama" \
+		-e OLLAMA_HOST=0.0.0.0:11434 \
+		-e OLLAMA_KEEP_ALIVE=1h \
 		--name $(CONTAINER_NAME) $(IMAGE_NAME)
+	@echo "Preloading model and starting keep-alive ping loop..."
+	$(CONTAINER_ENGINE) exec -d $(CONTAINER_NAME) ollama generate -m $(MODEL) "Ready check" >/dev/null 2>&1
+	$(CONTAINER_ENGINE) exec -d $(CONTAINER_NAME) sh -c "while true; do ollama generate -m $(MODEL) \"ping\" >/dev/null 2>&1; sleep 1800; done"
+endif
+
 
 # ------------------------------------------------------
 # Pull model inside container
@@ -94,8 +98,8 @@ tags:
 # ------------------------------------------------------
 clean:
 ifeq ($(OS),Windows_NT)
-	-$(CONTAINER_ENGINE) stop $(CONTAINER_NAME) $(NULL) || powershell -Command "exit 0"
-	-$(CONTAINER_ENGINE) rm $(CONTAINER_NAME) $(NULL) || powershell -Command "exit 0"
+	-$(CONTAINER_ENGINE) stop $(CONTAINER_NAME) $(NULL)
+	-$(CONTAINER_ENGINE) rm $(CONTAINER_NAME) $(NULL)
 else
 	-$(CONTAINER_ENGINE) stop $(CONTAINER_NAME) $(NULL) || true
 	-$(CONTAINER_ENGINE) rm $(CONTAINER_NAME) $(NULL) || true
@@ -113,11 +117,11 @@ status:
 serve:
 ifeq ($(OS),Windows_NT)
 	@echo Starting PHP server on http://localhost:$(PHP_PORT)
-	powershell -Command "Start-Process powershell -ArgumentList '-NoExit','-Command','php -S localhost:$(PHP_PORT)'"
-	@$(OPEN) http://localhost:$(PHP_PORT)
+	start powershell -NoExit -Command "php -S localhost:$(PHP_PORT)"
+	@$(OPEN_CMD) "http://localhost:$(PHP_PORT)"
 else
 	@echo "Starting PHP server on http://localhost:$(PHP_PORT)"
-	@$(OPEN) "http://localhost:$(PHP_PORT)" $(NULL) || true
+	@$(OPEN_CMD) "http://localhost:$(PHP_PORT)" $(NULL) || true
 	php -S localhost:$(PHP_PORT)
 endif
 
