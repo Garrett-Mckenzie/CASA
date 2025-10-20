@@ -64,7 +64,7 @@ mysqli_close($con);
 
     <link rel="stylesheet" href="css/base.css" type="text/css" />
 
-    <title>Fredericksburg SPCA | Leaderboard</title>
+    <title>Rappahannock CASA | Leaderboard</title>
 
     <style>
 

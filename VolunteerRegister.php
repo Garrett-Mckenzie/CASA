@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Fredericksburg SPCA | Register</title>
+    <title>Rappahannock CASA | Register</title>
     <link href="css/normal_tw.css" rel="stylesheet">
 <!-- BANDAID FIX FOR HEADER BEING WEIRD -->
 <?php
@@ -52,17 +52,11 @@ require_once('header.php');
             $errors = true;
         }
 
-        $name = $args['first_name'] + " "+ $args['last_name'];
+        $name = $args['first_name']." ".$args['last_name'];
 
         $id = $args['username'];
 
-        $password = isSecurePassword($args['password']);
-        if (!$password) {
-            echo "<p>Password is not secure enough.</p>";
-            $errors = true;
-        } else {
-            $password = password_hash($args['password'], PASSWORD_BCRYPT);
-        }
+        $password = password_hash($args['password'], PASSWORD_BCRYPT);
 
         if ($errors) {
             echo '<p class="error">Your form submission contained unexpected or invalid input.</p>';
