@@ -19,9 +19,9 @@ VOLUME_PATH     := $(shell powershell -Command "(Resolve-Path .\\ollama-data).Pa
 # ------------------------------------------------------
 check-podman:
 	@powershell -Command "if (-not (Get-Command podman -ErrorAction SilentlyContinue)) { \
-		Write-Host '❌ Podman is not installed. Please install it from https://podman.io/getting-started/installation'; \
+		Write-Host 'Podman is not installed. Please install it from https://podman.io/getting-started/installation'; \
 		exit 1; \
-	} else { Write-Host '✅ Podman detected.' }"
+	} else { Write-Host 'Podman detected.' }"
 
 # ------------------------------------------------------
 # Default target
