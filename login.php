@@ -142,7 +142,7 @@ if (isset($_GET['registerSuccess'])) {
 	  <input class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400" type="password" name="password" placeholder="Enter your password" required>
 	</div>
 	<div class="flex justify-between items-center mb-4">
-	  <a href="#" class="text-blue-500 text-sm hover:underline">Forgot password?</a>
+      <!--<a href="#" class="text-blue-500 text-sm hover:underline">Forgot password?</a> -->
 	  <a href="https://rappahannockcasa.com/" target="_blank" class="text-blue-500 text-sm hover:underline">Rappahannock CASA Website</a>
 	</div>
 	<button class="cursor-pointer w-full bg-[#345284] hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition duration-300">Login</button>
