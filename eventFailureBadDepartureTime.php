@@ -7,7 +7,7 @@
     <html>
         <head>
             <?php require_once('universal.inc') ?>
-            <title>Fredericksburg SPCA | Sign-Up for Event</title>
+            <title>Rappahannock CASA | Sign-Up for Event</title>
         </head>
         <body>
             <?php require_once('header.php') ?>
