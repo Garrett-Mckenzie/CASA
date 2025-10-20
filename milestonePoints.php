@@ -86,7 +86,7 @@ $progress_percent = min(100, max(0, round($progress * 100)));
 
     <link rel="stylesheet" href="css/base.css" type="text/css" />
 
-    <title>Fredericksburg SPCA | XP Milestones</title>
+    <title>Rappahannock CASA | XP Milestones</title>
 
     <style>
 

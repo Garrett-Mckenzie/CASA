@@ -55,7 +55,7 @@
 <html>
     <head>
         <?php require_once('universal.inc') ?>
-        <title>Fredericksburg SPCA | Event Search</title>
+        <title>Rappahannock CASA | Event Search</title>
     </head>
     <body>
         <?php require_once('header.php') ?>
