@@ -26,23 +26,27 @@ from mysql.connector import Error
 
 # Export
 def export_excel():
-    for arg in sys.argv[2:]:
-        try:
-            connection = mysql.connector.connect(
-                host=HOST,
-                user=USER,
-                password=PASSWORD,
-                database=DATABASE
-            )
-            if connection.is_connected():
-                query = "SELECT * FROM sample;"
-                df = pd.read_sql(query, connection)
-                df.to_excel(arg, index=False)
-                print(f"Data exported successfully as {arg}")
+    try:
+        connection = mysql.connector.connect(
+            host=HOST,
+            user=USER,
+            password=PASSWORD,
+            database=DATABASE
+        )
+        if connection.is_connected():
+            query = sys.argv[2]
+            export_file = sys.argv[3]
+            df = pd.read_sql_query(query, connection)
+            df.to_excel(export_file, index=False)
+            print(f"Data exported successfully as {export_file}")
             connection.close()
-        except Error:
-            print("Error while connecting to MySQL", Error)
-            return False
+    except Error as e:
+        print("Error while connecting to MySQL", e)
+        return False
+    except Exception as e:
+        print(f"Error exporting: {str(e)}")
+        return False
+    
     return True
 
 # Import
@@ -91,22 +95,26 @@ def import_excel():
 # Main
 def main():
     # Check file format
+    ret = 1
     if len(sys.argv) < 2 or (sys.argv[1] == "-h" or sys.argv[1] == "--help"):
         print("Usage:\nCASA_DB_Calls.py -i|--import <file1.xlsx> [<file2.xlsx> ...]\nCASA_DB_Calls.py -e|--export <file1.xlsx> [<file2.xlsx> ...]")
-        return 0
-    
-    for arg in sys.argv[2:]:
-        if not Path(arg).is_file() or not arg.endswith('.xlsx'):
-            print(f"Error: {arg} is not a valid .xlsx file")
-            return 0
+        return 1
 
     if sys.argv[1] == "-i" or sys.argv[1] == "--import":
-        import_excel()
+        for arg in sys.argv[2:]:
+            if not Path(arg).is_file() or not arg.endswith('.xlsx'):
+                print(f"Error: {arg} is not a valid .xlsx file")
+                return 1
+        ret = import_excel()
     elif sys.argv[1] == "-e" or sys.argv[1] == "--export":
-        export_excel
+        if len(sys.argv) != 4:
+            print("Error: Incorrect format")
+        ret = export_excel()
     else:
         print("Error: Invalid option. Use -h or --help for usage information.")
-        return 0
+        return 1
+    
+    return 0 if (ret == True) else 1
 
 if __name__ == "__main__":
     main()

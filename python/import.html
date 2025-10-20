@@ -30,7 +30,7 @@
         </header>
         <main>
             <form action="ImportHandler.php" method="post" enctype="">
-                <input type="file" multiple="multiple" onchange="displayImport(event)">
+                <input type="file" name="files[]" multiple="multiple" onchange="displayImport(event)">
                 <ul id="fileDisplay" class="display"></ul>
                 <button type="submit">Import</button>
             </form>
