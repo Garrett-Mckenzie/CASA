@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html">
+        <title>Import/Export | Rappahannock CASA</title>
+        <link rel="stylesheet" href="styler.sass">
+        <!-- Popup for download link -->
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const get = new URLSearchParams(window.location.search);
+                const success = params.get("success");
+                const file = params.get("file");
+
+                if(success === "1" && file){
+                    alert(`Export complete. Download here: ${file}`);
+                }
+                else{
+                    alert(`Failed to export.`);
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <table></table>
+            </nav>
+        </header>
+        <main>
+            <form action="ExportHandler.php" method="post" enctype="multipart/form-data">
+                <table>
+                    <tr>
+                        <td>Export Donor Information</td>
+                        <td><button name="export" id="donor" type="submit">Download</button></td>
+                    </tr>
+                    <tr>
+                        <td>Export Donation Information</td>
+                        <td><button name="export" id="donation" type="submit">Download</button></td>
+                    </tr>
+                </table>
+            </form>
+        </main>
+    </body>
+</html>
