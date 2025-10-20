@@ -6,8 +6,31 @@
         <link rel="stylesheet" href="styler.sass">
         <!-- Popup for download link -->
         <script>
+            async function handleExport(event){
+                const sass = await import("https://jspm.dev/sass");
+                event.preventDefault();
+
+                const form = event.target;
+                const formData = new FormData(form);
+
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: formData,
+                });
+
+                const result = await resposne.text();
+
+                const popup = document.createElement('div');
+                popup.style.position = 'fixed';
+                popup.innerHTML = `
+                    <p>${result}</p>
+                    <button onclick="this.parentElement.remove()">Close</button> `;
+                document.body.appendChild(popup);
+            }
+
+            /*
             document.addEventListener("DOMContentLoaded", () => {
-                const get = new URLSearchParams(window.location.search);
+                const params = new URLSearchParams(window.location.search);
                 const success = params.get("success");
                 const file = params.get("file");
 
@@ -18,6 +41,7 @@
                     alert(`Failed to export.`);
                 }
             });
+            */
         </script>
     </head>
     <body>
@@ -30,11 +54,11 @@
             <form action="ExportHandler.php" method="post" enctype="multipart/form-data">
                 <table>
                     <tr>
-                        <td>Export Donor Information</td>
+                        <td class="info">Export Donor Information</td>
                         <td><button name="export" id="donor" type="submit">Download</button></td>
                     </tr>
                     <tr>
-                        <td>Export Donation Information</td>
+                        <td class="info">Export Donation Information</td>
                         <td><button name="export" id="donation" type="submit">Download</button></td>
                     </tr>
                 </table>

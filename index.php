@@ -179,7 +179,7 @@
         }
 
         .logo-container img {
-            width: 128px;
+            width: 80px;
             height: 52px;
             display: block;
         }
@@ -439,20 +439,20 @@
 
     <div class="full-width-bar">
     <div class="content-box">
-        <img src="images/VolM.png" style="filter: contrast(150%);"/>
+        <img src="images/blank-white-background.jpg" style="filter: contrast(50%);"/>
         <div class="small-text">Look at the data.</div>
         <div class="large-text">Generate Report</div>
-<button class="circle-arrow-button" onclick="window.location.href='generateReport.php'">
+<button class="circle-arrow-button">
     <span class="button-text">Go</span>
     <div class="circle">&gt;</div>
 </button>
     </div>
 
     <div class="content-box">
-        <img src="images/EvM.png" style="filter: contrast(150%);" />
+        <img src="images/blank-white-background.jpg" style="filter: contrast(50%);" />
         <div class="small-text">Let’s have some fun!</div>
         <div class="large-text">Event Management</div>
-<button class="circle-arrow-button" onclick="window.location.href='eventManagement.php'">
+<button class="circle-arrow-button">
     <span class="button-text"><?php 
                         require_once('database/dbEvents.php');
                         require_once('database/dbPersons.php');
@@ -469,34 +469,31 @@
         <h2><b>Admin Dashboard</h2>
     </div>
     <div class="full-width-bar-sub">
-        <div class="content-box-test" onclick="window.location.href='calendar.php'">
-            <div class="icon-overlay">
-                <img style="border-radius: 5px;" src="images/view-calendar.svg" alt="Calendar Icon">
-            </div>
-            <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Calendar</div>
-            <div class="graph-text">See upcoming events/trainings.</div>
-            <button class="arrow-button">→</button>
-        </div>
-
-
-        <div class="content-box-test" onclick="window.location.href='resources.php'">
+        <div class="content-box-test" onclick="window.location.href='python/import.html'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Manage Documents</div>
-            <div class="graph-text">Resources for donors.</div>
+            <div class="large-text-sub">Import Files</div>
             <button class="arrow-button">→</button>
         </div>
 
-    <div class="content-box-test" onclick="window.location.href='generateEmailList.php'">
+
+        <div class="content-box-test" onclick="window.location.href='python/export.html'">
+            <div class="icon-overlay">
+                <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
+            </div>
+            <img class="background-image" src="images/blank-white-background.jpg" />
+            <div class="large-text-sub">Export Files</div>
+            <button class="arrow-button">→</button>
+        </div>
+
+    <div class="content-box-test" onclick="window.location.href='ai-email-gen/index.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
             <div class="large-text-sub">Generate Emails</div>
-            <div class="graph-text">Volunteer Emails</div>
             <button class="arrow-button">→</button>
         </div>
     </div>
@@ -638,13 +635,12 @@
         <h2><b>Your Dashboard</h2>
     </div>
     <div class="full-width-bar-sub">
-        <div class="content-box-test" onclick="window.location.href='calendar.php'">
+        <div class="content-box-test" onclick="window.location.href='python/import.html'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/view-calendar.svg" alt="Calendar Icon">
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Calendar</div>
-            <div class="graph-text">See upcoming events/trainings.</div>
+            <div class="large-text-sub">Import Files</div>
             <button class="arrow-button">→</button>
         </div>
 

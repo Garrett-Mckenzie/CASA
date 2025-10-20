@@ -30,3 +30,11 @@
         echo "Invalid request<br>";
     }
 ?>
+<!DOCTYPE html>
+<html>
+    <body>
+        <main>
+            <p name="Response"></p>
+        </main>
+    </body>
+</html>

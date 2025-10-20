@@ -45,9 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="mb-3">
         <label class="form-label">Reason for Email</label>
         <select class="form-select" name="reason">
-          <option>thank donor</option>
-          <option>solicit donation</option>
-          <option>event alert</option>
+          <option>Thank Donor</option>
+          <option>Solicit Donation</option>
+          <option>Event Alert</option>
         </select>
       </div>
 
