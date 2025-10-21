@@ -84,7 +84,7 @@ def import_excel():
                     for item in required_columns:
                         req[item] = row[item]
 
-                    query = "INSERT INTO "
+                    query = "INSERT INTO donor () VALUE ()"
                     cursor = connection.cursor()
                 connection.close()
             else: return False

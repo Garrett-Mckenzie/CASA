@@ -1,14 +1,32 @@
 <?php
+set_time_limit(120);                // allow script up to 2 minutes
+ini_set('max_execution_time', 120);
+// Always return JSON, even for PHP warnings/errors
+ini_set('display_errors', 0);
+set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'response' => "PHP error: $errstr"]);
+    exit;
+});
+set_exception_handler(function ($e) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'response' => "Exception: " . $e->getMessage()]);
+    exit;
+});
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    header('Content-Type: application/json');
+
     $reason = $_POST['reason'] ?? '';
     $recipient_email = $_POST['recipient_email'] ?? '';
     $recipient_name = $_POST['recipient_name'] ?? '';
     $sender = $_POST['sender'] ?? '';
 
-    $prompt = "You are an assistant that writes short, professional, and warm emails.\n".
-              "Sender: $sender\nRecipient name: $recipient_name\n".
-              "Reason: $reason\n".
-              "Write a concise, friendly email that could be sent to this recipient.";
+    $prompt = "You are an assistant that writes short, professional, and warm emails.\n" .
+              "Sender: $sender\nRecipient name: $recipient_name\n" .
+              "Reason: $reason\n" .
+              "Write a concise, friendly email that could be sent to this recipient. Do not include any bracketed info for me to fill out, if you don't know information leave it out!";
 
     $data = [
         "model" => "qwen3:14b",
@@ -16,19 +34,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         "stream" => false
     ];
 
-    $ch = curl_init('http://localhost:11434/api/generate');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-    $response = curl_exec($ch);
-    curl_close($ch);
+    try {
+        //use IPv4 loopback (faster + avoids IPv6/localhost timeout)
+        $ch = curl_init('http://127.0.0.1:11434/api/generate');
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_TIMEOUT => 120,                // allow long model load
+            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4 // force IPv4
+        ]);
 
-    header('Content-Type: application/json');
-    echo $response;
-    exit;
+        $response = curl_exec($ch);
+        $error = curl_error($ch);
+        curl_close($ch);
+
+        if ($error) {
+            echo json_encode([
+                'success' => false,
+                'response' => "Connection error: $error"
+            ]);
+            exit;
+        }
+
+        if (!$response || trim($response) === '') {
+            echo json_encode([
+                'success' => false,
+                'response' => "Model returned no output. Make sure the Ollama container and qwen3:14b are running."
+            ]);
+            exit;
+        }
+
+        $decoded = json_decode($response, true);
+        if (!$decoded || !isset($decoded['response'])) {
+            echo json_encode([
+                'success' => false,
+                'response' => "Invalid JSON from Ollama. Full output:\n" . substr($response, 0, 200)
+            ]);
+            exit;
+        }
+
+        echo json_encode([
+            'success' => true,
+            'response' => $decoded['response']
+        ]);
+        exit;
+
+    } catch (Throwable $e) {
+        echo json_encode([
+            'success' => false,
+            'response' => "Server error: " . $e->getMessage()
+        ]);
+        exit;
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -45,9 +107,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="mb-3">
         <label class="form-label">Reason for Email</label>
         <select class="form-select" name="reason">
-          <option>thank donor</option>
-          <option>solicit donation</option>
-          <option>event alert</option>
+          <option>Thank Donor</option>
+          <option>Solicit Donation</option>
+          <option>Event Alert</option>
         </select>
       </div>
 
