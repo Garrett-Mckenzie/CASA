@@ -1,8 +1,9 @@
 <?php
-    $python_script = 'CASA_DB_Calls.py';
+    $python_script = 'dbManager.py';
     $output = [];
     $return_var = 0;
     $temp = "";
+    $export_file = "exports" . DIRECTORY_SEPARATOR . "donorExport.xlsx";
     if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST)){
         $req = $_POST['export'];
         if($req === 'donor'){
@@ -14,7 +15,7 @@
         else{
             header("Location: export.html?success=0");
         }
-        
+
         exec("python \"$python_script\" -e \"$query\" \"$export_file\"", $output, $return_var);
         $temp = "exec successful";
         if($return_var === 0){

@@ -82,10 +82,17 @@ def import_excel():
                         'notes': None,
                     }
                     for item in required_columns:
-                        req[item] = row[item]
-
-                    query = "INSERT INTO donor () VALUE ()"
+                        try:
+                            req[item] = row[item]
+                        except Exception as ignored:
+                            pass
+                    if req['amount'] == None:
+                        return False
+                    query = "INSERT INTO donor (" + ((req['amount'] + ",") if req['amount'] != None else "") + ((req['reason'] + ",") if req['reason'] != None else "") + ((req['date'] + ",") if req['date'] != None else "") + ((req['fee'] + ",") if req['fee'] != None else "") + ((req['first'] + ",") if req['first'] != None else "") + ((req['last'] + ",") if req['last'] != None else "") + ((req['email'] + ",") if req['email'] != None else "") + ((req['zip'] + ",") if req['zip'] != None else "") + ((req['city'] + ",") if req['city'] != None else "") + ((req['state'] + ",") if req['state'] != None else "") + ((req['street'] + ",") if req['street'] != None else "") + ((req['phone'] + ",") if req['phone'] != None else "") + ((req['gender'] + ",") if req['gender'] != None else "") + ((req['notes'] + ",") if req['notes'] != None else "")
+                    #query = "INSERT INTO donor () VALUE ()"
                     cursor = connection.cursor()
+                    cursor.execute(query)
+                    connection.commit()
                 connection.close()
             else: return False
         except:
