@@ -581,7 +581,7 @@ INSERT IGNORE INTO `donations` (`date`, `amount`, `reason`, `eventID`, `donorID`
 ('05/10/2014', 350.00, 'Bellydance event; also gave $500 in 2015; $2,050 in 2017; gave $2,500 in 2018; $1,600 in 2020; $250 2024 Giving Tues', NULL, 82, 0.00, 0),
 
 -- Donor ID 84: Kelley Helmstutler DiDio
-('2018-07-08', 50.00, '', NULL, 84, 0.00, 0),
+('07/08/2018', 50.00, '', NULL, 84, 0.00, 0),
 
 -- Donor ID 87: Kelly & Sam Carniol
 ('01/01/2016', 100.00, 'In honor and with love for our amazing CASA Renee Cinalli, Community Give; $100 on 2024 Giving Tues', NULL, 87, 0.00, 0),
