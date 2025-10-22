@@ -17,13 +17,13 @@
         die();
     }
         
-    include_once('database/dbPersons.php');
-    include_once('domain/Person.php');
+    require 'database/dbPersons.php';
+    require 'domain/Person.php';
     // Get date?
     if (isset($_SESSION['_id'])) {
         $person = retrieve_person($_SESSION['_id']);
     }
-    $notRoot = $person->get_id() != 'vmsroot';
+    $notRoot = False
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +32,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <title>Frederickburg SPCA Volunteer Management | Dashboard</title>
+    <title>CASA Donation Management Web Application</title>
     <style>
         * {
             box-sizing: border-box;
@@ -51,7 +51,7 @@
 
         .full-width-bar {
             width: 100%;
-            background: #294877;
+            background: #00447b;
             padding: 17px 5%;
             display: flex;
             flex-wrap: wrap;
@@ -114,7 +114,7 @@
             left: 30px;
             font-size: 14px;
             font-weight: 700;
-            color: #294877;
+            color: #00447b;
         }
 
         .large-text {
@@ -144,7 +144,7 @@
             left: 10%;
             font-size: 14px;
             font-weight: 700;
-            color: #294877;
+            color: #00447b;
             max-width: 90%;
         }
 
@@ -172,14 +172,14 @@
 
         /* Logo */
         .logo-container {
-            background: #294877;
+            background: #00447b;
             padding: 10px 20px;
             border-radius: 50px;
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25) inset;
         }
 
         .logo-container img {
-            width: 128px;
+            width: 80px;
             height: 52px;
             display: block;
         }
@@ -259,7 +259,7 @@
     .circle {
         width: 30px;
         height: 30px;
-        background-color: #294877; /* Blue color */
+        background-color: #00447b; /* Blue color */
         color: white;
         border-radius: 50%;
         display: flex;
@@ -274,7 +274,7 @@
     }
 .colored-box {
     display: inline-block; /* Ensures it wraps tightly around the text */
-    background-color: #294877; /* Change to any color */
+    background-color: #00447b; /* Change to any color */
     color: white; /* Text color */
     padding: 1px 5px; /* Adds space inside the box */
     border-radius: 5px; /* Optional: Rounds the corners */
@@ -285,7 +285,7 @@
         /* Footer */
         .footer {
             width: 100%;
-            background: #294877;
+            background: #00447b;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -418,7 +418,7 @@
 
     <!-- Dummy content to enable scrolling -->
     <div style="margin-top: 0px; padding: 30px 20px;">
-        <h2><b>Welcome <?php echo $person->get_first_name() ?>!</b> Let's get started.</h2>
+        <h2><b>Welcome <?php echo $person->get_name() ?>!</b> Let's get started.</h2>
     </div>
 
             <?php if (isset($_GET['pcSuccess'])): ?>
@@ -439,53 +439,29 @@
 
     <div class="full-width-bar">
     <div class="content-box">
-        <img src="images/VolM.png" />
-        <div class="small-text">Make a difference.</div>
-        <div class="large-text">Volunteer Management</div>
-<button class="circle-arrow-button" onclick="window.location.href='volunteerManagement.php'">
+        <img src="images/blank-white-background.jpg" style="filter: contrast(50%);"/>
+        <div class="small-text">Look at the data.</div>
+        <div class="large-text">Generate Report</div>
+<button class="circle-arrow-button">
     <span class="button-text">Go</span>
     <div class="circle">&gt;</div>
 </button>
-<!--
-        <div class="nav-buttons">
-            <button class="nav-button" onclick="window.location.href='personSearch.php'">
-                <span>Find</span>
-                <span class="arrow"><img src="images/person-search.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 20px;"></span>
-            </button>
-            <button class="nav-button" onclick="window.location.href='VolunteerRegister.php'">
-                <span>Register</span>
-                <span class="arrow"><img src="images/add-person.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 20px;"></span>
-            </button>
-        </div>
--->
     </div>
 
     <div class="content-box">
-        <img src="images/EvM.png" />
+        <img src="images/blank-white-background.jpg" style="filter: contrast(50%);" />
         <div class="small-text">Let’s have some fun!</div>
         <div class="large-text">Event Management</div>
-<button class="circle-arrow-button" onclick="window.location.href='eventManagement.php'">
+<button class="circle-arrow-button">
     <span class="button-text"><?php 
                         require_once('database/dbEvents.php');
                         require_once('database/dbPersons.php');
-                        $pendingsignups = all_pending_names();
-                        if (sizeof($pendingsignups) > 0) {
-                            echo '<span class="colored-box">' . sizeof($pendingsignups) . '</span>';
-                        }   
                     ?> Sign-Ups </span>
     <div class="circle">&gt;</div>
 </button>
     </div>
 
-    <div class="content-box">
-        <img src="images/GrM.png" />
-        <div class="small-text">Our team makes this all possible.</div>
-        <div class="large-text">Group Management</div>
-<button class="circle-arrow-button" onclick="window.location.href='groupManagement.php'">
-    <span class="button-text">Go</span>
-    <div class="circle">&gt;</div>
-</button>
-    </div>
+    
 
 </div>
 
@@ -493,74 +469,31 @@
         <h2><b>Admin Dashboard</h2>
     </div>
     <div class="full-width-bar-sub">
-        <div class="content-box-test" onclick="window.location.href='calendar.php'">
-            <div class="icon-overlay">
-                <img style="border-radius: 5px;" src="images/view-calendar.svg" alt="Calendar Icon">
-            </div>
-            <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Calendar</div>
-            <div class="graph-text">See upcoming events/trainings.</div>
-            <button class="arrow-button">→</button>
-        </div>
-
-
-        <div class="content-box-test" onclick="window.location.href='resources.php'">
+        <div class="content-box-test" onclick="window.location.href='python/import.html'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Manage Documents</div>
-            <div class="graph-text">Resources for volunteers.</div>
-            <button class="arrow-button">→</button>
-        </div>
-                <?php
-                    require_once('database/dbMessages.php');
-                    $unreadMessageCount = get_user_unread_count($person->get_id());
-                    $inboxIcon = 'inbox.svg';
-                    if ($unreadMessageCount) {
-                        $inboxIcon = 'inbox-unread.svg';
-                    }
-                ?>
-        <div class="content-box-test" onclick="window.location.href='inbox.php'">
-            <div class="icon-overlay">
-                <img style="border-radius: 5px;" src="images/<?php echo $inboxIcon ?>" alt="Notification Icon">
-            </div>
-            <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">System Notifications<?php 
-                        if ($unreadMessageCount > 0) {
-                            echo ' (' . $unreadMessageCount . ')';
-                        }
-                    ?></div>
-            <div class="graph-text">Stay up to date.</div>
+            <div class="large-text-sub">Import Files</div>
             <button class="arrow-button">→</button>
         </div>
 
-        <div class="content-box-test" onclick="window.location.href='generateReport.php'">
+
+        <div class="content-box-test" onclick="window.location.href='python/export.html'">
             <div class="icon-overlay">
-                <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
+                <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Generate Report</div>
-            <div class="graph-text">From this quarter or annual.</div>
-            <button class="arrow-button">→</button>
-        </div>
-    <div class="content-box-test" onclick="window.location.href='generateEmailList.php'">
-            <div class="icon-overlay">
-                <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
-            </div>
-            <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Generate Email List</div>
-            <div class="graph-text">Volunteer Emails</div>
+            <div class="large-text-sub">Export Files</div>
             <button class="arrow-button">→</button>
         </div>
 
-        <div class="content-box-test" onclick="window.location.href='viewDiscussions.php'">
+    <div class="content-box-test" onclick="window.location.href='ai-email-gen/index.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Discussions</div>
-            <div class="graph-text">See the latest.</div>
+            <div class="large-text-sub">Generate Emails</div>
             <button class="arrow-button">→</button>
         </div>
     </div>
@@ -580,7 +513,7 @@
     <footer class="footer" style="margin-top: 100px;">
         <!-- Left Side: Logo & Socials -->
         <div class="footer-left">
-            <img src="images/actual_log.png" alt="Logo" class="footer-logo">
+            <img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -593,18 +526,17 @@
         <div class="footer-right">
             <div class="footer-section">
                 <div class="footer-topic">Connect</div>
-                <a href="https://www.facebook.com/share/g/15X2tqwFkA/">Facebook</a>
-                <a href="https://www.instagram.com/fredspca/?hl=en">Instagram</a>
-                <a href="https://fredspca.org">Main Website</a>
+                <a href="https://www.facebook.com/RappCASA/" target="_blank">Facebook</a>
+                <a href="https://www.instagram.com/rappahannock_casa/" target="_blank">Instagram</a>
+                <a href="https://rappahannockcasa.com/" target="_blank">Main Website</a>
             </div>
             <div class="footer-section">
                 <div class="footer-topic">Contact Us</div>
-                <a href="mailto:volunteer@fredspca.org">volunteer@fredspca.org</a>
-                <a href="tel:5408981500">540-898-1500 (ext 117)</a>
+                <a href="mailto:rappcasa@gmail.com">rappcasa@gmail.com</a>
+                <a href="tel:5407106199">540-710-6199</a>
             </div>
         </div>
     </footer>
-    <p>_</p>
 
     <!-- Font Awesome for Icons -->
     <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
@@ -625,7 +557,7 @@
 
     <!-- Volunteer of the Month Icon -->
     <a href="selectVOTM.php" style="text-decoration: none;">
-        <div style="font-size: 12px; font-weight: bold; color: #294877; margin-bottom: 5px;">
+        <div style="font-size: 12px; font-weight: bold; color: #00447b; margin-bottom: 5px;">
             🎖 Volunteer of the Month
         </div>
         <img src="images/star-icon.svg" alt="Volunteer of the Month Icon" style="width: 55px; height: auto; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
@@ -633,7 +565,7 @@
 
     <!-- Leaderboard Icon -->
     <a href="leaderboard.php" style="text-decoration: none;">
-        <div style="font-size: 12px; font-weight: bold; color: #294877; margin-bottom: 5px;">
+        <div style="font-size: 12px; font-weight: bold; color: #00447b; margin-bottom: 5px;">
             👑 Leaderboard
         </div>
         <img src="images/crown.png" alt="Leaderboard Icon" style="width: 55px; height: auto; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
@@ -645,12 +577,12 @@
 
     <!-- Dummy content to enable scrolling -->
     <div style="margin-top: 0px; padding: 30px 20px;">
-        <h2><b>Welcome <?php echo $person->get_first_name() ?>!</b> Let's get started.</h2>
+        <h2><b>Welcome <?php echo $person->get_name() ?>!</b> Let's get started.</h2>
     </div>
 
     <div class="full-width-bar">
     <div class="content-box">
-        <img src="images/VolM.png" />
+        <img src="images/VolM.png" style="filter: contrast(150%);"/>
         <div class="small-text">Make a difference.</div>
         <div class="large-text">My Profile</div>
         <div class="nav-buttons">
@@ -678,10 +610,7 @@
                 <span class="arrow"><img src="images/new-event.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 10px;"></span>
                 <span class="text">Sign-Up</span>
             </button>
-            <button class="nav-button" onclick="window.location.href='viewMyUpcomingEvents.php'">
-                <span class="arrow"><img src="images/list-solid.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 10px;"></span>
-                <span class="text">Upcoming</span>
-            </button>
+            
             <button class="nav-button" onclick="window.location.href='editHours.php'">
                 <span class="arrow"><img src="images/clock-regular.svg" style="width: 40px; border-radius:5px; border-bottom-right-radius: 10px;"></span>
                 <span class="text">Hours</span>
@@ -706,24 +635,16 @@
         <h2><b>Your Dashboard</h2>
     </div>
     <div class="full-width-bar-sub">
-        <div class="content-box-test" onclick="window.location.href='calendar.php'">
+        <div class="content-box-test" onclick="window.location.href='python/import.html'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/view-calendar.svg" alt="Calendar Icon">
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Calendar</div>
-            <div class="graph-text">See upcoming events/trainings.</div>
+            <div class="large-text-sub">Import Files</div>
             <button class="arrow-button">→</button>
         </div>
 
-               <?php
-                    require_once('database/dbMessages.php');
-                    $unreadMessageCount = get_user_unread_count($person->get_id());
-                    $inboxIcon = 'inbox.svg';
-                    if ($unreadMessageCount) {
-                        $inboxIcon = 'inbox-unread.svg';
-                    }   
-                ?>  
+        
 
         <div class="content-box-test" onclick="window.location.href='viewResources.php'">
             <div class="icon-overlay">
@@ -768,7 +689,7 @@
     <footer class="footer" style="margin-top: 100px;">
         <!-- Left Side: Logo & Socials -->
         <div class="footer-left">
-            <img src="images/actual_log.png" alt="Logo" class="footer-logo">
+            <img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>

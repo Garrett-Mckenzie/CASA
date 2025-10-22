@@ -22,7 +22,7 @@
         <?php require_once('universal.inc') ?>
         <link rel="stylesheet" href="css/messages.css"></link>
         <script src="js/messages.js"></script>
-        <title>Fredericksburg SPCA Volunteer System | Events</title>
+        <title>Rappahannock CASA | Events</title>
     </head>
     <body>
         <?php require_once('header.php') ?>
@@ -30,9 +30,8 @@
         <main class="general">
             <h2>Open for Sign-Up</h2>
             <!--<?php 
-                //equire_once('database/dbMessages.php');
-                //$messages = get_message_by_id($userID);
-                //if (count($messages) > 0): ?>
+                
+                 ?>
                 <div class="table-wrapper">
                     <table class="general">
                         <thead>

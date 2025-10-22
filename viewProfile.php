@@ -71,15 +71,6 @@
 
     $viewingOwnProfile = $id == $userID;
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset($_POST['url'])) {
-        if (!update_profile_pic($id, $_POST['url'])) {
-          header('Location: viewProfile.php?id='.$id.'&picsuccess=False');
-        } else {
-          header('Location: viewProfile.php?id='.$id.'&picsuccess=True');
-        }
-      }
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -143,8 +134,6 @@
 	<?php if ($viewingOwnProfile): ?>
           <h2 class="text-xl font-semibold mb-4">My Profile</h2>
 	  <h2 class="mb-4">Edit Icon Placeholder</h2>
-	<?php else: ?>
-	  <h2 class="text-xl font-semibold mb-4">Viewing <?php echo $user->get_first_name() . ' ' . $user->get_last_name() ?></h2>
 	<?php endif ?>
 	</div>
         <div class="space-y-2 divide-y divide-gray-300">
@@ -154,15 +143,7 @@
           <div class="flex justify-between py-2">
             <span class="font-medium">Role</span><span>Volunteer</span>
           </div>
-          <div class="flex justify-between py-2">
-            <span class="font-medium">Status</span><span><?php
-                 if ($user->get_archived()) {
-                     echo 'Archived';
-                 } else {
-                     echo 'Active';
-                 }
-                     ?></span>
-          </div>
+          
         </div>
       </div>
       <div class="mt-6 space-y-2">
@@ -174,7 +155,6 @@
         <button onclick="window.location.href='resetPassword.php?id=<?php echo htmlspecialchars($_GET['id']) ?>';" class="text-lg font-medium w-full px-4 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-700 cursor-pointer">Change Password</button>
                 <?php endif ?>
         <button onclick="window.location.href='volunteerReport.php?id=<?php echo htmlspecialchars($_GET['id']) ?>';" class="text-lg font-medium w-full px-4 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-700 cursor-pointer">View Volunteer Hours</button>
-        <button onclick="window.location.href='personSearch.php';" class="text-lg font-medium w-full px-4 py-2 border-2 border-gray-300 text-black rounded-md hover:border-blue-700 cursor-pointer">Return to User Search</button>
             <?php else: ?>
         <button onclick="window.location.href='changePassword.php';" class="text-lg font-medium w-full px-4 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-700 cursor-pointer">Change Password</button>
         <button onclick="window.location.href='volunteerReport.php';" class="text-lg font-medium w-full px-4 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-700 cursor-pointer">View Volunteer Hours</button>
@@ -185,8 +165,6 @@
 
 <?php if ($accessLevel < 2) : ?>
         <button onclick="window.location.href='volunteerReport.php?id=<?php echo $user->get_id() ?>';" class="text-lg font-medium w-full px-4 py-2 border-2 border-gray-300 text-black rounded-md hover:border-blue-700 cursor-pointer">My Volunteering Report</button>
-<?php else : ?>
-        <button onclick="window.location.href='volunteerReport.php?id=<?php echo $user->get_id() ?>';" class="text-lg font-medium w-full px-4 py-2 border-2 border-gray-300 text-black rounded-md hover:border-blue-700 cursor-pointer"><?php echo $user->get_first_name() ?> <?php echo $user->get_last_name() ?>'s Volunteering Report</button>
 <?php endif ?>
         <button onclick="window.location.href='index.php';" class="text-lg font-medium w-full px-4 py-2 border-2 border-gray-300 text-black rounded-md hover:border-blue-700 cursor-pointer">Return to Dashboard</button>
       </div>
@@ -207,86 +185,12 @@
           <span class="block text-sm font-medium text-blue-900">Username</span>
           <p class="text-gray-900 font-medium text-xl"><?php echo $user->get_id() ?></p>
         </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Name</span>
-          <p class="text-gray-900 font-medium text-xl"><?php echo $user->get_first_name() ?> <?php echo $user->get_last_name() ?></p>
-        </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Date of Birth</span>
-          <p class="text-gray-900 font-medium text-xl"><?php echo date('m/d/Y', strtotime($user->get_birthday())) ?></p>
-        </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Address</span>
-          <p class="text-gray-900 font-medium text-xl"><?php echo $user->get_street_address() . ', ' . $user->get_city() . ', ' . $user->get_state() . ' ' . $user->get_zip_code() ?></p>
-        </div>
+      
+       
       </div>
 
-      <!-- Contact Section -->
-      <div id="contact" class="profile-section space-y-4 hidden">
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Email</span>
-          <p class="text-gray-900 font-medium text-xl"><a href="mailto:<?php echo $user->get_email() ?>"><?php echo $user->get_email() ?></a></p>
-        </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Phone Number</span>
-          <p class="text-gray-900 font-medium text-xl"><a href="tel:<?php echo $user->get_phone1() ?>"><?php echo formatPhoneNumber($user->get_phone1()) ?></a> (<?php echo ucfirst($user->get_phone1type()) ?>)</p>
-        </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Emergency Contact Name</span>
-          <p class="text-gray-900 font-medium text-xl"><?php echo $user->get_emergency_contact_first_name() . ' ' . $user->get_emergency_contact_last_name() ?></p>
-        </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Emergency Contact Relation</span>
-          <p class="text-gray-900 font-medium text-xl"><?php echo $user->get_emergency_contact_relation() ?></p>
-        </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Emergency Contact Phone Number</span>
-          <p class="text-gray-900 font-medium text-xl"><a href="tel:<?php echo $user->get_emergency_contact_phone() ?>"><?php echo formatPhoneNumber($user->get_emergency_contact_phone()) ?></a> (<?php echo ucfirst($user->get_emergency_contact_phone_type()) ?>)</p>
-        </div>
- 
-      </div>
-
-      <!-- Volunteer Section -->
-      <div id="volunteer" class="profile-section space-y-4 hidden">
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Account Type</span>
-          <p class="text-gray-900 font-medium text-xl"><?php
-                if ($user->get_is_community_service_volunteer()) {
-                    echo 'Community Service Volunteer';
-                } else {
-                    echo 'Standard Volunteer';
-                }
-                    ?></p>
-        </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Skills</span>
-          <p class="text-gray-900 font-medium text-xl"><?php echo ucfirst($user->get_skills() ?: "Not specified") ?></p>
-        </div>
-        <div>
-          <span class="block text-sm font-medium text-blue-900">Interests</span>
-          <p class="text-gray-900 font-medium text-xl"><?php echo ucfirst($user->get_interests() ?: "Not specified") ?></p>
-        </div>
-	      <div>
-          <span class="block text-sm font-medium text-blue-900">Total Hours Volunteered</span>
-          <?php if ($isAdmin && !$viewingOwnProfile): ?>
-            <form method="POST" class="mt-2 flex items-center gap-4">
-              <input type="number" step="0.01" name="new_hours" min="0" value="<?= htmlspecialchars($user->get_total_hours_volunteered()) ?>" required
-                    class="border border-gray-300 px-3 py-1 rounded-md w-32 shadow-sm">
-            
-
-              <button type="submit" class="bg-blue-900 text-white px-4 py-1 rounded-md hover:bg-blue-700">
-                Update
-              </button>
-            </form>
-          <?php else: ?>
-            <p class="text-gray-900 font-medium text-xl">
-              <?= number_format($user->get_total_hours_volunteered(), 2) ?> hours
-            </p>
-          <?php endif; ?>
-        </div>
-
-	      
-      </div>
+      
+      
     </div>
   </div>
 </body>

@@ -5,8 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php require_once('database/dbMessages.php'); ?>
-    <title>Fredericksburg SPCA | Register</title>
+    <title>Rappahannock CASA | Register</title>
     <link href="css/normal_tw.css" rel="stylesheet">
 <!-- BANDAID FIX FOR HEADER BEING WEIRD -->
 <?php
@@ -42,16 +41,9 @@ require_once('header.php');
         $args = sanitize($_POST, $ignoreList);
 
         $required = array(
-            'first_name', 'last_name', 'birthdate',
-            'street_address', 'city', 'state', 'zip', 
-            'email', 'phone', 'phone_type',
-            'emergency_contact_first_name', 'emergency_contact_last_name',
-            'emergency_contact_relation', 'emergency_contact_phone',
-            'emergency_contact_phone_type',
-            'username', 'password',
-            'is_community_service_volunteer',
-            'is_new_volunteer', 
-            'total_hours_volunteered'
+            'first_name', 'last_name',
+            
+            'username', 'password'
         );
 
         $errors = false;
@@ -60,86 +52,11 @@ require_once('header.php');
             $errors = true;
         }
 
-        $first_name = $args['first_name'];
-        $last_name = $args['last_name'];
-        $birthday = validateDate($args['birthdate']);
-        if (!$birthday) {
-            echo "<p>Invalid birthdate.</p>";
-            $errors = true;
-        }
-
-        $street_address = $args['street_address'];
-        $city = $args['city'];
-        $state = $args['state'];
-        if (!valueConstrainedTo($state, array(
-            'AK','AL','AR','AZ','CA','CO','CT','DC','DE','FL','GA','HI','IA','ID','IL','IN','KS','KY','LA','MA','MD','ME',
-            'MI','MN','MO','MS','MT','NC','ND','NE','NH','NJ','NM','NV','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX',
-            'UT','VA','VT','WA','WI','WV','WY'))) {
-            echo "<p>Invalid state.</p>";
-            $errors = true;
-        }
-
-        $zip_code = $args['zip'];
-        if (!validateZipcode($zip_code)) {
-            echo "<p>Invalid ZIP code.</p>";
-            $errors = true;
-        }
-
-        $email = strtolower($args['email']);
-        if (!validateEmail($email)) {
-            echo "<p>Invalid email.</p>";
-            $errors = true;
-        }
-
-        $phone1 = validateAndFilterPhoneNumber($args['phone']);
-        if (!$phone1) {
-            echo "<p>Invalid phone number.</p>";
-            $errors = true;
-        }
-
-        $phone1type = $args['phone_type'];
-        if (!valueConstrainedTo($phone1type, array('cellphone', 'home', 'work'))) {
-            echo "<p>Invalid phone type.</p>";
-            $errors = true;
-        }
-
-        $emergency_contact_first_name = $args['emergency_contact_first_name'];
-        $emergency_contact_last_name = $args['emergency_contact_last_name'];
-        $emergency_contact_relation = $args['emergency_contact_relation'];
-
-        $emergency_contact_phone = validateAndFilterPhoneNumber($args['emergency_contact_phone']);
-        if (!$emergency_contact_phone) {
-            echo "<p>Invalid emergency contact phone.</p>";
-            $errors = true;
-        }
-
-        $emergency_contact_phone_type = $args['emergency_contact_phone_type'];
-        if (!valueConstrainedTo($emergency_contact_phone_type, array('cellphone', 'home', 'work'))) {
-            echo "<p>Invalid emergency phone type.</p>";
-            $errors = true;
-        }
-
-        $skills = isset($args['skills']) ? $args['skills'] : '';
-        $interests = isset($args['interests']) ? $args['interests'] : '';
-
-        $is_community_service_volunteer = $args['is_community_service_volunteer'] === 'yes' ? 1 : 0;
-        $is_new_volunteer = isset($args['is_new_volunteer']) ? (int)$args['is_new_volunteer'] : 1;
-        $total_hours_volunteered = isset($args['total_hours_volunteered']) ? (float)$args['total_hours_volunteered'] : 0.00;
-
-        $type = ($is_community_service_volunteer === 1) ? 'volunteer' : 'participant';
-        $archived = 0;
-        $status = "Inactive";
-        $training_level = "None";
+        $name = $args['first_name']." ".$args['last_name'];
 
         $id = $args['username'];
 
-        $password = isSecurePassword($args['password']);
-        if (!$password) {
-            echo "<p>Password is not secure enough.</p>";
-            $errors = true;
-        } else {
-            $password = password_hash($args['password'], PASSWORD_BCRYPT);
-        }
+        $password = password_hash($args['password'], PASSWORD_BCRYPT);
 
         if ($errors) {
             echo '<p class="error">Your form submission contained unexpected or invalid input.</p>';
@@ -147,16 +64,7 @@ require_once('header.php');
         }
 
         $newperson = new Person(
-            $id, $password, date("Y-m-d"),
-            $first_name, $last_name, $birthday,
-            $street_address, $city, $state, $zip_code,
-            $phone1, $phone1type, $email,
-            $emergency_contact_first_name, $emergency_contact_last_name,
-            $emergency_contact_phone, $emergency_contact_phone_type,
-            $emergency_contact_relation, $type, $status, $archived, 
-            $skills, $interests, $training_level,
-            $is_community_service_volunteer, $is_new_volunteer,
-            $total_hours_volunteered
+            $id, $password, $name, 0 //temp access level for all new users ~ Ethan
         );
 
         $result = add_person($newperson);
@@ -164,9 +72,8 @@ require_once('header.php');
             $showPopup = true;
         } else {
             echo '<script>document.location = "login.php?registerSuccess";</script>';
-            $title = $id . " has been added as a volunteer";
-            $body = "New volunteer account has been created";
-            system_message_all_admins($title, $body);
+            $title = $id . " has been added as a user";
+            $body = "New user account has been created";
         }
     } else {
         require_once('registrationForm.php');

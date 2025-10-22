@@ -9,9 +9,7 @@
      * from the string, then returns the resulting string
      */
 
-    function trainingLevelMet($accountName) {
-        
-    }
+
 
     function _sanitize($connection, $input) {
         if (is_array($input)) {

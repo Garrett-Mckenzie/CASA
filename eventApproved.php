@@ -37,7 +37,6 @@
     // include_once('database/dbPersons.php');
     // $access_level = $_SESSION['access_level'];
     // $user = retrieve_person($_SESSION['_id']);
-    // $active = $user->get_status() == 'Active';
 
     // ini_set("display_errors",1);
     // error_reporting(E_ALL);
@@ -177,7 +176,7 @@
     <?php
         require_once('universal.inc');
     ?>
-    <title>Fredericksburg SPCA | View Sign-Up: <?php echo $event_info['name'] ?></title>
+    <title>Rappahannock CASA | View Sign-Up: <?php echo $event_info['name'] ?></title>
     <link rel="stylesheet" href="css/event.css" type="text/css" />
     <?php if ($access_level >= 2) : ?>
         <script src="js/event.js"></script>

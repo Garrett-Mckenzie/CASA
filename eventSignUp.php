@@ -84,8 +84,6 @@
                     die();
                 }
                 
-                require_once('database/dbMessages.php');
-                send_system_message($userID, "Your request to sign up for $name has been sent to an admin.", "Your request to sign up for $name will be reviewed by an admin shortly. You will get another notification when you get approved or denied.");
                 //send_system_message("vmsroot", "$userID requested to sign up for a restricted event", "$userID requested to sign up for $name. Please review.");
 
                 //$name = htmlspecialchars(string: isset($_GET['event_name']) ? $_GET['event_name'] : '');
@@ -100,8 +98,6 @@
                 header(header: 'Location: eventFailure.php');
                 exit();
             }
-            require_once('database/dbMessages.php');
-            send_system_message($userID, "You are now signed up for $name!", "Thank you for signing up for $name!");
             header('Location: signupSuccess.php');
 
             //require_once('include/output.php');
@@ -109,8 +105,7 @@
 
             //$startTime = time24hto12h($startTime);
             //$date = date('l, F j, Y', timestamp: strtotime($date));
-            //require_once('database/dbMessages.php');
-            //system_message_all_users_except($userID, "Your sign-up has been approved!", "Congratulations!");
+         
             //header(header: "Location: eventApproved.php?id=$id&createSuccess");
             //header(header: "Location: eventApproved.php?id=$id&createSuccess");
             die();
@@ -171,7 +166,7 @@
 <html>
     <head>
         <?php require_once('universal.inc') ?>
-        <title>Fredericksburg SPCA | Sign-Up for Event</title>
+        <title>Rappahannock CASA | Sign-Up for Event</title>
     </head>
     <body>
         <?php require_once('header.php') ?>

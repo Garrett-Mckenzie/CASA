@@ -42,8 +42,6 @@
 		$formatted_start_time = $date . ' ' . validate12hTimeAndConvertTo24h($startTime);
 		$formatted_end_time = $date . ' ' . validate12hTimeAndConvertTo24h($endTime);
 
-		check_in($userID, $eventID, $formatted_start_time);
-		check_out($userID, $eventID, $formatted_end_time);
 
 		$success = 1;
 
@@ -84,7 +82,7 @@
 <html>
     <head>
         <?php require_once('universal.inc') ?>
-        <title>Fredericksburg SPCA | Add New Check-In</title>
+        <title>Rappahannock CASA | Add New Check-In</title>
     </head>
     <body>
 	<?php require_once('header.php') ?>

@@ -71,17 +71,6 @@ require_once('header.php');
 	  <img class="button-icon" src="images/add-person.svg" alt="Person Icon">
         </button>
 
-        <button onclick="window.location.href='personSearch.php';">
-	  <div class="button-left-gray"></div>
-	  <div>Search Volunteers</div>
-	  <img class="button-icon" src="images/person-search.svg" alt="Person Icon">
-        </button>
-
-	<button onclick="window.location.href='checkedInVolunteers.php';">
-	  <div class="button-left-gray"></div>
-	  <div>Checked-In Volunteers</div>
-	  <img class="button-icon h-10 w-10 left-5" src="images/clipboard-regular.svg" alt="Person Icon">
-        </button>
 
 	<button onclick="window.location.href='selectVOTM.php';">
 	  <div class="button-left-gray"></div>

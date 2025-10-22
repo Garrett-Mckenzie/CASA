@@ -43,10 +43,9 @@
 // require_once('domain/Person.php');
 
 // // Fetch events attended by the user
-// //$events = get_events_attended_by_2($username);
 
 // // Fetch eventIDs attended by the user
-// $event_ids = get_attended_event_ids($username);
+
 ?>
 
 <!-- <!DOCTYPE html>
@@ -54,7 +53,7 @@
 <head>
     <?php require_once('universal.inc'); ?>
     <link rel="stylesheet" href="css/editprofile.css" type="text/css" />
-    <title>Fredericksburg SPCA | User Events</title>
+    <title>Rappahannock CASA | User Events</title>
 </head>
 <body>
     <?php require_once('header.php'); ?>
@@ -78,7 +77,6 @@
                     <fieldset class="section-box">
                         <h2><?php echo htmlspecialchars($event['name']) ?></h2>
 
-                        <?php $shifts = get_check_in_outs($username, $event['id']); ?>
 
                         <table class="general">
                             <tr>
@@ -89,39 +87,21 @@
                                 <th style="width: 200px;"></th>
                             </tr>
 
-                            <?php foreach ($shifts as $shift): ?>
+                           
                                 <tr>
 
-                                    <?php
-                                        $start_date_time = explode(' ', $shift['start_time']);
-                                        
-
-                                        $end_date_time = explode(' ', $shift['end_time']);
-                                    ?>
-
-                                    <td><?php echo time24hto12h($start_date_time[1])?></td>
-                                    <td><?php echo time24hto12h($end_date_time[1])?></td>
-
-                                    <?php
-                                        $start_time = strtotime($shift['start_time']);
-                                        $end_time = strtotime($shift['end_time']);
-                                        $duration = ($end_time - $start_time)/60; // minutes
-                                    ?>
+                                    
                                     <td style="padding-right: 0;"><?php echo floatPrecision($duration, 2) ?></td>
 
                                     <form method="GET" action="editTimes.php">
                                         <!-- Hidden inputs to pass data -->
                                         <input type="hidden" name="eventId" value="<?php echo htmlspecialchars($event['id']); ?>" />
                                         <input type="hidden" name="user" value="<?php echo htmlspecialchars($username); ?>" />
-                                        <input type="hidden" name="start_time" value="<?php echo htmlspecialchars($shift['start_time']); ?>" />
-                                        <input type="hidden" name="end_time" value="<?php echo htmlspecialchars($shift['end_time']); ?>" />
                                         
                                         <!-- Submit button for editing -->
                                     
                                         <td style="padding-left: 0; padding-right: 0;"><button type="submit" class="button edit-button" style="height:48px; width:150px;">Edit</button></td>
                                     </form>
-
-                                    <td style="padding-left: 0; padding-right: 0;"><button class="button danger" style="height:48px; width:150px;" onclick="confirmAction('<?php echo $event['id']?>', '<?php echo $shift['start_time']?>', '<?php echo $shift['end_time']?>')">Delete</button></td>
 
                                     <script>
                                     function confirmAction(eventID, start_time, end_time) {
@@ -146,7 +126,6 @@
 
                     </fieldset>
 
-                <?php endforeach; ?>
             <?php else: ?>
                 <p class="no-events-message">No events attended by <?php echo htmlspecialchars($username); ?>.</p>
             <?php endif; ?>

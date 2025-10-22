@@ -19,21 +19,20 @@ date_default_timezone_set('America/New_York');
 date_default_timezone_set('America/New_York');
 
 function connect() {
-    $host = "localhost"; 
-    $database = "casadb";
-    $user = "casadb";
-    $pass = "casadb";
-    if ($_SERVER['SERVER_NAME'] == 'jenniferp160.sg-host.com') {
-        $user = 'uknrzrk8sj1e7';
-        $database = 'dbkzrh4cfmxbt0';
-        $pass = 'fxextih7mssg';
-    } 
-    $con = mysqli_connect($host,$user,$pass,$database);
-    if (!$con) { echo "not connected to server"; return mysqli_error($con);}
-    $selected = mysqli_select_db($con,$database);
-    if (!$selected) { echo "database not selected"; return mysqli_error($con); }
-    else return $con;
-    
+	$host = "localhost"; 
+	$database = "casadb";
+	$user = "casadb";
+	$pass = "casadb";
+	if ($_SERVER['SERVER_NAME'] == 'jenniferp160.sg-host.com') {
+		$user = 'uknrzrk8sj1e7';
+		$database = 'dbkzrh4cfmxbt0';
+		$pass = 'fxextih7mssg';
+	} 
+	$con = mysqli_connect($host,$user,$pass,$database);
+	if (!$con) { echo "not connected to server"; return mysqli_error($con);}
+	$selected = mysqli_select_db($con,$database);
+	if (!$selected) { echo "database not selected"; return mysqli_error($con); }
+	else return $con;
 }
 
 ?>

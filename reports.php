@@ -23,8 +23,6 @@ include_once('database/dbPersons.php');
 include_once('domain/Person.php');
 include_once('database/dbEvents.php');
 
-include_once('database/dbShifts.php');
-include_once('domain/Shift.php');
 ?>
 
 <html>
@@ -78,7 +76,7 @@ $(function() {
 });
 </script>
 	<?php require_once('universal.inc') ?>
-        <title>Fredericksburg SPCA | Reports</title>
+        <title>Rappahannock CASA | Reports</title>
         <style>
             .report_select{
                 display: flex;
