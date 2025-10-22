@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html">
         <title>Import/Export | Rappahannock CASA</title>
-        <link rel="stylesheet" href="styler.sass">
+        <link rel="stylesheet" href="styler.scss">
         <script type="text/javascript">
             
 
@@ -30,7 +30,8 @@
         </header>
         <main>
             <form action="ImportHandler.php" method="post" enctype="multipart/form-data">
-                <input type="file" name="files[]" multiple="multiple" onchange="displayImport(event)">
+                <!-- Add CSV Compatibility -->
+                <input type="file" name="files[]" accept=".xlsx, .xls" multiple="multiple" onchange="displayImport(event)">
                 <ul id="fileDisplay" class="display"></ul>
                 <button type="submit">Import</button>
             </form>
