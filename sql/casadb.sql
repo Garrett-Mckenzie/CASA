@@ -125,6 +125,7 @@ CREATE TABLE `associations` (
 
 INSERT INTO dbpersons (`id`,`name`,`password`,`accessLevel`) VALUES ('vmsroot','SUPER ADMIN', '$2y$10$.3p8xvmUqmxNztEzMJQRBesLDwdiRU3xnt/HOcJtsglwsbUk88VTO', '0');
 
+
 INSERT IGNORE INTO `donors` (`id`, `first`, `last`, `email`, `zip`, `city`, `state`, `street`, `phone`, `gender`, `notes`) VALUES
 (1, 'Phillip', 'Jenkins', '1philjenkins@gmail.com', '22405', 'Fredericksburg', 'VA', '54 Hamlin Drive', NULL, NULL, 'former colleagues of Janet and Edie'),
 (2, 'Jeri', 'Phillips', '4jphillips@comcast.net', '22551', 'Spotsylvania', 'VA', '8432 Battle Park Drive', NULL, NULL, 'CASA volunteer'),
@@ -961,7 +962,6 @@ INSERT IGNORE INTO `donations` (`date`, `amount`, `reason`, `eventID`, `donorID`
 
 -- Donor ID 284: Michael & Marietta D'Ostilio
 ('06/27/2025', 50.00, 'In memory of Bobby Anderson', NULL, 284, 0.00, 0);
-
 
 
 SET FOREIGN_KEY_CHECKS = 1;
