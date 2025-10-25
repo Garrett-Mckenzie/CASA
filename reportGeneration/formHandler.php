@@ -36,7 +36,7 @@
 
 <?php
 #build out the command using options from the form
-$pyPath = "./makeReport.py";
+$pyPath = "./reports/makeReport.py";
 $args = array();
 foreach ($_POST as $key => $value){
 	if ($value != NULL){

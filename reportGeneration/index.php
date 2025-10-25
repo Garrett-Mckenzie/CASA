@@ -1,8 +1,22 @@
 <?php
+$os = NULL;
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'){
+				$os = "w";
+}
+else{
+				$os = "l";
+}
+
+$output = [];	
+if ($os == "w"){
+				exec("dir reports /b",$output);
+}
+else{
+				exec("ls reports",$output);
+}
 ?>
 
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -15,9 +29,13 @@
 		<h3 class="mb-3">Report Generator</h3>
 		<hr style = "height: 1px; background-color: black;"></hr>
 		<form id="emailForm" action="./formHandler.php" method="post">
+			<div class = "mb-3">
+				<label><b>Name of Report</b></label><br/>
+				<input type = "text" id="startDate" name="startDate"></input>
+			</div>
 			<div class="mb-3">	
 				<label><b>Starting Date For Report</b></label><br/>
-				<input type = "datetime-local" id="startDate" name="startDate"></input>
+				<input type = "datetime-local" id="reportName" name="reportName"></input>
 			</div>
 			<div class="mb-3">
 				<label><b>Ending Date For Report</b></label><br/>
@@ -44,5 +62,21 @@
 
 			<button type="submit" class="btn btn-primary">Generate Report</button>
 		</form>
+	</div>
+	<div class="container mt-4 p-4 bg-white rounded shadow">
+		<table>
+			<tr>
+				<th>Report History</th>
+			<tr>
+				<?php
+								foreach ($output as $value){
+									if (str_contains($value,".pdf")){
+										echo "<tr>";
+										echo "<td><a target='_blank' href=./reports/".$value.">".$value."</a></td>";
+										echo "</tr>";
+									}					
+								}
+				?>
+		</table>
 	</div>
 </body> 

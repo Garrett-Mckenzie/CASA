@@ -1,15 +1,24 @@
+#data science stuff
 import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-import sys
 import plotly.express as px
-from reportlab.lib.pagesizes import letter
+import scipy.stats as stats
+
+#pdf generation stuff with reportlab
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.platypus import Paragraph, Spacer
+from reportlab.lib.pagesizes import LETTER
 from reportlab.lib import colors
 from reportlab.pdfgen import canvas
+from reportlab.lib.styles import getSampleStyleSheet
+
+#other
+import sys
 import traceback
 import mariadb
+from datetime import datetime
 
 def connect():
     try:
@@ -44,10 +53,18 @@ def getArgs():
         i += 1
     return result
 
-def createPDF(filepath):
-    doc = SimpleDocTemplate()
-    pass
-def insertTable(data,left = 1):
+def createPDF(name):
+    doc = SimpleDocTemplate(f'{name}.pdf',pagesize=LETTER)
+    return doc
+
+def insertWriting(txt,doc,style = "Normal"):
+    styles = getSampleStyleSheet()
+    story = []
+    story.append(Paragraph(txt,styles[style])) 
+    story.append(Spacer(1,12))
+    doc.build(story)
+    return doc
+def insertTable(data):
     pass
 def insertGraph(**kwargs):
     pass
