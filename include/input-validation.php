@@ -164,7 +164,10 @@
 
     function wereRequiredFieldsSubmitted($args, $fieldsRequired, $blankOkay=true) {
         foreach ($fieldsRequired as $field) {
-            if (!isset($args[$field]) || (!$args[$field] && !$blankOkay)) {
+            if (!array_key_exists($field, $args)) {
+                return false;
+            }
+            if (!$blankOkay && trim((string)$args[$field]) === '') {
                 return false;
             }
         }
