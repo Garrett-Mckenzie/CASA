@@ -1,19 +1,19 @@
 <?php
-$os = NULL;
-if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'){
-				$os = "w";
-}
-else{
-				$os = "l";
-}
+				$os = NULL;
+				if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'){
+								$os = "w";
+				}
+				else{
+								$os = "l";
+				}
 
-$output = [];	
-if ($os == "w"){
-				exec("dir reports /b",$output);
-}
-else{
-				exec("ls reports",$output);
-}
+				$output = [];	
+				if ($os == "w"){
+								exec("dir reports /b",$output);
+				}
+				else{
+								exec("ls reports",$output);
+				}
 ?>
 
 <!DOCTYPE html>
@@ -31,11 +31,11 @@ else{
 		<form id="emailForm" action="./formHandler.php" method="post">
 			<div class = "mb-3">
 				<label><b>Name of Report</b></label><br/>
-				<input type = "text" id="startDate" name="startDate"></input>
+				<input type = "text" id="reportName" name="reportName"></input>
 			</div>
 			<div class="mb-3">	
 				<label><b>Starting Date For Report</b></label><br/>
-				<input type = "datetime-local" id="reportName" name="reportName"></input>
+				<input type = "datetime-local" id="startDate" name="startDate"></input>
 			</div>
 			<div class="mb-3">
 				<label><b>Ending Date For Report</b></label><br/>
@@ -68,15 +68,15 @@ else{
 			<tr>
 				<th>Report History</th>
 			<tr>
-				<?php
-								foreach ($output as $value){
-									if (str_contains($value,".pdf")){
-										echo "<tr>";
-										echo "<td><a target='_blank' href=./reports/".$value.">".$value."</a></td>";
-										echo "</tr>";
-									}					
-								}
-				?>
+<?php
+foreach ($output as $value){
+				if (str_contains($value,".pdf")){
+								echo "<tr>";
+								echo "<td><a target='_blank' href=./reports/".$value.">".$value."</a></td>";
+								echo "</tr>";
+				}					
+}
+?>
 		</table>
 	</div>
 </body> 

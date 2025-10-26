@@ -41,20 +41,35 @@ def executeQuery(query,conn):
     except Excetion as e:
         raise e
 
+#icky solution but just role with it
 def getArgs():
     result = {}
     i = 0
+    name = ""
+    inName = 0
     for cmd in sys.argv:
         if ".py" not in cmd:
+            if "reportName" in cmd or inName == 1:
+                if ":" in cmd and inName == 0:
+                    name += str(cmd[cmd.index(":") + 1 : ])+"_"
+                    inName = 1;
+                    result["reportName"]=name[0:-1]
+                elif ":" in cmd and inName == 1:
+                    result["reportName"]=name[0:-1]
+                    inName = 0;
+                else:
+                    name += str(cmd)+"_"
             if ":" in cmd:
                 result[cmd[0:cmd.index(":")]] = cmd[cmd.index(":") + 1 : ]
-            else:
+            elif inName == 0:
                 result[i] = cmd
-        i += 1
+        if name != "":
+            result["reportName"]=name[0:-1]
+        i += 1            
     return result
 
 def createPDF(name):
-    doc = SimpleDocTemplate(f'{name}.pdf',pagesize=LETTER)
+    doc = SimpleDocTemplate(f'reports/{name}.pdf',pagesize=LETTER)
     return doc
 
 def insertWriting(txt,doc,style = "Normal"):

@@ -1,9 +1,12 @@
+<?php
+#yes I know this is silly just don't question it
+echo "
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-	<meta charset="UTF-8">
+	<meta charset='UTF-8'>
 	<title>Report Generator</title>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+	<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css'>
 </head>
 
 <style>
@@ -28,13 +31,15 @@
 	}
 </style>
 
-<body class="p-4 bg-light">
-	<div class = "loader"></div>
-	<div class = "loading-text"><b>Working On The Report One Moment</b></div> 	
+<body class='p-4 bg-light'>
+	<div class = 'loader'></div>
+	<div class = 'loading-text'><b>Working On The Report One Moment</b></div> 	
 </body>
-</html>
+</html>";
+#flush the page to display the stuff while we wait for the py
+ob_flush();
+flush();
 
-<?php
 #build out the command using options from the form
 $pyPath = "./reports/makeReport.py";
 $args = array();
@@ -44,8 +49,12 @@ foreach ($_POST as $key => $value){
 	}
 }
 $command = "python ".$pyPath." ".implode(" ",$args);	
+echo $command;
 #Execute reportGen.py with options
 $output = null;	
 $output = exec($command);
-echo $output;
+
+#this line is really fucking sick
+echo '<script type="text/javascript"> window.open("reports/'.$output.'","_blank");window.location.href="index.php";</script>';
+exit();
 ?>

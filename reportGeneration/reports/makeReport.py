@@ -3,7 +3,7 @@ from reportGen import *
 try:
     #get options as specified by the user
     args = getArgs()
-
+    
     #connect to database
     try:
         conn = connect()
@@ -11,6 +11,7 @@ try:
         raise e
 
     #make the doc
+    name = None
     if "reportName" not in args.keys():
         time = str(datetime.now())
         date = time[0:time.index(" ")].replace("-","_")
@@ -26,6 +27,7 @@ try:
     #insert some text
     txt = "ethan = gay"
     insertWriting(txt,doc,style = "Normal")
+    print(f"{name}.pdf")
    
 except Exception as e:
     traceback.print_exc()
