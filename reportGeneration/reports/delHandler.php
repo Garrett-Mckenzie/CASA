@@ -1,5 +1,4 @@
 <?php
-#yes I know this is silly just don't question it
 echo "
 <!DOCTYPE html>
 <html lang='en'>
@@ -33,27 +32,45 @@ echo "
 
 <body class='p-4 bg-light'>
 	<div class = 'loader'></div>
-	<div class = 'loading-text'><b>Working On The Report One Moment</b></div> 	
+	<div class = 'loading-text'><b>Removing Old Reports One Moment</b></div> 	
 </body>
 </html>";
+
 #flush the page to display the stuff while we wait for the py
 ob_flush();
 flush();
 
-#build out the command using options from the form
-$pyPath = "./reports/makeReport.py";
-$args = array();
-foreach ($_POST as $key => $value){
-	if ($value != NULL){
-		array_push($args,$key.":".$value);
+
+#get arguments
+$args = [];
+foreach ($_POST as $key=>$value){
+	$len = strlen($key);
+	$key[$len-4] = ".";
+	array_push($args,$key);
+}
+
+#get os
+$os = NULL;
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'){
+				$os = "w";
+}
+else{
+				$os = "l";
+}
+
+if ($os == "l"){
+	foreach ($args as $file){
+					exec("rm ".$file);
+					echo $file;
 	}
 }
-$command = "python ".$pyPath." ".implode(" ",$args);	
-#Execute reportGen.py with options
-$output = null;	
-$output = exec($command);
 
-#this line is really fucking sick
-echo '<script type="text/javascript"> window.open("reports/'.$output.'","_blank");window.location.href="index.php";</script>';
+else{
+	foreach ($args as $file){
+		exec("del ".$file);
+	}
+}
+
+echo '<script>window.location.href="../index.php";</script>';
 exit();
 ?>
