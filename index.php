@@ -442,7 +442,7 @@
         <img src="images/blank-white-background.jpg" style="filter: contrast(50%);"/>
         <div class="small-text">Look at the data.</div>
         <div class="large-text">Generate Report</div>
-<button class="circle-arrow-button">
+<button class="circle-arrow-button" onclick="window.location.href='reportGeneration/index.php'">
     <span class="button-text">Go</span>
     <div class="circle">&gt;</div>
 </button>

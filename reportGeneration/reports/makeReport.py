@@ -4,6 +4,20 @@ try:
     #get options as specified by the user
     args = getArgs()
 
+    ### data stuff ###
+    #questions to answer with report:
+        #top x donors by total amount donated
+        #top x donors by avg amount donated
+        #boxplots for top 5 cities and the average donation amount
+        #same for zipcodes ^
+
+        #given an event, total donations toward event y over time x (this might be included on the specific event page)
+        #descriptive stats over sample dataset
+            
+        
+
+    ### end data stuff ###
+
     #connect to database
     try:
         conn = connect()
