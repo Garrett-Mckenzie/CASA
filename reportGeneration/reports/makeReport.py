@@ -1,4 +1,5 @@
-from reportGen import *
+from importMeEthan import *
+from importMeGarrett import *
 
 try:
     #get options as specified by the user
@@ -28,6 +29,8 @@ try:
     txt = "ethan = gay"
     insertWriting(txt,doc,style = "Normal")
     print(f"{name}.pdf")
+
+    #insert a table
    
 except Exception as e:
     traceback.print_exc()
