@@ -59,24 +59,28 @@
 			</div>
 			<div class="mb-3">
 			</div>
-
 			<button type="submit" class="btn btn-primary">Generate Report</button>
 		</form>
 	</div>
 	<div class="container mt-4 p-4 bg-white rounded shadow">
-		<table>
+		<form action="./reports/delHandler.php" method="post">
+		<table style="width:100%">
 			<tr>
-				<th>Report History</th>
+				<th>Report History</th><th>Delete Report</th>
 			<tr>
-<?php
-foreach ($output as $value){
-				if (str_contains($value,".pdf")){
-								echo "<tr>";
-								echo "<td><a target='_blank' href=./reports/".$value.">".$value."</a></td>";
-								echo "</tr>";
-				}					
-}
-?>
+			<?php
+				foreach ($output as $value){
+					if (str_contains($value,".pdf")){
+						echo "<tr>";
+						echo "<td><a target='_blank' href=./reports/".$value.">".$value."</a></td>";
+						echo "<td><input type='checkbox' id =".$value." name=".$value."></input></td>";
+						echo "</tr>";
+					}
+				}
+			?>
 		</table>
+		<br/>
+		<button type="submit" class="btn btn-primary">Submit Changes</button>
+		</form>
 	</div>
 </body> 
