@@ -132,7 +132,7 @@ class PDF:
         self.elements.append(table)
         self.elements.append(Spacer(1,12))
     
-    #def insertGraph(self,plot,width,height):
+    def insertGraph(self,plot,width,height):
         plt.savefig("./reports/plot.png") 
         self.elements.append(Image("reports/plot.png",width=width*inch,height=height*inch))
     
