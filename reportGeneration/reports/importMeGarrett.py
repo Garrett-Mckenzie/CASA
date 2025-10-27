@@ -3,11 +3,11 @@ from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
 
+
 # Total donations over past time (by month, quarter, year)
 #general overall stats (all donations)
 def numDonationsOverTime(queryRows):
     # select date, from donations
-
     chungus = []
     for date in queryRows:
         dateObj = datetime.strptime(date[0], "%m-%d-%Y")
@@ -50,7 +50,9 @@ def avgDonation(queryRows):
 # Median donation amount
 def medDonation(queryRows):
     # select amount from donations
+
     queryRows = [row[0] for row in queryRows]
+
 
     arrr = np.array(queryRows)
     return np.median(arrr)
@@ -124,6 +126,7 @@ def goalAchievementRate(eventRows,donationRows):
     events["completion"] = ((events["aggDonations"]/events["goalAmount"])*100).round(decimals=2)
 
     return events[["id","name","completion"]]
+
 
 
 # Completion rate of fundraisers (completed vs ongoing)

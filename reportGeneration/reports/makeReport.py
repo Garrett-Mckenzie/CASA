@@ -11,7 +11,9 @@ try:
     ### end data stuff ###
     
     #connect to database
+
     #args['os'] = 'l'
+
     try:
         if args['os'] == 'w':
             conn = winConnect()
