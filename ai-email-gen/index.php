@@ -34,16 +34,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Email Generator</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <?php require_once('/Applications/XAMPP/xamppfiles/htdocs/CASA/universal.inc') ?>
+  <title>Rappahannock CASA | Email Generator</title>
 </head>
+    <?php require_once('/Applications/XAMPP/xamppfiles/htdocs/CASA/header.php') ?>
 <body class="p-4 bg-light">
   <div class="container mt-4 p-4 bg-white rounded shadow">
-    <h3 class="mb-3">AI Email Generator</h3>
+    <h3 class="mb-3">Email Generator</h3>
     <form id="emailForm">
       <div class="mb-3">
-        <label class="form-label">Reason for Email</label>
+        <label class="form-label">Reason for Email:</label>
         <select class="form-select" name="reason">
           <option>Thank Donor</option>
           <option>Solicit Donation</option>
@@ -52,17 +54,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Recipient Name</label>
+        <label class="form-label">Recipient Name:</label>
         <input type="text" class="form-control" name="recipient_name" placeholder="Jane Doe" required>
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Recipient Email</label>
+        <label class="form-label">Recipient Email:</label>
         <input type="email" class="form-control" name="recipient_email" placeholder="jane@example.com" required>
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Sender Email</label>
+        <label class="form-label">Sender Email:</label>
         <input type="email" class="form-control" name="sender" value="yourname@gmail.com" required>
       </div>
 
