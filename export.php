@@ -1,9 +1,33 @@
+<?php
+    // Template for new VMS pages. Base your new page on this one
+
+    // Make session information accessible, allowing us to associate
+    // data with the logged-in user.
+    session_cache_expire(30);
+    session_start();
+
+    $loggedIn = false;
+    $accessLevel = 0;
+    $userID = null;
+    if (isset($_SESSION['_id'])) {
+        $loggedIn = true;
+        // 0 = not logged in, 1 = standard user, 2 = manager (Admin), 3 super admin (TBI)
+        $accessLevel = $_SESSION['access_level'];
+        $userID = $_SESSION['_id'];
+    }
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <?php require_once('universal.inc') ?>
+    <link rel="stylesheet" href="css/messages.css"></link>
+    <script src="js/messages.js"></script>
+    <title>Rappahannock CASA | Export</title>
+</head>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html">
-        <title>Import/Export | Rappahannock CASA</title>
-        <link rel="stylesheet" href="styler.sass">
         <!-- Popup for download link -->
         <script>
             async function handleExport(event){
@@ -45,6 +69,8 @@
         </script>
     </head>
     <body>
+        <?php require_once('header.php') ?>
+        <h1>Export</h1>
         <header>
             <nav>
                 <table></table>
@@ -65,4 +91,31 @@
             </form>
         </main>
     </body>
+<footer class="footer" style="margin-top: 100px;">
+        <!-- Left Side: Logo & Socials -->
+        <div class="footer-left">
+            <img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+
+        <!-- Right Side: Page Links -->
+        <div class="footer-right">
+            <div class="footer-section">
+                <div class="footer-topic">Connect</div>
+                <a href="https://www.facebook.com/RappCASA/" target="_blank">Facebook</a>
+                <a href="https://www.instagram.com/rappahannock_casa/" target="_blank">Instagram</a>
+                <a href="https://rappahannockcasa.com/" target="_blank">Main Website</a>
+            </div>
+            <div class="footer-section">
+                <div class="footer-topic">Contact Us</div>
+                <a href="mailto:rappcasa@gmail.com">rappcasa@gmail.com</a>
+                <a href="tel:5407106199">540-710-6199</a>
+            </div>
+        </div>
+    </footer>
 </html>

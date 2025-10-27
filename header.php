@@ -662,6 +662,11 @@ date_default_timezone_set('America/New_York');
         $permission_array['requestfailed.php'] = 1;
         $permission_array['settimes.php'] = 1;
         $permission_array['eventfailurebaddeparturetime.php'] = 1;
+        $permission_array['import.php'] = 3;
+        $permission_array['export.php'] = 3;
+        $permission_array['emailgen.php'] = 3;
+
+
         
         // LOWERCASE
 

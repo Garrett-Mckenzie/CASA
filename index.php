@@ -469,7 +469,7 @@
         <h2><b>Admin Dashboard</h2>
     </div>
     <div class="full-width-bar-sub">
-        <div class="content-box-test" onclick="window.location.href='python/import.html'">
+        <div class="content-box-test" onclick="window.location.href='import.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
             </div>
@@ -479,7 +479,7 @@
         </div>
 
 
-        <div class="content-box-test" onclick="window.location.href='python/export.html'">
+        <div class="content-box-test" onclick="window.location.href='export.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
             </div>
@@ -488,7 +488,7 @@
             <button class="arrow-button">→</button>
         </div>
 
-    <div class="content-box-test" onclick="window.location.href='ai-email-gen/index.php'">
+    <div class="content-box-test" onclick="window.location.href='emailgen.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
             </div>
@@ -635,7 +635,7 @@
         <h2><b>Your Dashboard</h2>
     </div>
     <div class="full-width-bar-sub">
-        <div class="content-box-test" onclick="window.location.href='python/import.html'">
+        <div class="content-box-test" onclick="window.location.href='import.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/view-calendar.svg" alt="Calendar Icon">
             </div>
