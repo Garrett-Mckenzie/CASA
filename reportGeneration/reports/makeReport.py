@@ -4,24 +4,19 @@ from importMeGarrett import *
 try:
     #get options as specified by the user
     args = getArgs()
-    
-    ### data stuff ###
-    #questions to answer with report:
-        #top x donors by total amount donated
-        #top x donors by avg amount donated
-        #boxplots for top 5 cities and the average donation amount
-        #same for zipcodes ^
 
-        #given an event, total donations toward event y over time x (this might be included on the specific event page)
-        #descriptive stats over sample dataset
-            
-        
+    ### data stuff ###
+   
 
     ### end data stuff ###
     
     #connect to database
+    #args['os'] = 'l'
     try:
-        conn = connect()
+        if args['os'] == 'w':
+            conn = winConnect()
+        else:
+            conn = macConnect()
     except Exception as e:
         raise e
 
@@ -62,6 +57,7 @@ try:
     #Insert a graph
     data = pd.DataFrame({"Height":[1,2,3,4,5,6,7,8,9,10],"Johnson":[2,4,6,8,10,12,14,16,18,20]})
     plot = sns.scatterplot(data=data,x="Height",y="Johnson")
+
     pdf.insertGraph(plot,5,5)
 
     #make the pdf (THIS MUST BE CALLED LAST)

@@ -25,7 +25,7 @@ import traceback
 import mariadb
 from datetime import datetime
 
-def connect():
+def winConnect():
     try:
         conn = mariadb.connect(
                 user = "casadb",
@@ -36,6 +36,22 @@ def connect():
         return conn
     except Exception as e:
         raise e
+    
+def macConnect():
+    try:
+        conn = mariadb.connect(
+            user="casadb",
+            password="casadb",
+            host="localhost",
+            database="casadb",
+            unix_socket="/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock"
+        )
+        return conn
+    except Exception as e:
+        raise e
+
+
+
 
 def executeQuery(query,conn):
     try:
@@ -43,7 +59,7 @@ def executeQuery(query,conn):
         cur.execute(query)
         result = cur.fetchall()
         return result
-    except Excetion as e:
+    except Exception as e:
         raise e
 
 #icky solution but just role with it
@@ -115,11 +131,11 @@ class PDF:
         table.setStyle(table_style)
         self.elements.append(table)
         self.elements.append(Spacer(1,12))
-
-    def insertGraph(self,plot,width,height):
+    
+    #def insertGraph(self,plot,width,height):
         plt.savefig("./reports/plot.png") 
         self.elements.append(Image("reports/plot.png",width=width*inch,height=height*inch))
     
     #This method actually makes the pdf
     def buildPDF(self):
-        self.doc.build(self.elements) 
+        self.doc.build(self.elements)
