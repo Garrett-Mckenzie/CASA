@@ -48,7 +48,7 @@ foreach ($_POST as $key => $value){
 		array_push($args,$key.":".$value);
 	}
 }
-$command = "python ".$pyPath." ".implode(" ",$args);
+$command = "python3 ".$pyPath." ".implode(" ",$args). " 2>&1";
 	
 #Execute reportGen.py with options
 $output = null;

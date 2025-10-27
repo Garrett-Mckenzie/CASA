@@ -19,9 +19,6 @@ try:
     else:
         conn = macConnect()
 
-    print("hello world")
-    exit()
-
     #Make the pdf object
     name = None
     if "reportName" not in args.keys():
