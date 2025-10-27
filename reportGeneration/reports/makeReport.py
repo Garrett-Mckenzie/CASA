@@ -37,28 +37,26 @@ try:
     to write to the pdf. Replace this shiii with yo analysis fool.
     """ 
     #Insert a title
-    pdf.insertTitle("CHEEEEEEESSSSSSSSSSSSSSSEEEEE!!!!!!!!!!!!!!")
+    pdf.insertTitle("HELLO CASA PEOPLE THIS IS AN EXAMPLE")
 
     #Insert a subheading
-    pdf.insertSubheading("Why I like it")
+    pdf.insertSubheading("This is a Subheading")
 
     #Insert a series of paragraphs
-    pdf.insertParagraphs(["Because it is yummy. auidhcnaiuc niu d c hp hbcoer vhew ourhvbspi eruvpeirvpie uvhpeiufpeufv","And it is tasty."])
+    pdf.insertParagraphs(["CASA is a very cool organization and we are excited to be working with them. Sea of Thieves is also cool. It is a very fun video game where you drive a BOAT around and dig up treasure."])
 
     #Insert a single paragraph
-    pdf.insertParagraph("Y are U GAY????")
-
+    pdf.insertParagraph("Hey would you look at that we can have multiple paragraphs in a document isnt that cool. I am now going to say gibberish to demonstrate is working. odcnapidcnaipsdcnapisdjcasdc asdic asdc asc nqic asc adc iadcp ad apnc ap apicj jdcn apdijc a.")
     #Insert a table (make sure to include header row in the matrix boy)
-    data = [["PenarSize","FootSize"],[12,10],[40,12],[10000,10000]]
+    pdf.insertSubheading("Hey a table thats cool!!")
+    data = [["Money","Donors"],[1,10],[2,20],[3,30],[4,40],[5,50]]
     cellWidths = [70,70]
     pdf.insertTable(data,cellWidths)
 
     #Insert a graph
-    '''
-    data = pd.DataFrame({"Height":[1,2,3,4,5,6,7,8,9,10],"Johnson":[2,4,6,8,10,12,14,16,18,20]})
-    plot = sns.scatterplot(data=data,x="Height",y="Johnson")
-    pdf.insertGraph(plot,5,5)
-    '''
+    data = pd.DataFrame({"Height":[1,2,3,4,5,6,7,8,9,10],"Width":[20,44,60,81,10,12,14,16,18,20]})
+    plot = sns.scatterplot(data=data,x="Height",y="Width")
+    pdf.insertGraph(plot,3,3) 
 
     #make the pdf (THIS MUST BE CALLED LAST)
     pdf.buildPDF()
