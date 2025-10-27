@@ -1,3 +1,6 @@
+$primary: #00447b
+$secondary: #d90009
+    
 html
     font-family: "Lucida Console", "Consola", "Sans Serif"
 
@@ -12,3 +15,27 @@ td
     
     .info
         padding-right: 1em
+
+#popup
+    position: fixed
+    top: 50%
+    left: 50%
+    border-width: 2px
+    border-style: solid
+    border-color: #222
+    background-color: #f0f0f0
+    backdrop-filter: blur(5px)
+    border-radius: 10px
+    display: flex
+
+    p
+        color: $primary
+    a
+        &:active, &:visited
+            color: $secondary
+            align-content: center
+            margin-left: 5px
+    
+    button
+        border-style: solid
+        border-width: 2px

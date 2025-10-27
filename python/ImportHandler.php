@@ -13,6 +13,7 @@
 
                     if($return_var === 0){
                         echo "Imported $name<br>";
+                        header("Location: import.html?success=1&file=$name");
                     } else{
                         echo "Error importing $name<br>";
                     }
@@ -21,10 +22,12 @@
                 }
                 else {
                     echo "Failed to fetch $name<br>";
+                    header("Location: import.html?success=0");
                     //header("Location: import.html?success=0");
                 }
             } else {
                 echo "Failed to upload $name<br>";
+                header("Location: import.html?success=0");
                 //header("Location: import.html?success=0");
             }
         }
@@ -32,13 +35,6 @@
         echo "Invalid Request<br>";
         echo "Expected POST, Recieved " . $_SERVER['REQUEST_METHOD'] . "<br>";
         echo "Recieved" . $_FILES['files'] . "<br>";
+        header("Location: import.html?success=0");
     }
 ?>
-<!DOCTYPE html>
-<html>
-    <body>
-        <main>
-            <p name="Response"></p>
-        </main>
-    </body>
-</html>
