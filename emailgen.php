@@ -52,9 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <?php require_once('universal.inc') ?>
   <title>Rappahannock CASA | Email Generator</title>
 </head>
-<body class="p-4 bg-light">
+<body>
     <?php require_once('header.php') ?>
-    <h1>Generate an Email/h1>
+    <h1>Generate an Email</h1>
   <div class="container mt-4 p-4 bg-white rounded shadow">
     <h3 class="mb-3">Email Generator</h3>
     <form id="emailForm">

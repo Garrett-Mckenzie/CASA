@@ -23,6 +23,30 @@
     <link rel="stylesheet" href="css/messages.css"></link>
     <script src="js/messages.js"></script>
     <title>Rappahannock CASA | Export</title>
+    <style>
+                        html, body {
+                            height: 100%;
+                            margin: 0;
+                            padding: 0;
+                        }
+
+                        body {
+                            display: flex;
+                            flex-direction: column;
+                            min-height: 100vh;
+                        }
+
+                        main {
+                            flex: 1; /* pushes the footer down */
+                        }
+
+                        .footer {
+                            background-color: #333;
+                            color: #fff;
+                            text-align: center;
+                            padding: 20px 0;
+                        }
+                    </style>
 </head>
 <!DOCTYPE html>
 <html>
@@ -71,6 +95,7 @@
     <body>
         <?php require_once('header.php') ?>
         <h1>Export</h1>
+
         <header>
             <nav>
                 <table></table>
