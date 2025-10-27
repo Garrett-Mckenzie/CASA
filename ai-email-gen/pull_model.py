@@ -1,7 +1,7 @@
 import requests
 
 url = "http://localhost:11434/api/pull"
-payload = {"model": "qwen3:14b"}
+payload = {"model": "llama3.2:3b}
 
 try:
     with requests.post(url, json=payload, stream=True) as resp:

@@ -194,6 +194,7 @@ function get_new_volunteers_count($dateFrom, $dateTo) {
 
 
 function make_a_person($result_row) {
+	require_once './domain/Person.php';
 	$thePerson = new Person(
 		$result_row['id'],
 		$result_row['password'],

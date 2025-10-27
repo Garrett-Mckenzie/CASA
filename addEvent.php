@@ -18,32 +18,34 @@
     // Require admin privileges
     if ($accessLevel < 2) {
         header('Location: login.php');
-        //echo 'bad access level';
+        echo 'bad access level';
         die();
     }
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         require_once('include/input-validation.php');
         require_once('database/dbEvents.php');
+
         $args = sanitize($_POST, null);
-        $required = array(
-            "name", "date", "start-time", "end-time", "description", "type"
-        );
+
+        $required = array("name","goalAmount", "startDate","endDate", "startTime", "endTime", "description");
+
         if (!wereRequiredFieldsSubmitted($args, $required)) {
             echo 'bad form data';
             die();
         } else {
-            $validated = validate12hTimeRangeAndConvertTo24h($args["start-time"], $args["end-time"]);
+            $validated = validate12hTimeRangeAndConvertTo24h($args["startTime"], $args["endTime"]);
             if (!$validated) {
                 echo 'bad time range';
                 die();
             }
 
-            $startTime = $args['start-time'] = $validated[0];
-            $endTime = $args['end-time'] = $validated[1];
-            $date = $args['date'] = validateDate($args["date"]);
+            $startTime = $args['startTime'] = $validated[0];
+            $endTime = $args['endTime'] = $validated[1];
+            $startDate = $args['startDate'] = validateDate($args["startDate"]);
+            $endDate = $args['endDate'] = validateDate($args["endDate"]);
             
     
-            if (!$startTime || !$endTime || !$date > 11){
+            if (!$startTime || !$endTime || !$endDate || !$startDate){
                 echo 'bad args';
                 die();
             }
@@ -86,21 +88,28 @@
             <form id="new-event-form" method="POST">
                 <label for="name">* Event Name </label>
                 <input type="text" id="name" name="name" required placeholder="Enter name"> 
-                <label for="name">* Date </label>
-                <input type="date" id="date" name="date" <?php if ($date) echo 'value="' . $date . '"'; ?> min="<?php echo date('Y-m-d'); ?>" required>
+
+                <label for="name">* Fundraiser Goal </label>
+                <input type="text" id="goalAmount" name="goalAmount" required placeholder=" $$$ ">
+
+                <label for="name">* Start Date </label>
+                <input type="date" id="startDate" name="startDate" <?php if ($date) echo 'value="' . $date . '"'; ?> min="<?php echo date('Y-m-d'); ?>" required>
+
+                <label for="name">* End Date </label>
+                <input type="date" id="endDate" name="endDate" <?php if ($date) echo 'value="' . $date . '"'; ?> min="<?php echo date('Y-m-d'); ?>" required>
+
                 <label for="name">* Start Time </label>
-                <input type="text" id="start-time" name="start-time" pattern="([1-9]|10|11|12):[0-5][0-9] ?([aApP][mM])" required placeholder="Enter start time. Ex. 12:00 PM">
+                <input type="text" id="startTime" name="startTime" pattern="([1-9]|10|11|12):[0-5][0-9] ?([aApP][mM])" required placeholder="Enter start time. Ex. 12:00 PM">
+
                 <label for="name">* End Time </label>
-                <input type="text" id="end-time" name="end-time" pattern="([1-9]|10|11|12):[0-5][0-9] ?([aApP][mM])" required placeholder="Enter end time. Ex. 1:00 PM">
+                <input type="text" id="endTime" name="endTime" pattern="([1-9]|10|11|12):[0-5][0-9] ?([aApP][mM])" required placeholder="Enter end time. Ex. 1:00 PM">
+
                 <label for="name">* Description </label>
                 <input type="text" id="description" name="description" required placeholder="Enter description">
-                <label for="name">Event Type </label>
-                <input type="text" id="type" name="type" required placeholder="Enter Event Type">
+  
                 <label for="name">Location </label>
-                <input type="text" id="location" name="location" required placeholder="Enter location">
-                <label for="name">Capacity </label>
-                <input type="number" id="capacity" name="capacity" required placeholder="Enter capacity (e.g. 1-99)">
-                
+                <input type="text" id="location" name="location" placeholder="Enter location">
+
                 
                 <input type="submit" value="Create Event">
                 
