@@ -505,6 +505,7 @@
             <img class="background-image" src="images/blank-white-background.jpg" />
             <div class="large-text-sub">Generate Emails</div>
             <button class="arrow-button">→</button>
+            
         </div>
     </div>
 
