@@ -498,6 +498,16 @@
         </div>
     </div>
 
+    <div class="content-box-test" onclick="window.location.href='Search-donor-db/index.php'">
+            <div class="icon-overlay">
+                <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
+            </div>
+            <img class="background-image" src="images/blank-white-background.jpg" />
+            <div class="large-text-sub">Generate Emails</div>
+            <button class="arrow-button">→</button>
+        </div>
+    </div>
+
 
     
 
