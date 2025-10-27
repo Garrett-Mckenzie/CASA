@@ -48,12 +48,21 @@ foreach ($_POST as $key => $value){
 		array_push($args,$key.":".$value);
 	}
 }
-$command = "python ".$pyPath." ".implode(" ",$args);	
+$command = "python ".$pyPath." ".implode(" ",$args);
+	
 #Execute reportGen.py with options
-$output = null;	
-$output = exec($command);
+$output = null;
+$returnCode = null;
+try{
+	exec($command,$output,$returnCode);	
+	var_dump($output);
+	var_dump($returnCode);
+}
+catch (Throwable $e){
+	echo "There was a problem on our end sorry";
+}
 
 #this line is really fucking sick
-echo '<script type="text/javascript"> window.open("reports/'.$output.'","_blank");window.location.href="index.php";</script>';
+#echo '<script type="text/javascript"> window.open("reports/'.$output.'","_blank");window.location.href="index.php";</script>';
 exit();
 ?>
