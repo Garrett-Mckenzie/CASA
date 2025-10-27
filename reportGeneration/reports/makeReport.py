@@ -2,6 +2,8 @@ from importMeEthan import *
 from importMeGarrett import *
 import time
 
+
+
 try:
     #get options as specified by the user
     args = getArgs()
@@ -54,11 +56,11 @@ try:
     pdf.insertTable(data,cellWidths)
 
     #Insert a graph
-    '''
+    
     data = pd.DataFrame({"Height":[1,2,3,4,5,6,7,8,9,10],"Johnson":[2,4,6,8,10,12,14,16,18,20]})
     plot = sns.scatterplot(data=data,x="Height",y="Johnson")
     pdf.insertGraph(plot,5,5)
-    '''
+    
 
     #make the pdf (THIS MUST BE CALLED LAST)
     pdf.buildPDF()
