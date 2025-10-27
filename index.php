@@ -503,7 +503,7 @@
                 <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Generate Emails</div>
+            <div class="large-text-sub">Search</div>
             <button class="arrow-button">→</button>
             
         </div>
