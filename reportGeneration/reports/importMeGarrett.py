@@ -130,10 +130,52 @@ def goalAchievementRate(eventRows,donationRows):
 
 
 # Completion rate of fundraisers (completed vs ongoing)
-# Donor retention rate (repeat donors ÷ total donors)
+def totalCompletion(eventRows,donationRows):
+    completionMatrix = goalAchievementRate(eventRows,donationRows)
+    completionMatrix["completed"] = np.where(completionMatrix['completion']>=100,1,0)
+    pp = completionMatrix[(completionMatrix["completed"]==1)]
+
+    return round(len(pp)/len(completionMatrix)*100,2)
+
+# Donor retention rate (repeat donors ÷ total donors) !!maybe skip
+
 # New donor acquisition rate
+def donorAcqRate(queryRows):
+    #query of every unique donors first donation date
+    donationsDates = []
+    for date in queryRows:
+        dateObj = datetime.strptime(date[0], "%m-%d-%Y")
+        donationsDates.append(dateObj)
+
+    today = datetime.today()
+    monthAgo = today - timedelta(days=30)
+    quarterAgo = today - timedelta(days=90)
+    yearAgo = today - timedelta(days=365)
+
+    q = 0;
+    y = 0;
+    m = 0;
+    for date in donationsDates:
+        if yearAgo <= date <= today:
+            y+=1
+            if quarterAgo <= date <= today:
+                q+=1
+                if monthAgo <= date <= today:
+                    m+=1
+
+    #return num of new donors in last month,quarter and year
+    return[m,q,y]
 ##visuals
 # Line chart of donations over time
+def chartNumDonations(queryRows,rType,k):
+    donationsDates = []
+    for date in queryRows:
+        dateObj = datetime.strptime(date[0], "%m-%d-%Y")
+        donationsDates.append(dateObj)
+
+    today = datetime.today()
+
+    return
 # Bar chart of fundraiser goal vs. actual raised
 # KPI dashboard tiles (Total Raised, Avg Donation, Active Donors, etc.)
 
