@@ -15,7 +15,7 @@ echo "<pre>Running command:\n\nCOMMAND: $cmd\n\n";
 $output = [];
 $return_var = null;
 exec($cmd, $output, $return_var);
-echo "$cmd\n";
+
 echo "RETURN CODE: $return_var\n\nOUTPUT:\n\n";
 print_r($output);
 echo "</pre>";
