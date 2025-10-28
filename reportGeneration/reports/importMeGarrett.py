@@ -174,6 +174,12 @@ def chartNumDonations(queryRows,rType,k):
         donationsDates.append(dateObj)
 
     today = datetime.today()
+    if(rType == "y"):
+        timeAgo = today - timedelta(days=365*k)
+    if(rType == "q"):
+        timeAgo = today-timedelta(days=90*k)
+    else:
+        timeAgo = today-timedelta(days=30*k)
 
     return
 # Bar chart of fundraiser goal vs. actual raised

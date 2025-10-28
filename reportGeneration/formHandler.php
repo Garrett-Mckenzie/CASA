@@ -51,20 +51,26 @@ foreach ($_POST as $key => $value){
 $ethanPyPath = "/usr/local/bin/python";
 $otherPyPath = "python3"; //default to system python
 $command =  "$ethanPyPath $pyPath " . implode(" ",$args). " 2>&1";
+
+//$command = "python ".$pyPath." ".implode(" ",$args). " 2>&1";
 	
 #Execute reportGen.py with options
 $output = null;
 $returnCode = null;
 try{
 	exec($command,$output,$returnCode);	
-	var_dump($output);
-	var_dump($returnCode);
+	if (sizeof($output) > 1){
+		throw new Exception("Bad output");
+	}
+	#this line is really fucking sick
+	echo '<script type="text/javascript"> window.open("reports/'.$output[0].'","_blank");window.location.href="index.php";</script>';
 }
 catch (Throwable $e){
-	echo "There was a problem on our end sorry";
+	foreach ($output as $value){
+			echo $value;
+	}
+	echo "There was a problem on our end please exit the page.";
 }
 
-#this line is really fucking sick
-#echo '<script type="text/javascript"> window.open("reports/'.$output.'","_blank");window.location.href="index.php";</script>';
 exit();
 ?>

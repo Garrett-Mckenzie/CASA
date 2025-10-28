@@ -39,19 +39,19 @@ try:
     to write to the pdf. Replace this shiii with yo analysis fool.
     """ 
     #Insert a title
-    pdf.insertTitle("CHEEEEEEESSSSSSSSSSSSSSSEEEEE!!!!!!!!!!!!!!")
+    pdf.insertTitle("HELLO CASA PEOPLE THIS IS AN EXAMPLE")
 
     #Insert a subheading
-    pdf.insertSubheading("Why I like it")
+    pdf.insertSubheading("This is a Subheading")
 
     #Insert a series of paragraphs
-    pdf.insertParagraphs(["Because it is yummy. auidhcnaiuc niu d c hp hbcoer vhew ourhvbspi eruvpeirvpie uvhpeiufpeufv","And it is tasty."])
+    pdf.insertParagraphs(["CASA is a very cool organization and we are excited to be working with them. Sea of Thieves is also cool. It is a very fun video game where you drive a BOAT around and dig up treasure."])
 
     #Insert a single paragraph
-    pdf.insertParagraph("Y are U GAY????")
-
+    pdf.insertParagraph("Hey would you look at that we can have multiple paragraphs in a document isnt that cool. I am now going to say gibberish to demonstrate is working. odcnapidcnaipsdcnapisdjcasdc asdic asdc asc nqic asc adc iadcp ad apnc ap apicj jdcn apdijc a.")
     #Insert a table (make sure to include header row in the matrix boy)
-    data = [["PenarSize","FootSize"],[12,10],[40,12],[10000,10000]]
+    pdf.insertSubheading("Hey a table thats cool!!")
+    data = [["Money","Donors"],[1,10],[2,20],[3,30],[4,40],[5,50]]
     cellWidths = [70,70]
     pdf.insertTable(data,cellWidths)
 
