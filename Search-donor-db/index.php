@@ -16,6 +16,8 @@ if ($con) {
     mysqli_close($con);
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,6 +75,11 @@ if ($con) {
                     </div>
                 </div>
             </div>            
+        </form>
+
+        <form action="#" method="post">
+                    <input type="text" name="event" placeholder="Enter new task..." required>
+                    <button type="submit" name="add_task" class="submit-button">Add Task</button>
         </form>
 
         <!-- Search Button -->

@@ -285,7 +285,7 @@
         /* Footer */
         .footer {
             width: 100%;
-            background: #00447b;
+            background: #7b0000ff;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -500,10 +500,10 @@
 
     <div class="content-box-test" onclick="window.location.href='Search-donor-db/index.php'">
             <div class="icon-overlay">
-                <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
+                <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Search</div>
+            <div class="large-text-sub">Search donors</div>
             <button class="arrow-button">→</button>
             
         </div>
