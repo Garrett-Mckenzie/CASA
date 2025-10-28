@@ -1,8 +1,7 @@
 #try:
 
 #data science stuff
-import os
-os.environ['MPLCONFIGDIR'] = '/tmp/matplotlib'
+
 
 import pandas as pd
 import numpy as np
