@@ -30,6 +30,7 @@ def main():
         response = requests.post(url, json=payload)
         response.raise_for_status()
         data = response.json()
+        print(data.response)
         print(data.get("response", "").strip())
     except requests.exceptions.RequestException as e:
         print(f"Error communicating with Ollama API: {e}")

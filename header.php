@@ -188,16 +188,15 @@ date_default_timezone_set('America/New_York');
 
         /* Logo */
         .logo-container {
-            background: white;
+            background: #00447b;
             padding: 10px 20px;
             border-radius: 50px;
-            border: 1px solid black;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25) inset;
         }
 
         .logo-container img {
-            width: 128px;
-            height: 52px;
-            display: block;
+            width: 80px;
+            height: 60px;
         }
 
         /* Navigation Links */
@@ -692,21 +691,9 @@ date_default_timezone_set('America/New_York');
         <!-- Left Section: Logo & Nav Links -->
         <div class="left-section">
             <div class="logo-container">
-                <a href="index.php"><img src="images/RAPPAHANNOCK_v_RedBlue2.png" alt="Logo"></a>
+                <a href="index.php"><img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo"></a>
             </div>
             <div class="nav-links">
-                <div class="nav-item">Volunteers
-                    <div class="dropdown">
-            
-<a href="VolunteerRegister.php" style="text-decoration: none;">
-  <div class="in-nav">
-    <img src="images/add-person.svg">
-    <span style="font-size:24px;">Register Volunteer</span>
-  </div>
-</a>
-			
-                    </div>
-                </div>
                 <div class="nav-item">Events
                     <div class="dropdown">
 
