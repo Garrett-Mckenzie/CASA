@@ -58,8 +58,11 @@ try{
 	if (sizeof($output) > 1){
 		throw new Exception("Bad output");
 	}
+	var_dump($output);
+	echo "<br/>";
+	echo $command;
 	#this line is really fucking sick
-	echo '<script type="text/javascript"> window.open("reports/'.$output[0].'","_blank");window.location.href="index.php";</script>';
+	#echo '<script type="text/javascript"> window.open("reports/'.$output[0].'","_blank");window.location.href="index.php";</script>';
 }
 catch (Throwable $e){
 	foreach ($output as $value){
