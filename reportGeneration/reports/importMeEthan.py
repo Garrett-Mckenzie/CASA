@@ -1,29 +1,34 @@
-#data science stuff
-import pandas as pd
-import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
-import plotly.express as px
-import scipy.stats as stats
+try:
+    #data science stuff
+    import pandas as pd
+    import numpy as np
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+    import plotly.express as px
+    import scipy.stats as stats
 
-#pdf generation stuff with reportlab
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
-from reportlab.platypus import Paragraph, Spacer, Image
-from reportlab.lib.pagesizes import LETTER
-from reportlab.lib import colors
-from reportlab.pdfgen import canvas
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.styles import ParagraphStyle
-from reportlab.lib.enums import TA_CENTER,TA_LEFT,TA_RIGHT
-from reportlab.lib.units import inch
+    #pdf generation stuff with reportlab
+    from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+    from reportlab.platypus import Paragraph, Spacer, Image
+    from reportlab.lib.pagesizes import LETTER
+    from reportlab.lib import colors
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.styles import getSampleStyleSheet
+    from reportlab.lib.styles import ParagraphStyle
+    from reportlab.lib.enums import TA_CENTER,TA_LEFT,TA_RIGHT
+    from reportlab.lib.units import inch
 
-#other
-from pathlib import Path
-import sys
-import os
-import traceback
-import mariadb
-from datetime import datetime
+    #other
+    from pathlib import Path
+    import sys
+    import os
+    import traceback
+    import mariadb
+    from datetime import datetime
+
+except Exception as e:
+    print(str(e))
+
 
 def winConnect():
     try:
