@@ -2,15 +2,22 @@ from importMeEthan import *
 from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
-
+import pprint
 
 # Total donations over past time (by month, quarter, year)
 #general overall stats (all donations)
 def numDonationsOverTime(queryRows):
-    # select date, from donations
+    """Total donations over past time (by month, quarter, year); general overall stats (all donations)
+
+    Args:
+        queryRows (array of tuples): select date, from donations
+
+    Returns:
+        list: [monthTotal,quarterTotal,yearlyTotal]
+    """
     chungus = []
     for date in queryRows:
-        dateObj = datetime.strptime(date[0], "%m-%d-%Y")
+        dateObj = datetime.strptime(date[0], "%m/%d/%Y")
         chungus.append(dateObj)
     
     onFleek = datetime.today()
@@ -23,32 +30,56 @@ def numDonationsOverTime(queryRows):
     yTot = 0
     for row in chungus:
         if(rad<= row <= onFleek):
-            mTot+=1
+            yTot+=1
             if(stephen <=row<=onFleek):
                 qTot += 1
                 if(perchance <= row <= onFleek):
-                    yTot += 1
+                    mTot += 1
                         
     return [mTot,qTot,yTot]
     
 
 # Total number of donors
 def totalDonors(queryRows):
+    """Total number of donors
+
+    Args:
+        queryRows (array of tuples): select * from donors
+
+    Returns:
+        int: number of donors
+    """
     # select * from donors
     return len(queryRows)
 
 # Average donation amount
 def avgDonation(queryRows):
+    """Average donation amount
+
+    Args:
+        queryRows (array of tuples): select amount from donations
+
+    Returns:
+        float: average donation amount rounded to 2 digits past decimal
+    """
     # select amount from donations
     numDonations = len(queryRows)
     total = 0
     for row in queryRows:
         total += row[0]
 
-    return total/numDonations
+    return round(total/numDonations,2)
 
 # Median donation amount
 def medDonation(queryRows):
+    """Median donation amount
+
+    Args:
+        queryRows (array of tuples): select amount from donations
+
+    Returns:
+        float: median donation
+    """
     # select amount from donations
 
     queryRows = [row[0] for row in queryRows]
@@ -59,7 +90,7 @@ def medDonation(queryRows):
 
 # Donation growth rate (year-over-year, quarter-over-quarter)
 def donationGrowth(queryRows, rType):
-    """growth rate % of year to last year
+    """growth rate % (year-over-lastYear, quarter-over-lastQuarter)
 
     Args:
         queryRows (array of tuples): query results containing just date information of all donations
@@ -71,7 +102,7 @@ def donationGrowth(queryRows, rType):
 
     donationsDates = []
     for date in queryRows:
-        dateObj = datetime.strptime(date[0], "%m-%d-%Y")
+        dateObj = datetime.strptime(date[0], "%m/%d/%Y")
         donationsDates.append(dateObj)
 
     today = datetime.today()
@@ -97,9 +128,9 @@ def donationGrowth(queryRows, rType):
             if twoQuarterAgo <= date <= quarterAgo:
                 pastDonations +=1
 
-    if pastDonations == 0:
-        return 0.0
-    growth = ((curDonations/pastDonations)-1)*100
+    if pastDonations ==0 or curDonations == 0:
+        return 0.0 #no growth and catches divide by 0 error
+    growth = (((curDonations-pastDonations)/pastDonations))*100
     return round(growth,2)
 
 
@@ -118,12 +149,13 @@ def goalAchievementRate(eventRows,donationRows):
     #select id,name,goalAmount from dbevents
     #select amount, eventID from donations
     events = pd.DataFrame(eventRows,columns=["id","name","goalAmount"])
-    events["aggDonations"] = 0
+    events["aggDonations"] = 0.00
+
     for tuple in donationRows:
-        if tuple[1] in events["id"]:
-            events.at[tuple[1],"aggDonations"] += tuple[0]
+        if tuple[1] in events["id"].values:
+            events.loc[events["id"] == tuple[1],"aggDonations"] += float(tuple[0])
     
-    events["completion"] = ((events["aggDonations"]/events["goalAmount"])*100).round(decimals=2)
+    events["completion"] = ((events["aggDonations"]/events["goalAmount"].astype(float))*100).round(2)
 
     return events[["id","name","completion"]]
 
@@ -131,6 +163,15 @@ def goalAchievementRate(eventRows,donationRows):
 
 # Completion rate of fundraisers (completed vs ongoing)
 def totalCompletion(eventRows,donationRows):
+    """Completion rate of fundraisers (completed vs ongoing)
+
+    Args:
+        eventRows (array of tuples): select id,name,goalAmount from dbevents
+        donationRows (array of tuples): select amount, eventID from donations
+
+    Returns:
+        float: rounded PERCENTAGE of completed events (completed/allEvents)
+    """
     completionMatrix = goalAchievementRate(eventRows,donationRows)
     completionMatrix["completed"] = np.where(completionMatrix['completion']>=100,1,0)
     pp = completionMatrix[(completionMatrix["completed"]==1)]
@@ -141,10 +182,18 @@ def totalCompletion(eventRows,donationRows):
 
 # New donor acquisition rate
 def donorAcqRate(queryRows):
+    """New donor acquisition rate
+
+    Args:
+        queryRows (array of tuples): query of every unique donors first donation date
+
+    Returns:
+        list: [newWithinMonth,newWithinQuarter,newWithinYear]
+    """
     #query of every unique donors first donation date
     donationsDates = []
     for date in queryRows:
-        dateObj = datetime.strptime(date[0], "%m-%d-%Y")
+        dateObj = datetime.strptime(date[0], "%m/%d/%Y")
         donationsDates.append(dateObj)
 
     today = datetime.today()
@@ -164,13 +213,13 @@ def donorAcqRate(queryRows):
                     m+=1
 
     #return num of new donors in last month,quarter and year
-    return[m,q,y]
+    return [m,q,y]
 ##visuals
 # Line chart of donations over time
 def chartNumDonations(queryRows,rType,k):
     donationsDates = []
     for date in queryRows:
-        dateObj = datetime.strptime(date[0], "%m-%d-%Y")
+        dateObj = datetime.strptime(date[0], "%m/%d/%Y")
         donationsDates.append(dateObj)
 
     today = datetime.today()
