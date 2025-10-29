@@ -49,6 +49,10 @@ foreach ($_POST as $key => $value){
 	}
 }
 $command = "python ".$pyPath." ".implode(" ",$args). " 2>&1";
+
+$ethanPyPath = "/usr/local/bin/python";
+$otherPyPath = "python3"; //default to system python
+$command =  "$ethanPyPath $pyPath " . implode(" ",$args). " 2>&1";
 	
 #Execute reportGen.py with options
 $output = null;
