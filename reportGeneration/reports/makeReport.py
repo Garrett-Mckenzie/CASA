@@ -1,3 +1,4 @@
+
 try:
     from importMeEthan import *
     from importMeGarrett import *
@@ -54,9 +55,9 @@ try:
     pdf.insertTable(data,cellWidths)
 
     #Insert a graph
-    # data = pd.DataFrame({"Height":[1,2,3,4,5,6,7,8,9,10],"Width":[20,44,60,81,10,12,14,16,18,20]})
-    # plot = sns.scatterplot(data=data,x="Height",y="Width")
-    # pdf.insertGraph(plot,3,3) 
+    data = pd.DataFrame({"Height":[1,2,3,4,5,6,7,8,9,10],"Width":[20,44,60,81,10,12,14,16,18,20]})
+    sns.scatterplot(data=data,x="Height",y="Width")
+    pdf.insertGraph(3,3) 
 
     #make the pdf (THIS MUST BE CALLED LAST)
     pdf.buildPDF()

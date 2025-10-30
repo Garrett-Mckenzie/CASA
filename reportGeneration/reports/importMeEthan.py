@@ -1,10 +1,20 @@
+import os, tempfile, sys
+
+# Force Matplotlib to use a safe backend and writable cache before anything else
+# makes a tmp directory where the system can write to it without explicit perms
+os.environ["MPLCONFIGDIR"] = os.path.join(tempfile.gettempdir(), "matplotlib")
+os.environ["MPLBACKEND"] = "Agg"
+
+import matplotlib
+matplotlib.use("Agg")
+
 try:
-    import os
-    os.environ["MPLCONFIGDIR"] = "/Applications/XAMPP/xamppfiles/htdocs/CASA/tmp_matplotlib"
+
 
     #data science stuff
     import pandas as pd
     import numpy as np
+    import matplotlib.pyplot as plt
     import seaborn as sns
     
 
@@ -139,8 +149,8 @@ try:
             self.elements.append(table)
             self.elements.append(Spacer(1,12))
 
-        def insertGraph(self,plot,width,height):
-            plot.savefig("./reports/plot.png") 
+        def insertGraph(self,width,height):
+            plt.savefig("./reports/plot.png") 
             self.elements.append(Image("reports/plot.png",width=width*inch,height=height*inch))
 
         #This method actually makes the pdf
