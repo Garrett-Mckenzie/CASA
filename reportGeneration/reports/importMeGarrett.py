@@ -1,6 +1,4 @@
-import matplotlib
-matplotlib.use('Agg')  # Headless backend, safe for servers
-
+import importMeEthan as Ethan
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import numpy as np
@@ -273,23 +271,22 @@ def chartNumDonations(queryRows,rType='y',gType='hist',k=1, b=12):
         # Count number of donations per day
         daily_counts = df.groupby('date').size().reset_index(name='count')
         # Line plot of counts over time
-
-        fig, ax = plt.subplots()
-        sns.lineplot(data=daily_counts, x='date', y='count')
-        ax.set_title("Donations Over Time")
-        ax.set_xlabel("Date")
-        ax.set_ylabel("Donation Count")
-        plt.tight_layout()
-        return fig
-
-    else:
         # fig, ax = plt.subplots()
-        figure = sns.histplot(data=df, x="date", bins=b)
+        sns.lineplot(data=daily_counts, x='date', y='count')
         # ax.set_title("Donations Over Time")
         # ax.set_xlabel("Date")
         # ax.set_ylabel("Donation Count")
         # plt.tight_layout()
-        return figure
+        return 
+
+    else:
+        # fig, ax = plt.subplots()
+        sns.histplot(data=df, x="date", bins=b)
+        # ax.set_title("Donations Over Time")
+        # ax.set_xlabel("Date")
+        # ax.set_ylabel("Donation Count")
+        # plt.tight_layout()
+        return 
 
 
     
@@ -312,14 +309,14 @@ def chartFundraiserGoals(eventRows,donationRows):
 
     melted = events.melt(id_vars='name', value_vars=['goalAmount', 'aggDonations'],var_name='metric', value_name='amount')
     # Plot
-    fig, ax = plt.subplots()
+    # fig, ax = plt.subplots()
     sns.displot(data=melted, x='name', hue='metric', weights='amount', multiple='stack', shrink=0.8)
-    ax.set_title("Goal vs Donations per Event")
-    ax.set_xlabel("Event")
-    ax.set_ylabel("Amount")
-    ax.tick_params(axis="x", rotation=45)
-    plt.tight_layout()
-    return fig
+    # ax.set_title("Goal vs Donations per Event")
+    # ax.set_xlabel("Event")
+    # ax.set_ylabel("Amount")
+    # ax.tick_params(axis="x", rotation=45)
+    # plt.tight_layout()
+    return
 
 # KPI dashboard tiles (Total Raised, Avg Donation, Active Donors, etc.)
 

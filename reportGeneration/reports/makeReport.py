@@ -1,10 +1,9 @@
-from importMeEthan import *
-from importMeGarrett import *
-import time
-
-
 
 try:
+    from importMeEthan import *
+    from importMeGarrett import *
+    import time
+
     #get options as specified by the user
     args = getArgs()
 
@@ -57,8 +56,8 @@ try:
 
     #Insert a graph
     data = pd.DataFrame({"Height":[1,2,3,4,5,6,7,8,9,10],"Width":[20,44,60,81,10,12,14,16,18,20]})
-    plot = sns.scatterplot(data=data,x="Height",y="Width")
-    pdf.insertGraph(plot,3,3) 
+    sns.scatterplot(data=data,x="Height",y="Width")
+    pdf.insertGraph(3,3) 
 
     #make the pdf (THIS MUST BE CALLED LAST)
     pdf.buildPDF()
@@ -70,3 +69,4 @@ try:
    
 except Exception as e:
     traceback.print_exc()
+    raise e
