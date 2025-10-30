@@ -74,5 +74,4 @@ catch (Throwable $e){
 	echo "<br/>";
 	echo "There was a problem on our end please exit the page.";
 }
-
 ?>
