@@ -64,8 +64,8 @@ print(data.donorAcqRate(cur.fetchall()))
 
 print("# new donors graph over time: ",end="")
 cur.execute("select date from donations where date is not null")
-#graph = data.chartNumDonations(cur.fetchall(),"y","hist",12)
-#plt.show()
+graph = data.chartNumDonations(cur.fetchall(),"y","line",12)
+plt.show()
 
 #graph = data.chartFundraiserGoals(rows1,rows2)
 #plt.show()

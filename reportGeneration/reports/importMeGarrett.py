@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use('Agg')  # Headless backend, safe for servers
+
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import numpy as np
@@ -270,6 +273,7 @@ def chartNumDonations(queryRows,rType='y',gType='hist',k=1, b=12):
         # Count number of donations per day
         daily_counts = df.groupby('date').size().reset_index(name='count')
         # Line plot of counts over time
+
         fig, ax = plt.subplots()
         sns.lineplot(data=daily_counts, x='date', y='count')
         ax.set_title("Donations Over Time")
@@ -279,13 +283,13 @@ def chartNumDonations(queryRows,rType='y',gType='hist',k=1, b=12):
         return fig
 
     else:
-        fig, ax = plt.subplots()
-        sns.histplot(data=df, x="date", bins=b)
-        ax.set_title("Donations Over Time")
-        ax.set_xlabel("Date")
-        ax.set_ylabel("Donation Count")
-        plt.tight_layout()
-        return fig
+        # fig, ax = plt.subplots()
+        figure = sns.histplot(data=df, x="date", bins=b)
+        # ax.set_title("Donations Over Time")
+        # ax.set_xlabel("Date")
+        # ax.set_ylabel("Donation Count")
+        # plt.tight_layout()
+        return figure
 
 
     
