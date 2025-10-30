@@ -48,9 +48,13 @@ foreach ($_POST as $key => $value){
 		array_push($args,$key.":".$value);
 	}
 }
+<<<<<<< HEAD
 $command = "python ".$pyPath." ".implode(" ",$args). " 2>&1";
 
 $ethanPyPath = "/usr/local/bin/python";
+=======
+$ethanPyPath = "/Applications/XAMPP/xamppfiles/htdocs/CASA/venv/bin/python";
+>>>>>>> 0c22980 (this is a testing branch)
 $otherPyPath = "python3"; //default to system python
 $command =  "$ethanPyPath $pyPath " . implode(" ",$args). " 2>&1";
 	
@@ -63,7 +67,8 @@ try{
 		throw new Exception("Bad output");
 	}
 	#this line is really fucking sick
-	echo '<script type="text/javascript"> window.open("reports/'.$output[0].'","_blank");window.location.href="index.php";</script>';
+	# echo '<script type="text/javascript"> window.open("reports/'.$output[0].'","_blank");window.location.href="index.php";</script>';
+	var_dump($output);
 }
 catch (Throwable $e){
 	foreach ($output as $value){
