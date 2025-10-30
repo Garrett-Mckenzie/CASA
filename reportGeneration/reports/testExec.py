@@ -62,5 +62,13 @@ print("# new donors in last (m,q,y): ",end="")
 cur.execute("select donorID, MIN(STR_TO_DATE(date,'%m/%d/%Y')) as date from donations where date is not null group by donorID order by date")
 print(data.donorAcqRate(cur.fetchall()))
 
+print("# new donors graph over time: ",end="")
+cur.execute("select date from donations where date is not null")
+#graph = data.chartNumDonations(cur.fetchall(),"y","hist",12)
+#plt.show()
+
+#graph = data.chartFundraiserGoals(rows1,rows2)
+#plt.show()
+
 cur.close()
 conn.close()

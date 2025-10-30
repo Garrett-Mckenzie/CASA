@@ -2,6 +2,7 @@ from importMeEthan import *
 from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
+import seaborn as sns
 import pprint
 
 # Total donations over past time (by month, quarter, year)
@@ -229,27 +230,93 @@ def donorAcqRate(queryRows):
     #return num of new donors in last month,quarter and year
     return [m,q,y]
 ##visuals
-# Line chart of donations over time
-def chartNumDonations(queryRows,rType,k):
+
+def chartNumDonations(queryRows,rType='y',gType='hist',k=1, b=12):
+    """create chart of donations over time
+
+    Args:
+        queryRows (array of tuples): elect date from donations where date is not null
+        rType (str, optional): time type (y=year,q=quarter,m=month). Defaults to 'y'.
+        gType (str, optional): graph type [hist or line]. Defaults to 'hist'.
+        k (int, optional): number of rType. Defaults to 1.
+        b (int, optional): number of bins. Defaults to 12.
+
+    Returns:
+        _type_: _description_
+    """
     donationsDates = []
     for date in queryRows:
-        if isinstance(date[1], (str)):
-            dateObj = datetime.strptime(date[1], "%m/%d/%Y")
+        if isinstance(date[0], (str)):
+            dateObj = datetime.strptime(date[0], "%m/%d/%Y")
             donationsDates.append(dateObj)      
         else:
-            datetimeObj = datetime.combine(date[1], datetime.min.time())
+            datetimeObj = datetime.combine(date[0], datetime.min.time())
             donationsDates.append(datetimeObj)
 
     today = datetime.today()
-    if(rType == "y"):
-        timeAgo = today - timedelta(days=365*k)
-    if(rType == "q"):
-        timeAgo = today-timedelta(days=90*k)
+    if(rType.lower() == "y"):
+        timeAgo = today - timedelta(days=(round(365.0*k,0)))
+    elif(rType.lower()== "q"):
+        timeAgo = today-timedelta(days=(round(90.0*k,0)))
     else:
-        timeAgo = today-timedelta(days=30*k)
+        timeAgo = today-timedelta(days=(round(30.0*k,0)))
 
-    return
+    #get just in time range
+    df = pd.DataFrame(donationsDates,columns=["date"]) 
+    df = df[(timeAgo <= df["date"])&(df["date"] <= today)]
+
+    if(gType.lower()=="line"):        
+        df['date'] = pd.to_datetime(df['date'])
+        # Count number of donations per day
+        daily_counts = df.groupby('date').size().reset_index(name='count')
+        # Line plot of counts over time
+        fig, ax = plt.subplots()
+        sns.lineplot(data=daily_counts, x='date', y='count')
+        ax.set_title("Donations Over Time")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Donation Count")
+        plt.tight_layout()
+        return fig
+
+    else:
+        fig, ax = plt.subplots()
+        sns.histplot(data=df, x="date", bins=b)
+        ax.set_title("Donations Over Time")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Donation Count")
+        plt.tight_layout()
+        return fig
+
+
+    
 # Bar chart of fundraiser goal vs. actual raised
+def chartFundraiserGoals(eventRows,donationRows):
+
+    #select id,name,goalAmount from dbevents
+    #select amount, eventID from donations
+    events = pd.DataFrame(eventRows,columns=["id","name","goalAmount"])
+    events["aggDonations"] = 0.00
+
+    for tuple in donationRows:
+        if tuple[1] in events["id"].values:
+            events.loc[events["id"] == tuple[1],"aggDonations"] += float(tuple[0])
+    
+    events["completion"] = ((events["aggDonations"]/events["goalAmount"].astype(float))*100).round(2)
+    events= events[["name","goalAmount","aggDonations"]] 
+    events["goalAmount"] = events["goalAmount"].astype(float)
+    pprint.pprint(events)
+
+    melted = events.melt(id_vars='name', value_vars=['goalAmount', 'aggDonations'],var_name='metric', value_name='amount')
+    # Plot
+    fig, ax = plt.subplots()
+    sns.displot(data=melted, x='name', hue='metric', weights='amount', multiple='stack', shrink=0.8)
+    ax.set_title("Goal vs Donations per Event")
+    ax.set_xlabel("Event")
+    ax.set_ylabel("Amount")
+    ax.tick_params(axis="x", rotation=45)
+    plt.tight_layout()
+    return fig
+
 # KPI dashboard tiles (Total Raised, Avg Donation, Active Donors, etc.)
 
 
