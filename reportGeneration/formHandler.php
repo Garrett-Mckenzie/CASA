@@ -41,18 +41,24 @@ ob_flush();
 flush();
 
 #build out the command using options from the form
-$pyPath = "./reports/makeReport.py";
+
 $args = array();
 foreach ($_POST as $key => $value){
 	if ($value != NULL){
 		array_push($args,$key.":".$value);
 	}
 }
-$venvPath = "../venv/bin/python";
 
-$otherPyPath = "python3"; //default to system python
+//Path to the pyFile no matter what OS. NO TOUCHIE
+$pyPath = "./reports/makeReport.py";
+
+//linux and mac command
+$venvPath = "../venv/bin/python"; //Venv
+$Path = "python3"; //No Venv Linux Default Pthon
 $command =  "$venvPath $pyPath " . implode(" ",$args). " 2>&1";
-//$command = "python ".$pyPath." ".implode(" ",$args). " 2>&1";
+
+//Windows command
+$command = "python ".$pyPath." ".implode(" ",$args). " 2>&1";
 	
 #Execute reportGen.py with options
 $output = null;
