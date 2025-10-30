@@ -48,7 +48,11 @@ foreach ($_POST as $key => $value){
 		array_push($args,$key.":".$value);
 	}
 }
-$command = "python ".$pyPath." ".implode(" ",$args). " 2>&1";
+$ethanPyPath = "/Applications/XAMPP/xamppfiles/htdocs/CASA/venv/bin/python";
+
+$otherPyPath = "python3"; //default to system python
+$command =  "$ethanPyPath $pyPath " . implode(" ",$args). " 2>&1";
+//$command = "python ".$pyPath." ".implode(" ",$args). " 2>&1";
 	
 #Execute reportGen.py with options
 $output = null;

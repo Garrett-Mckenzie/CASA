@@ -1,11 +1,12 @@
 try:
+    import os
+    os.environ["MPLCONFIGDIR"] = "/Applications/XAMPP/xamppfiles/htdocs/CASA/tmp_matplotlib"
+
     #data science stuff
     import pandas as pd
     import numpy as np
     import seaborn as sns
-    import matplotlib.pyplot as plt
-    import plotly.express as px
-    import scipy.stats as stats
+    
 
     #pdf generation stuff with reportlab
     from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
@@ -138,9 +139,9 @@ try:
             self.elements.append(table)
             self.elements.append(Spacer(1,12))
 
-        #def insertGraph(self,plot,width,height):
-            #plt.savefig("./reports/plot.png") 
-            #self.elements.append(Image("reports/plot.png",width=width*inch,height=height*inch))
+        def insertGraph(self,plot,width,height):
+            plot.savefig("./reports/plot.png") 
+            self.elements.append(Image("reports/plot.png",width=width*inch,height=height*inch))
 
         #This method actually makes the pdf
         def buildPDF(self):
