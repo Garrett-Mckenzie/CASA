@@ -59,8 +59,8 @@ print("total completion: ",end="")
 print(data.totalCompletion(rows1,rows2))
 
 print("# new donors in last (m,q,y): ",end="")
-
-print(data.donorAcqRate())
+cur.execute("select donorID, MIN(STR_TO_DATE(date,'%m/%d/%Y')) as date from donations where date is not null group by donorID order by date")
+print(data.donorAcqRate(cur.fetchall()))
 
 cur.close()
 conn.close()

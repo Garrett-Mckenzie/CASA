@@ -17,8 +17,13 @@ def numDonationsOverTime(queryRows):
     """
     chungus = []
     for date in queryRows:
-        dateObj = datetime.strptime(date[0], "%m/%d/%Y")
-        chungus.append(dateObj)
+        if isinstance(date[0], (str)):
+            dateObj = datetime.strptime(date[0], "%m/%d/%Y")
+            chungus.append(dateObj)
+            
+        else:
+            datetimeObj = datetime.combine(date[0], datetime.min.time())
+            chungus.append(datetimeObj)
     
     onFleek = datetime.today()
     perchance = onFleek - timedelta(days=30)
@@ -102,8 +107,13 @@ def donationGrowth(queryRows, rType):
 
     donationsDates = []
     for date in queryRows:
-        dateObj = datetime.strptime(date[0], "%m/%d/%Y")
-        donationsDates.append(dateObj)
+        if isinstance(date[0], (str)):
+            dateObj = datetime.strptime(date[0], "%m/%d/%Y")
+            donationsDates.append(dateObj)
+            
+        else:
+            datetimeObj = datetime.combine(date[0], datetime.min.time())
+            donationsDates.append(datetimeObj)
 
     today = datetime.today()
     curDonations = 0
@@ -156,7 +166,6 @@ def goalAchievementRate(eventRows,donationRows):
             events.loc[events["id"] == tuple[1],"aggDonations"] += float(tuple[0])
     
     events["completion"] = ((events["aggDonations"]/events["goalAmount"].astype(float))*100).round(2)
-
     return events[["id","name","completion"]]
 
 
@@ -185,7 +194,7 @@ def donorAcqRate(queryRows):
     """New donor acquisition rate
 
     Args:
-        queryRows (array of tuples): query of every unique donors first donation date
+        queryRows (array of tuples ((donorID,date))): select donorID, MIN(STR_TO_DATE(date,'%m/%d/%Y')) as date from donations where date is not null group by donorID order by date
 
     Returns:
         list: [newWithinMonth,newWithinQuarter,newWithinYear]
@@ -193,8 +202,13 @@ def donorAcqRate(queryRows):
     #query of every unique donors first donation date
     donationsDates = []
     for date in queryRows:
-        dateObj = datetime.strptime(date[0], "%m/%d/%Y")
-        donationsDates.append(dateObj)
+        if isinstance(date[1], (str)):
+            dateObj = datetime.strptime(date[1], "%m/%d/%Y")
+            donationsDates.append(dateObj)
+            
+        else:
+            datetimeObj = datetime.combine(date[1], datetime.min.time())
+            donationsDates.append(datetimeObj)
 
     today = datetime.today()
     monthAgo = today - timedelta(days=30)
@@ -219,8 +233,12 @@ def donorAcqRate(queryRows):
 def chartNumDonations(queryRows,rType,k):
     donationsDates = []
     for date in queryRows:
-        dateObj = datetime.strptime(date[0], "%m/%d/%Y")
-        donationsDates.append(dateObj)
+        if isinstance(date[1], (str)):
+            dateObj = datetime.strptime(date[1], "%m/%d/%Y")
+            donationsDates.append(dateObj)      
+        else:
+            datetimeObj = datetime.combine(date[1], datetime.min.time())
+            donationsDates.append(datetimeObj)
 
     today = datetime.today()
     if(rType == "y"):
