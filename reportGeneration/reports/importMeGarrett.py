@@ -1,4 +1,4 @@
-import importMeEthan as Ethan
+import importMeEthan as Ethan #needed for matplotlib fix
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import numpy as np

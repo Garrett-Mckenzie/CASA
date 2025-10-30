@@ -1,6 +1,6 @@
 
 try:
-    from importMeEthan import *
+    from importMeEthan import * #must come before importMeGarrett
     from importMeGarrett import *
     import time
 
