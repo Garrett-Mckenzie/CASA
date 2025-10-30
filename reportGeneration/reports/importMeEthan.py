@@ -6,6 +6,7 @@ os.environ["MPLCONFIGDIR"] = os.path.join(tempfile.gettempdir(), "matplotlib")
 os.environ["MPLBACKEND"] = "Agg"
 
 import matplotlib
+#required for xampp to not barf with matplotlib (something about xampp being headless)
 matplotlib.use("Agg")
 
 try:
