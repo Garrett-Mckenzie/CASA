@@ -48,13 +48,9 @@ foreach ($_POST as $key => $value){
 		array_push($args,$key.":".$value);
 	}
 }
-<<<<<<< HEAD
-$command = "python ".$pyPath." ".implode(" ",$args). " 2>&1";
 
-$ethanPyPath = "/usr/local/bin/python";
-=======
 $ethanPyPath = "/Applications/XAMPP/xamppfiles/htdocs/CASA/venv/bin/python";
->>>>>>> 0c22980 (this is a testing branch)
+
 $otherPyPath = "python3"; //default to system python
 $command =  "$ethanPyPath $pyPath " . implode(" ",$args). " 2>&1";
 	
