@@ -1,8 +1,8 @@
-from importMeEthan import *
-from importMeGarrett import *
-import time
-
 try:
+    from importMeEthan import *
+    from importMeGarrett import *
+    import time
+
     #get options as specified by the user
     args = getArgs()
 
@@ -68,3 +68,4 @@ try:
    
 except Exception as e:
     traceback.print_exc()
+    raise e
