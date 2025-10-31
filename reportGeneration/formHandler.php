@@ -58,7 +58,7 @@ $Path = "python3"; //No Venv Linux Default Pthon
 $command =  "$venvPath $pyPath " . implode(" ",$args). " 2>&1";
 
 //Windows command
-$command = "python ".$pyPath." ".implode(" ",$args). " 2>&1";
+//$command = "python ".$pyPath." ".implode(" ",$args). " 2>&1";
 	
 #Execute reportGen.py with options
 $output = null;

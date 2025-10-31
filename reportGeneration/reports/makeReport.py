@@ -1,16 +1,11 @@
 
 try:
-    from importMeEthan import *
+    from importMeEthan import * #must come before importMeGarrett
     from importMeGarrett import *
     import time
 
     #get options as specified by the user
     args = getArgs()
-
-    ### data stuff ###
-   
-
-    ### end data stuff ###
     
     #connect to database
 
@@ -19,6 +14,7 @@ try:
         conn = winConnect()
     else:
         conn = macConnect()
+    cur = conn.cursor()
 
     #Make the pdf object
     name = None
@@ -55,9 +51,16 @@ try:
     pdf.insertTable(data,cellWidths)
 
     #Insert a graph
-    data = pd.DataFrame({"Height":[1,2,3,4,5,6,7,8,9,10],"Width":[20,44,60,81,10,12,14,16,18,20]})
-    sns.scatterplot(data=data,x="Height",y="Width")
-    pdf.insertGraph(3,3) 
+    #data = pd.DataFrame({"Height":[1,2,3,4,5,6,7,8,9,10],"Width":[20,44,60,81,10,12,14,16,18,20]})
+    #sns.scatterplot(data=data,x="Height",y="Width")
+
+    cur.execute("select date from donations where date is not null")
+    donationDates = cur.fetchall()
+
+    fig2 = chartNumDonations(donationDates,"y","hist",12)
+    pdf.insertGraph(4,3,2) 
+    fig1 = chartNumDonations(donationDates,"y","line",12)
+    pdf.insertGraph(4,3,1)
 
     #make the pdf (THIS MUST BE CALLED LAST)
     pdf.buildPDF()
