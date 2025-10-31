@@ -54,14 +54,22 @@ try:
     #data = pd.DataFrame({"Height":[1,2,3,4,5,6,7,8,9,10],"Width":[20,44,60,81,10,12,14,16,18,20]})
     #sns.scatterplot(data=data,x="Height",y="Width")
 
+    #"fundraiser completion % for each event"
+    cur.execute("select id,name, goalAmount from dbevents where goalAmount is not null")
+    rows1 = cur.fetchall()
+    cur.execute("select amount, eventID from donations where amount is not null and eventID is not null")
+    rows2 = cur.fetchall()
+
     cur.execute("select date from donations where date is not null")
     donationDates = cur.fetchall()
 
     fig2 = chartNumDonations(donationDates,"y","hist",12)
-    pdf.insertGraph(4,3,2) 
+    pdf.insertGraph(4,3,1) 
     fig1 = chartNumDonations(donationDates,"y","line",12)
-    pdf.insertGraph(4,3,1)
-
+    pdf.insertGraph(4,3,2)
+    fig3 = chartFundraiserGoals(rows1,rows2)
+    pdf.insertGraph(4,3,3)
+    
     #make the pdf (THIS MUST BE CALLED LAST)
     pdf.buildPDF()
 

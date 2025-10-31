@@ -295,28 +295,27 @@ def chartFundraiserGoals(eventRows,donationRows):
 
     #select id,name,goalAmount from dbevents
     #select amount, eventID from donations
-    events = pd.DataFrame(eventRows,columns=["id","name","goalAmount"])
-    events["aggDonations"] = 0.00
+    events = pd.DataFrame(eventRows,columns=["id","name","Goal Amount"])
+    events["Total Donations"] = 0.00
 
     for tuple in donationRows:
         if tuple[1] in events["id"].values:
-            events.loc[events["id"] == tuple[1],"aggDonations"] += float(tuple[0])
+            events.loc[events["id"] == tuple[1],"Total Donations"] += float(tuple[0])
     
-    events["completion"] = ((events["aggDonations"]/events["goalAmount"].astype(float))*100).round(2)
-    events= events[["name","goalAmount","aggDonations"]] 
-    events["goalAmount"] = events["goalAmount"].astype(float)
-    pprint.pprint(events)
+    #events["completion"] = ((events["Total Donations"]/events["Goal Amount"].astype(float))*100).round(2)
+    events= events[["name","Goal Amount","Total Donations"]] 
+    events["Goal Amount"] = events["Goal Amount"].astype(float)
 
-    melted = events.melt(id_vars='name', value_vars=['goalAmount', 'aggDonations'],var_name='metric', value_name='amount')
-    # Plot
-    # fig, ax = plt.subplots()
-    sns.displot(data=melted, x='name', hue='metric', weights='amount', multiple='stack', shrink=0.8)
-    # ax.set_title("Goal vs Donations per Event")
-    # ax.set_xlabel("Event")
-    # ax.set_ylabel("Amount")
-    # ax.tick_params(axis="x", rotation=45)
-    # plt.tight_layout()
-    return
+    melted = events.melt(id_vars='name', value_vars=['Goal Amount', 'Total Donations'],var_name='metric', value_name='amount')
+    fig, ax = plt.subplots()
+    sns.histplot(data=melted, x='name', hue='metric', weights='amount', multiple='dodge', shrink=0.8, ax=ax)
+    ax.set_title("Goal vs Donations per Event")
+    ax.set_xlabel("Event Name")
+    ax.set_ylabel("Dollar Amount")
+    ax.tick_params(axis="x", rotation=45)
+    plt.tight_layout()
+    return fig
+    
 
 # KPI dashboard tiles (Total Raised, Avg Donation, Active Donors, etc.)
 
