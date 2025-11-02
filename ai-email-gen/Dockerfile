@@ -17,4 +17,4 @@ RUN mkdir -p /usr/share/ollama/.ollama && \
 EXPOSE 11434
 
 # Start Ollama with the correct environment
-CMD ["bash", "-c", "OLLAMA_MODELS=/root/.ollama/models /usr/local/bin/ollama serve"]
+CMD ["bash", "-c", "OLLAMA_MODELS=/root/.ollama/models ollama serve"]
