@@ -410,7 +410,7 @@
     </script>
 <!--END TEST-->
 </head>
-
+<link rel="icon" type="image/x-icon" href="images/RAPPAHANNOCK_v_RedBlue.png">
 <!-- ONLY SUPER ADMIN WILL SEE THIS -->
 <?php if ($_SESSION['access_level'] >= 2): ?>
 <body>
@@ -439,7 +439,7 @@
 
     <div class="full-width-bar">
     <div class="content-box">
-        <img src="images/blank-white-background.jpg" style="filter: contrast(50%);"/>
+        <img src="images/blank-white-background.jpg"/>
         <div class="small-text">Look at the data.</div>
         <div class="large-text">Generate Report</div>
 <button class="circle-arrow-button" onclick="window.location.href='reportGeneration/index.php'">
@@ -488,7 +488,7 @@
             <button class="arrow-button">→</button>
         </div>
 
-    <div class="content-box-test" onclick="window.location.href='emailgen.php'">
+        <div class="content-box-test" onclick="window.location.href='emailgen.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
             </div>
@@ -496,11 +496,11 @@
             <div class="large-text-sub">Generate Emails</div>
             <button class="arrow-button">→</button>
         </div>
-    </div>
 
-    <div class="content-box-test" onclick="window.location.href='Search-donor-db/index.php'">
+
+        <div class="content-box-test" onclick="window.location.href='Search-donor-db/index.php'">
             <div class="icon-overlay">
-                <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
+                <img style="border-radius: 5px;" src="images/magnifying-glass.svg" alt="Search Icon">
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
             <div class="large-text-sub">Search</div>
