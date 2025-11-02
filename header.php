@@ -560,7 +560,7 @@ date_default_timezone_set('America/New_York');
         <!-- Left Section: Logo & Nav Links -->
         <div class="left-section">
             <div class="logo-container">
-                <a href="index.php"><img src="images/CASA logo white cropped.png" alt="Logo"></a>
+                <a href="index.php"><img src="images/RAPPAHANNOCK_v_RedBlue2.png" alt="Logo"></a>
             </div>
             <div class="nav-links">
 		<div class="nav-item"><span class="font-change">Volunteer Management System</span>
@@ -696,7 +696,7 @@ date_default_timezone_set('America/New_York');
         <!-- Left Section: Logo & Nav Links -->
         <div class="left-section">
             <div class="logo-container">
-                <a href="index.php"><img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo"></a>
+                <a href="index.php"><img src="images/RAPPAHANNOCK_v_RedBlue2.png" style="filter: brightness(1000%)"" alt="Logo"></a>
             </div>
             <div class="nav-links">
                 <div class="nav-item">Events
