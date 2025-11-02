@@ -40,9 +40,6 @@ import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 
-
-
-
 # Export
 def export_excel():
     engine = None
@@ -75,6 +72,13 @@ def import_excel():
             # MySQL
             url = f"mysql+mysqlconnector://{USER}:{PASSWORD}@{HOST}/{DATABASE}"
             engine = create_engine(url)
+            print(engine)
+            try:
+                with engine.connect() as conn:
+                    print("got it")
+            except Exception as e:
+                print(e)
+                exit()
             
             with engine.connect() as connection:
                 file = pd.read_excel(arg)
@@ -138,7 +142,8 @@ def import_excel():
 #                    connection.commit()
  #               connection.close()
  #           else: return False
-        except:
+        except Exception as e:
+            print(e)
             return False
     return True
 
@@ -156,6 +161,7 @@ def main():
                 print(f"Error: {arg} is not a valid .xlsx file")
                 return 1
         ret = import_excel()
+        print("Made It!")
     elif sys.argv[1] == "-e" or sys.argv[1] == "--export":
         if len(sys.argv) != 4:
             print("Error: Incorrect format")
