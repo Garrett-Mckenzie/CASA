@@ -12,13 +12,7 @@ function add_person($person) {
 	// If the result is empty, it means the person doesn't exist, so we can add the person
 	if (mysqli_num_rows($result) == 0) {
 		// Prepare the insert query
-		$insert_query = 'INSERT INTO dbpersons (
-			id, name, password,
-	) VALUES ("' .
-	$person->get_id() . '","' .
-	$person->get_name() . '","' .
-	$person->get_password()  . '");';
-
+		$insert_query = 'INSERT INTO dbpersons (id, name, password,accessLevel) VALUES ("'.$person->get_id().'","'.$person->get_name().'","'.$person->get_password().'","'.$person->get_access_level().'");';
 		// Check if the query is properly built
 		if (empty($insert_query)) {
 			die("Error: insert query is empty");
@@ -200,6 +194,7 @@ function get_new_volunteers_count($dateFrom, $dateTo) {
 
 
 function make_a_person($result_row) {
+	require_once './domain/Person.php';
 	$thePerson = new Person(
 		$result_row['id'],
 		$result_row['password'],

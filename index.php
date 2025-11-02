@@ -23,7 +23,7 @@
     if (isset($_SESSION['_id'])) {
         $person = retrieve_person($_SESSION['_id']);
     }
-    $notRoot = $person->get_id() != 'vmsroot';
+    $notRoot = False
 ?>
 
 <!DOCTYPE html>
@@ -442,7 +442,7 @@
         <img src="images/blank-white-background.jpg" style="filter: contrast(50%);"/>
         <div class="small-text">Look at the data.</div>
         <div class="large-text">Generate Report</div>
-<button class="circle-arrow-button">
+<button class="circle-arrow-button" onclick="window.location.href='reportGeneration/index.php'">
     <span class="button-text">Go</span>
     <div class="circle">&gt;</div>
 </button>
@@ -495,6 +495,17 @@
             <img class="background-image" src="images/blank-white-background.jpg" />
             <div class="large-text-sub">Generate Emails</div>
             <button class="arrow-button">→</button>
+        </div>
+    </div>
+
+    <div class="content-box-test" onclick="window.location.href='Search-donor-db/index.php'">
+            <div class="icon-overlay">
+                <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
+            </div>
+            <img class="background-image" src="images/blank-white-background.jpg" />
+            <div class="large-text-sub">Search</div>
+            <button class="arrow-button">→</button>
+            
         </div>
     </div>
 
