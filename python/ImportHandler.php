@@ -1,18 +1,19 @@
 <?php
-    $python_script = 'CASA_DB_Calls.py';
+    $python_script = 'dbManager.py';
     $output = [];
     $return_var = 0;
-    if($_SERVER['REQUEST_METHOD'] === 'post' && isset($_FILES['files'])){
+    if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['files'])){
         $fileset = $_FILES['files'];
         foreach($fileset['name'] as $index => $name){
             if($fileset['error'][$index] === UPLOAD_ERR_OK){
                 // Fetch from temp directory
                 $temp = sys_get_temp_dir() . DIRECTORY_SEPARATOR . basename($name);
-                if(move_uploaded_file($fileset['tmp_name']['name'], $temp)){
+                if(move_uploaded_file($fileset['tmp_name'][$index], $temp)){
                     exec("python \"$python_script\" -i \"$temp\"", $output, $return_var);
 
                     if($return_var === 0){
                         echo "Imported $name<br>";
+                        header("Location: import.html?success=1&file=$name");
                     } else{
                         echo "Error importing $name<br>";
                     }
@@ -21,20 +22,19 @@
                 }
                 else {
                     echo "Failed to fetch $name<br>";
+                    header("Location: import.html?success=0");
+                    //header("Location: import.html?success=0");
                 }
             } else {
                 echo "Failed to upload $name<br>";
+                header("Location: import.html?success=0");
+                //header("Location: import.html?success=0");
             }
         }
     } else {
-        echo "Invalid request<br>";
+        echo "Invalid Request<br>";
+        echo "Expected POST, Recieved " . $_SERVER['REQUEST_METHOD'] . "<br>";
+        echo "Recieved" . $_FILES['files'] . "<br>";
+        header("Location: import.html?success=0");
     }
 ?>
-<!DOCTYPE html>
-<html>
-    <body>
-        <main>
-            <p name="Response"></p>
-        </main>
-    </body>
-</html>

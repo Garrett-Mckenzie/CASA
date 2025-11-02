@@ -2,10 +2,24 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html">
+        <meta charset="UTF-8">
         <title>Import/Export | Rappahannock CASA</title>
-        <link rel="stylesheet" href="styler.sass">
+        <link rel="stylesheet" href="styler.scss">
         <!-- Popup for download link -->
         <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const success = urlParams.get('success');
+            var file = urlParams.get('file');
+            file = file.substring(file.lastIndexOf('\\') + 1);
+            if(file){
+                window.onload = function() {
+                    document.getElementById('popText').innerHTML = 'Download: ';
+                    document.getElementById('popLink').setAttribute('href', file);
+                    document.getElementById('popLink').innerHTML = file;
+                    document.getElementById('popup').style.visibility = 'visible';
+                }
+            }
+
             async function handleExport(event){
                 const sass = await import("https://jspm.dev/sass");
                 event.preventDefault();
@@ -18,7 +32,7 @@
                     body: formData,
                 });
 
-                const result = await resposne.text();
+                const result = await response.text();
 
                 const popup = document.createElement('div');
                 popup.style.position = 'fixed';
@@ -27,21 +41,6 @@
                     <button onclick="this.parentElement.remove()">Close</button> `;
                 document.body.appendChild(popup);
             }
-
-            /*
-            document.addEventListener("DOMContentLoaded", () => {
-                const params = new URLSearchParams(window.location.search);
-                const success = params.get("success");
-                const file = params.get("file");
-
-                if(success === "1" && file){
-                    alert(`Export complete. Download here: ${file}`);
-                }
-                else{
-                    alert(`Failed to export.`);
-                }
-            });
-            */
         </script>
     </head>
     <body>
@@ -51,18 +50,22 @@
             </nav>
         </header>
         <main>
-            <form action="ExportHandler.php" method="post" enctype="multipart/form-data">
+            <form action="ExportHandler.php" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
                 <table>
                     <tr>
                         <td class="info">Export Donor Information</td>
-                        <td><button name="export" id="donor" type="submit">Download</button></td>
+                        <td><button name="export" id="donor" value="donor" type="submit">Download</button></td>
                     </tr>
                     <tr>
                         <td class="info">Export Donation Information</td>
-                        <td><button name="export" id="donation" type="submit">Download</button></td>
+                        <td><button name="export" id="donation" value="donation" type="submit">Download</button></td>
                     </tr>
                 </table>
             </form>
+            <div id="popup" style="visibility: hidden;">
+                <p id="popText"></p>
+                <a id="popLink" href="" target="_blank"></a>
+            </div>
         </main>
     </body>
 </html>
