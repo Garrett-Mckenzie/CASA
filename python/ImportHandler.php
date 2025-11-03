@@ -9,8 +9,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['files'])){
 												$temp = sys_get_temp_dir() . DIRECTORY_SEPARATOR . basename($name);
 												if(move_uploaded_file($fileset['tmp_name'][$index], $temp)){
 																exec("python -u \"$python_script\" -i \"$temp\" 2>&1", $output, $return_var);
-																var_dump($output);
-																echo "<br/>";
 
 																if($return_var === 0){
 																				echo "Imported $name<br>";
