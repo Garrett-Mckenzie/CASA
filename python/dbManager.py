@@ -9,6 +9,8 @@ from credentials import HOST, USER, PASSWORD, DATABASE
 installed_pd = False
 installed_mysql = False
 installed_alchemy = False
+installed_pyxl = False
+installed_sql = False
 for dist in distributions():
     if dist.metadata['Name'] == 'pandas':
         installed_pd = True
@@ -16,6 +18,10 @@ for dist in distributions():
         installed_mysql = True
     if dist.metadata['Name'] == 'SQLAlchemy':
         installed_alchemy = True
+    if dist.metadata['Name'] == 'openpyxl':
+        installed_pyxl = True
+    if dist.metadata['Name'] == 'mysql':
+        installed_sql = True
 
 if not installed_pd:
     try:
@@ -36,8 +42,20 @@ if not installed_alchemy:
     except subprocess.CalledProcessError:
         subprocess.check_call([sys.executable, '-m', 'pip3', 'install', 'SQLAlchemy'])
 
+if not installed_pyxl:
+    try:
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'openpyxl'])
+    except subprocess.CalledProcessError:
+        subprocess.check_call([sys.executable, '-m', 'pip3', 'install', 'openpyxl'])
+
+if not installed_sql:
+    try:
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'mysql'])
+    except subprocess.CalledProcessError:
+        subprocess.check_call([sys.executable, '-m', 'pip3', 'install', 'mysql'])
+
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 
 
@@ -50,6 +68,8 @@ def export_excel():
         url = f"mysql+mysqlconnector://{USER}:{PASSWORD}@{HOST}/{DATABASE}"
         engine = create_engine(url)
         query = sys.argv[2]
+        print(f"Engine URL: {url}")
+        print(f"Engine: {engine}")
 
         with engine.connect() as connection:
             df = pd.read_sql_query(query, connection)
@@ -68,78 +88,81 @@ def export_excel():
     return True
 
 # Import
-def import_excel():
-    for arg in sys.argv[2:]:
-        required_columns = ['Amount', 'Reason', 'Date', 'Fee', 'First', 'Last', 'Email', 'ZIP', 'City', 'State', 'Street', 'Phone', 'Gender', 'Notes']
+# Donor Import: first, last, email, zip, city, state, street, phone, gender, notes
+# Donations Import: amount, reason, date, fee, thanked
+def import_excel(doclist : list):
+    for doc in doclist:
+        engine = None
         try:
-            # MySQL
             url = f"mysql+mysqlconnector://{USER}:{PASSWORD}@{HOST}/{DATABASE}"
             engine = create_engine(url)
-            
             with engine.connect() as connection:
-                file = pd.read_excel(arg)
-                for index, row in file.iterrows():
-                    req = {
-                        'amount': None,
-                        'reason': None,
-                        'date': None,
-                        'fee': None,
-                        'first': None,
-                        'last': None,
-                        'email': None,
-                        'zip': None,
-                        'city': None,
-                        'state': None,
-                        'street': None,
-                        'phone': None,
-                        'gender': None,
-                        'notes': None,
-                    }
-                    for item in required_columns:
-                        try:
-                            req[item] = row[item]
-                        except Exception as ignored:
-                            pass
-                    if req['amount'] == None:
-                        return False
-                    query = "INSERT INTO donor (" + ((req['amount'] + ",") if req['amount'] != None else "") + ((req['reason'] + ",") if req['reason'] != None else "") + ((req['date'] + ",") if req['date'] != None else "") + ((req['fee'] + ",") if req['fee'] != None else "") + ((req['first'] + ",") if req['first'] != None else "") + ((req['last'] + ",") if req['last'] != None else "") + ((req['email'] + ",") if req['email'] != None else "") + ((req['zip'] + ",") if req['zip'] != None else "") + ((req['city'] + ",") if req['city'] != None else "") + ((req['state'] + ",") if req['state'] != None else "") + ((req['street'] + ",") if req['street'] != None else "") + ((req['phone'] + ",") if req['phone'] != None else "") + ((req['gender'] + ",") if req['gender'] != None else "") + ((req['notes'] + ",") if req['notes'] != None else "")
+                donor_data = {}
+                donation_data = {}
 
-#            if(connection.is_connected()):
-#                # SQL
-#                file = pd.read_excel(arg)
-#                for index, row in file.iterrows():
-#                    req = {
-#                        'amount': None,
-#                        'reason': None,
-#                        'date': None,
-#                        'fee': None,
-#                        'first': None,
-#                        'last': None,
-#                        'email': None,
-#                        'zip': None,
-#                        'city': None,
-#                        'state': None,
-#                        'street': None,
-#                        'phone': None,
-#                        'gender': None,
-#                        'notes': None,
-#                    }
-#                    for item in required_columns:
-#                        try:
-#                            req[item] = row[item]
-#                        except Exception as ignored:
-#                            pass
-#                    if req['amount'] == None:
-#                        return False
-#                    query = "INSERT INTO donor (" + ((req['amount'] + ",") if req['amount'] != None else "") + ((req['reason'] + ",") if req['reason'] != None else "") + ((req['date'] + ",") if req['date'] != None else "") + ((req['fee'] + ",") if req['fee'] != None else "") + ((req['first'] + ",") if req['first'] != None else "") + ((req['last'] + ",") if req['last'] != None else "") + ((req['email'] + ",") if req['email'] != None else "") + ((req['zip'] + ",") if req['zip'] != None else "") + ((req['city'] + ",") if req['city'] != None else "") + ((req['state'] + ",") if req['state'] != None else "") + ((req['street'] + ",") if req['street'] != None else "") + ((req['phone'] + ",") if req['phone'] != None else "") + ((req['gender'] + ",") if req['gender'] != None else "") + ((req['notes'] + ",") if req['notes'] != None else "")
-#                    #query = "INSERT INTO donor () VALUE ()"
-#                    cursor = connection.cursor()
-#                    cursor.execute(query)
-#                    connection.commit()
- #               connection.close()
- #           else: return False
-        except:
+                df = pd.read_excel(doc)
+                for index, row in df.iterrows():
+
+                    # Import donor data
+                    donor_data = {
+                        "first": row.get('first'),
+                        "last": row.get('last'),
+                        "email": row.get('email'),
+                        "zip": row.get('zip'),
+                        "city": row.get('city'),
+                        "state": row.get('state'),
+                        "street": row.get('street'),
+                        "phone": row.get('phone'),
+                        "gender": row.get('gender'),
+                        "notes": row.get('notes')
+                    }
+
+                    # Remove None values
+                    donor_data = {k: v for k, v in donor_data.items() if v is not None}
+                    columns = ', '.join(donor_data.keys())
+                    placeholders = ', '.join([f":{k}" for k in donor_data.keys()])
+
+                    # Query and Execute
+                    donorQuery = f"INSERT INTO donors ({columns}) VALUES ({placeholders})"
+                    connection.execute(text(donorQuery), donor_data)
+                    connection.commit()
+
+
+
+                    # Import donation data
+                    donation_data = {
+                        "amount": row.get('amount'),
+                        "reason": row.get('reason'),
+                        "date": row.get('date'),
+                        "fee": row.get('fee'),
+                        "thanked": row.get('thanked')
+                    }
+
+                    # Remove None values
+                    donation_data = {k: v for k, v in donation_data.items() if v is not None}
+                    columns = ', '.join(donation_data.keys())
+                    placeholders = ', '.join([f":{k}" for k in donation_data.keys()])
+
+                    # Query and Execute
+                    donationQuery = f"INSERT INTO donations ({columns}) VALUES ({placeholders})"
+                    connection.execute(text(donationQuery), donation_data)
+                    connection.commit()
+
+        # Exception handling
+        except SQLAlchemyError as e:
+            print(f"Error connecting to database: {e}")
+            if connection: # type: ignore
+                connection.rollback()
             return False
+        except Exception as e:
+            print(f"Error: {e}")
+            if connection: # type: ignore
+                connection.rollback()
+            return False
+        finally:
+            if engine is not None:
+                engine.dispose()
+
     return True
 
 # Main
@@ -155,7 +178,8 @@ def main():
             if not Path(arg).is_file() or not arg.endswith('.xlsx'):
                 print(f"Error: {arg} is not a valid .xlsx file")
                 return 1
-        ret = import_excel()
+        doclist = sys.argv[2:]
+        ret = import_excel(doclist)
     elif sys.argv[1] == "-e" or sys.argv[1] == "--export":
         if len(sys.argv) != 4:
             print("Error: Incorrect format")

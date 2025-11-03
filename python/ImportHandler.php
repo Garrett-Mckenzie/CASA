@@ -1,7 +1,9 @@
 <?php
-    $python_script = 'dbManager.py';
+    $python_bin = '/usr/bin/python3';
+    $python_script = __DIR__ . DIRECTORY_SEPARATOR . 'dbManager.py';
     $output = [];
     $return_var = 0;
+
     if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['files'])){
         $fileset = $_FILES['files'];
         foreach($fileset['name'] as $index => $name){
@@ -9,32 +11,25 @@
                 // Fetch from temp directory
                 $temp = sys_get_temp_dir() . DIRECTORY_SEPARATOR . basename($name);
                 if(move_uploaded_file($fileset['tmp_name'][$index], $temp)){
-                    exec("python \"$python_script\" -i \"$temp\"", $output, $return_var);
-
-                    if($return_var === 0){
-                        echo "Imported $name<br>";
-                        header("Location: import.html?success=1&file=$name");
-                    } else{
-                        echo "Error importing $name<br>";
-                    }
-
+                    $cmd = $python_bin . " " . escapeshellarg($python_script) . ' -i ' . escapeshellarg($temp);
+                    exec($cmd, $output, $return_var);
                     unlink($temp);
+                    header("Location: import.html?success=1");
+                    exit;
                 }
-                else {
-                    echo "Failed to fetch $name<br>";
-                    header("Location: import.html?success=0");
-                    //header("Location: import.html?success=0");
+                else{
+                    header("Location: import.html?success=0&error=move_failed");
+                    exit;
                 }
-            } else {
-                echo "Failed to upload $name<br>";
-                header("Location: import.html?success=0");
-                //header("Location: import.html?success=0");
+            }
+            else{
+                header("Location: import.html?success=0&error=upload_failed");
+                exit;
             }
         }
-    } else {
-        echo "Invalid Request<br>";
-        echo "Expected POST, Recieved " . $_SERVER['REQUEST_METHOD'] . "<br>";
-        echo "Recieved" . $_FILES['files'] . "<br>";
-        header("Location: import.html?success=0");
+    }
+    else{
+        header("Location: import.html?success=0&error=post_failed");
+        exit;
     }
 ?>

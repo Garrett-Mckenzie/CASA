@@ -1,5 +1,5 @@
 html {
-  font-family: "Lucida Console", "Consola", "Sans Serif";
+  font-family: "Lucida Console", "Consolas", "Sans Serif";
 }
 
 .display {
@@ -35,7 +35,31 @@ td .info {
   align-content: center;
   margin-left: 5px;
 }
-#popup button{
+#popup button {
   border-style:solid;
   border-width:2px;
+}
+
+#DonationDate {
+  display: "flex";
+}
+
+#options {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+#exportForm {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+#buttonCell {
+  text-align: center;
+  padding-left: 0.5em;
+}
+
+td {
+  padding-left: 0.5em;
 }

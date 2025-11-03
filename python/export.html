@@ -9,13 +9,13 @@
         <script>
             const urlParams = new URLSearchParams(window.location.search);
             const success = urlParams.get('success');
-            var file = urlParams.get('file');
-            file = file.substring(file.lastIndexOf('\\') + 1);
+            const file = urlParams.get('file');
+            const filename = file.substring(file.lastIndexOf('\\') + 1);
             if(file){
                 window.onload = function() {
                     document.getElementById('popText').innerHTML = 'Download: ';
                     document.getElementById('popLink').setAttribute('href', file);
-                    document.getElementById('popLink').innerHTML = file;
+                    document.getElementById('popLink').innerHTML = filename;
                     document.getElementById('popup').style.visibility = 'visible';
                 }
             }
@@ -50,21 +50,22 @@
             </nav>
         </header>
         <main>
-            <form action="ExportHandler.php" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
-                <table>
-                    <tr>
-                        <td class="info">Export Donor Information</td>
-                        <td><button name="export" id="donor" value="donor" type="submit">Download</button></td>
+            <form class="exportForm" action="ExportHandler.php" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
+                <table class="options">
+                    <tr class="Donor">
+                        <td class="info"><h3>Export Donor Information</h3></td>
+                        <td class="buttonCell"><button name="export" id="donor" value="donor" type="submit">Download</button></td>
                     </tr>
-                    <tr>
+                    <tr class="Donation">
                         <td class="info">Export Donation Information</td>
-                        <td><button name="export" id="donation" value="donation" type="submit">Download</button></td>
+                        <td class="startDate"><input type="date" name="startDate" id="startDate"></i><input class="endDate" type="date" name="endDate" id="endDate"></td>
+                        <td class="buttonCell"><button name="export" id="donation" value="donation" type="submit">Download</button></td>
                     </tr>
                 </table>
             </form>
             <div id="popup" style="visibility: hidden;">
                 <p id="popText"></p>
-                <a id="popLink" href="" target="_blank"></a>
+                <a id="popLink" href="" rel="noreferer" target="_blank"></a>
             </div>
         </main>
     </body>

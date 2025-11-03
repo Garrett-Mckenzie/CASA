@@ -1,5 +1,6 @@
 <?php
     $python_script = 'dbManager.py';
+    $date = date('m-d-y');
     $output = [];
     $return_var = 0;
     $temp = "";
@@ -12,11 +13,22 @@
         $req = $_POST['export'];
         if($req === 'donor'){
             $query = "SELECT * FROM donors";
-            $export_file = "exports" . DIRECTORY_SEPARATOR . "donorExport.xlsx";
+            $dup = 0;
+            while(file_exists("exports" . DIRECTORY_SEPARATOR . "donorExport" . $date . ($dup > 0 ? "_$dup" : "") . ".xlsx")){
+                $dup++;
+            }
+            $export_file = "exports" . DIRECTORY_SEPARATOR . "donorExport" . ($dup > 0 ? "_$dup" : "") . $date . ".xlsx";
         }
         elseif($req === 'donation'){
-            $query = "SELECT * FROM donations";
-            $export_file = "exports" . DIRECTORY_SEPARATOR . "donationExport.xlsx";
+            if(isset($_POST['startDate']) && isset($_POST['endDate']) && !empty($_POST['startDate']) && !empty($_POST['endDate'])){
+                $start = $_POST['startDate'];
+                $end = $_POST['endDate'];
+                $query = "SELECT * FROM donations WHERE donation_date BETWEEN '$start' AND '$end'";
+            }
+            else{
+                $query = "SELECT * FROM donations";
+            }
+            $export_file = "exports" . DIRECTORY_SEPARATOR . "donationExport" . $date . ".xlsx";
         }
         else{
             header("Location: export.html?success=0");
@@ -29,24 +41,17 @@
             }
             unlink($export_file);
         }
-        if($export_file != null) { exec("python \"$python_script\" -e \"$query\" \"$export_file\"", $output, $return_var); }
+        if($export_file != null) { exec("python \"$python_script\" -e \"$query\" \"$export_file\"", $output, $return_var); } # python dbManager.py -e "SELECT" exports\donorExport.xlsx
         else { header("Location: export.html?success=0&error=no_file&post=" . urldecode(serialize($_POST))); exit; }
         header("Location: export.html?success=1&file=$export_file");
         exit;
     }
 
-#        if($output === 0){
-#        $download = "exports" . DIRECTORY_SEPARATOR . 'donorExport' . ".xlsx";
-#            header("Location: export.html?success=1&file=$download");
-#            exit;
-#        }
-#        else{
-#            header("Location: export.html?success=0&ret=$return_var&out=" . urlencode(serialize($output)));
-#            exit;
-#        }
-#    }
-#    else{
-#        header("Location: export.html?success=0&file=$temp&ret=$return_var&out=" . urlencode(serialize($output)));
-#        exit;
-#    }
+    // Delete file on Download
+    if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteFile'])){
+        $file = $_POST['deleteFile'];
+        if(file_exists($file)){ unlink($file); header("Location: export.html?success=1"); }
+        else { header("Location: export.html?success=0&error=noFile"); }
+        exit;
+    }
 ?>
