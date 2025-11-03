@@ -3,7 +3,6 @@
     $output = [];
     $return_var = 0;
     $temp = "";
-    var_dump($_POST);
     $export_file = null;
     if(is_dir("exports") === false){
         mkdir("exports");
