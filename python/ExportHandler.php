@@ -20,25 +20,24 @@
             $export_file = "exports" . DIRECTORY_SEPARATOR . "donationExport.xlsx";
         }
         else{
-            //header("Location: ../export.php?success=0");
+            header("Location: ../export.php?success=0");
         }
 
         if(file_exists($export_file)){
             if($_POST['overwrite'] !== 'true'){
-               // header("Location: ../export.php?success=0&error=file_exists");
+               header("Location: ../export.php?success=0&error=file_exists");
                 exit;
             }
             unlink($export_file);
         }
 	if($export_file != null) { 
 		exec("python -u \"$python_script\" -e \"$query\" \"$export_file\"", $output, $return_var); 
-		var_dump($output);
 	}
 	else {
-		//header("Location: ../export.php?success=0&error=no_file&post=" . urldecode(serialize($_POST))); 
+		header("Location: ../export.php?success=0&error=no_file&post=" . urldecode(serialize($_POST))); 
 		exit; 
 	}
-        //header("Location: ../export.php?success=1&file=$export_file");
+        header("Location: ../export.php?success=1&file=$export_file");
         exit;
     }
 
