@@ -31,7 +31,7 @@
             unlink($export_file);
         }
 	if($export_file != null) { 
-		exec("python \"$python_script\" -e \"$query\" \"$export_file\"", $output, $return_var); 
+		exec("python -u \"$python_script\" -e \"$query\" \"$export_file\"", $output, $return_var); 
 		var_dump($output);
 	}
 	else {

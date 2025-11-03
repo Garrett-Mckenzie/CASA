@@ -71,16 +71,10 @@ def import_excel():
         try:
             # MySQL
             url = f"mysql+mysqlconnector://{USER}:{PASSWORD}@{HOST}/{DATABASE}"
-            engine = create_engine(url)
-            print(engine)
-            try:
-                with engine.connect() as conn:
-                    print("got it")
-            except Exception as e:
-                print(e)
-                exit()
+            engine = create_engine(url , echo=True)
             
             with engine.connect() as connection:
+                print("gello")
                 file = pd.read_excel(arg)
                 for index, row in file.iterrows():
                     req = {
@@ -143,7 +137,6 @@ def import_excel():
  #               connection.close()
  #           else: return False
         except Exception as e:
-            print(e)
             return False
     return True
 
