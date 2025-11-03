@@ -1,6 +1,7 @@
 <?php
 $python_script = 'dbManager.py';
 $return_var = 0;
+
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['files'])){
 				$fileset = $_FILES['files'];
 				foreach($fileset['name'] as $index => $name){
