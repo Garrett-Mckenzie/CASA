@@ -27,11 +27,14 @@ def numDonationsOverTime(queryRows):
             datetimeObj = datetime.combine(date[0], datetime.min.time())
             chungus.append(datetimeObj)
     
+    # cur date
     onFleek = datetime.today()
+    # different time ranges
     perchance = onFleek - timedelta(days=30)
     stephen = onFleek - timedelta(days=90)
     rad = onFleek - timedelta(days=365)
 
+    # totals over past month, quarter, an year
     mTot = 0
     qTot = 0
     yTot = 0
@@ -94,6 +97,37 @@ def medDonation(queryRows):
 
     arrr = np.array(queryRows)
     return np.median(arrr)
+
+def totalRaised(queryRows,rType,k):
+    """returns total moneies raised over a period of time or all time
+
+    Args:
+        queryRows (array of tuples): select amount, date from donations
+        rType (str): a=all,y=year,q=quarter,m=month. Time type to go back by
+        k (float): number of rType to go back (if rType==a, k is irrelevant)
+
+    Returns:
+        float: total amount raised rounded to 2 digits past decimal
+    """
+    if(rType.lower()=="a"):
+        df = pd.DataFrame(queryRows,columns=["amount","date"])
+        total = df['amount'].sum()
+        return round(total,2)
+    
+    today = datetime.today()
+    if(rType.lower() == "y"):
+        timeAgo = today - timedelta(days=(round(365.0*k,0)))
+    elif(rType.lower()== "q"):
+        timeAgo = today-timedelta(days=(round(90.0*k,0)))
+    else:
+        timeAgo = today-timedelta(days=(round(30.0*k,0)))
+
+    #get just in time range
+    df = pd.DataFrame(queryRows,columns=["amount","date"]) 
+    df = df[(timeAgo <= df["date"])&(df["date"] <= today)]
+
+    total = df['amount'].sum()
+    return round(total,2)
 
 # Donation growth rate (year-over-year, quarter-over-quarter)
 def donationGrowth(queryRows, rType):
@@ -292,7 +326,15 @@ def chartNumDonations(queryRows,rType='y',gType='hist',k=1, b=12):
     
 # Bar chart of fundraiser goal vs. actual raised
 def chartFundraiserGoals(eventRows,donationRows):
+    """Bar chart of fundraiser goal vs. actual raised
 
+    Args:
+        eventRows (array of tuples): select id,name,goalAmount from dbevents
+        donationRows (array of tuples): select amount, eventID from donations
+
+    Returns:
+        matplotlib graph: graph figure which can be shown through plt.show()
+    """
     #select id,name,goalAmount from dbevents
     #select amount, eventID from donations
     events = pd.DataFrame(eventRows,columns=["id","name","Goal Amount"])
@@ -316,8 +358,6 @@ def chartFundraiserGoals(eventRows,donationRows):
     plt.tight_layout()
     return fig
     
-
-# KPI dashboard tiles (Total Raised, Avg Donation, Active Donors, etc.)
 
 
 # Top donors by total amount
