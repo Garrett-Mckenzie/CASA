@@ -4,67 +4,50 @@ from importlib.metadata import distributions
 import subprocess
 from pathlib import Path
 from credentials import HOST, USER, PASSWORD, DATABASE
-
-# Checks for dependencies and installs them if not present
-installed_pd = False
-installed_mysql = False
-installed_alchemy = False
-for dist in distributions():
-    if dist.metadata['Name'] == 'pandas':
-        installed_pd = True
-    if dist.metadata['Name'] == 'mysql-connector-python':
-        installed_mysql = True
-    if dist.metadata['Name'] == 'SQLAlchemy':
-        installed_alchemy = True
-
-if not installed_pd:
-    try:
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pandas'])
-    except subprocess.CalledProcessError:
-        subprocess.check_call([sys.executable, '-m', 'pip3', 'install', 'pandas'])
-
-if not installed_mysql:
-    try:
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'mysql-connector-python'])
-    except subprocess.CalledProcessError:
-        subprocess.check_call([sys.executable, '-m', 'pip3', 'install', 'mysql-connector-python'])
-
-
-if not installed_alchemy:
-    try:
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'SQLAlchemy'])
-    except subprocess.CalledProcessError:
-        subprocess.check_call([sys.executable, '-m', 'pip3', 'install', 'SQLAlchemy'])
-
 import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 
+def winConnect():
+    try:
+        conn = mariadb.connect(
+                user = "casadb",
+                password = "casadb",
+                host = "localhost",
+                database = "casadb"
+                )
+        return conn
+    except Exception as e:
+        raise e
+
+def macConnect():
+    try:
+        conn = mariadb.connect(
+                user="casadb",
+                password="casadb",
+                host="localhost",
+                database="casadb",
+                unix_socket="/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock"
+                )
+        return conn
+    except Exception as e:
+        raise e
+
+
 # Export
 def export_excel():
-    engine = None
+    query = sys.argv[2]
     try:
-        url = f"mysql+mysqlconnector://{USER}:{PASSWORD}@{HOST}/{DATABASE}"
-        engine = create_engine(url)
-        query = sys.argv[2]
-
-        with engine.connect() as connection:
-            df = pd.read_sql_query(query, connection)
-            output_file = sys.argv[3]
-            df.to_excel(output_file, index=False)
-
-    except SQLAlchemyError as e:
-        print(f"Error connecting to database: {e}")
-        return False
+        conn = winConnect():
+        conn.
+        output_file = sys.argv[3]
+        df.to_excel(output_file, index=False)
     except Exception as e:
-        print(f"General error: {e}")
-        return False
-    finally:
-        if engine is not None:
-            engine.dispose()
-    return True
+        print(str(e))
+        raise e
+        
 
-# Import
+   # Import
 def import_excel():
     for arg in sys.argv[2:]:
         required_columns = ['Amount', 'Reason', 'Date', 'Fee', 'First', 'Last', 'Email', 'ZIP', 'City', 'State', 'Street', 'Phone', 'Gender', 'Notes']
@@ -72,27 +55,27 @@ def import_excel():
             # MySQL
             url = f"mysql+mysqlconnector://{USER}:{PASSWORD}@{HOST}/{DATABASE}"
             engine = create_engine(url , echo=True)
-            
+
             with engine.connect() as connection:
                 print("gello")
                 file = pd.read_excel(arg)
                 for index, row in file.iterrows():
                     req = {
-                        'amount': None,
-                        'reason': None,
-                        'date': None,
-                        'fee': None,
-                        'first': None,
-                        'last': None,
-                        'email': None,
-                        'zip': None,
-                        'city': None,
-                        'state': None,
-                        'street': None,
-                        'phone': None,
-                        'gender': None,
-                        'notes': None,
-                    }
+                            'amount': None,
+                            'reason': None,
+                            'date': None,
+                            'fee': None,
+                            'first': None,
+                            'last': None,
+                            'email': None,
+                            'zip': None,
+                            'city': None,
+                            'state': None,
+                            'street': None,
+                            'phone': None,
+                            'gender': None,
+                            'notes': None,
+                            }
                     for item in required_columns:
                         try:
                             req[item] = row[item]
@@ -162,8 +145,8 @@ def main():
     else:
         print("Error: Invalid option. Use -h or --help for usage information.")
         return 1
-    
-    return 0 if ret else 1
+
+        return 0 if ret else 1
 
 if __name__ == "__main__":
     main()
