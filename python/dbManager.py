@@ -64,48 +64,11 @@ def export_excel():
     except Exception as e:
         raise e
         
-# Import
+"""
+The code here just isnt good Ill replace it later
+"""
 def import_excel():
-    for arg in sys.argv[2:]:
-        required_columns = ['Amount', 'Reason', 'Date', 'Fee', 'First', 'Last', 'Email', 'ZIP', 'City', 'State', 'Street', 'Phone', 'Gender', 'Notes']
-        try:
-            file = pd.read_excel(arg)
-            for index, row in file.iterrows():
-                req = {
-                        'amount': None,
-                        'reason': None,
-                        'date': None,
-                        'fee': None,
-                        'first': None,
-                        'last': None,
-                        'email': None,
-                        'zip': None,
-                        'city': None,
-                        'state': None,
-                        'street': None,
-                        'phone': None,
-                        'gender': None,
-                        'notes': None,
-                        }
-                for item in required_columns:
-                    try:
-                        req[item] = row[item]
-                    except Exception as ignored:
-                        pass
-                if req['amount'] == None:
-                    return False
-                query = "INSERT INTO donor (" + ((req['amount'] + ",") if req['amount'] != None else "") + ((req['reason'] + ",") if req['reason'] != None else "") + ((req['date'] + ",") if req['date'] != None else "") + ((req['fee'] + ",") if req['fee'] != None else "") + ((req['first'] + ",") if req['first'] != None else "") + ((req['last'] + ",") if req['last'] != None else "") + ((req['email'] + ",") if req['email'] != None else "") + ((req['zip'] + ",") if req['zip'] != None else "") + ((req['city'] + ",") if req['city'] != None else "") + ((req['state'] + ",") if req['state'] != None else "") + ((req['street'] + ",") if req['street'] != None else "") + ((req['phone'] + ",") if req['phone'] != None else "") + ((req['gender'] + ",") if req['gender'] != None else "") + ((req['notes'] + ",") if req['notes'] != None else "")
-
-                try:
-                    #make the cursour and connection
-                    conn = winConnect()
-                    cursor = conn.cursor() 
-                    cursor.execute(query)
-                except Exception as e:
-                    raise e
-        except Exception as e:
-            return False
-    return True
+    pass
 
 # Main
 def main():
