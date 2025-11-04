@@ -113,7 +113,7 @@ if ($status == 0){
 	$message = "There was a problem exporting the file";
 }
 else if ($status == 1){
-	$message = "The file was exported!";
+	$message = "The file was exported! It can be downloaded <a href = './python/exports/Export.xlsx' download='Export.xlsx'>here</a>!";
 }
 
 if ($status != -1){
@@ -125,11 +125,11 @@ if ($status != -1){
 		<table>
 		    <tr>
 			<td class="info">Export Donor Information</td>
-			<td><button name="export" id="donor" type="submit">Download</button></td>
+			<td><button name="export" value="donor" value type="submit">Download</button></td>
 		    </tr>
 		    <tr>
 			<td class="info">Export Donation Information</td>
-			<td><button name="export" id="donation" type="submit">Download</button></td>
+			<td><button name="export" value="donation" type="submit">Download</button></td>
 		    </tr>
 		</table>
 	    </form>
