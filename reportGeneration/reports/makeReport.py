@@ -1,29 +1,20 @@
-from importMeEthan import *
-from importMeGarrett import *
 
 try:
+    from importMeEthan import * #must come before importMeGarrett
+    from importMeGarrett import *
+    import time
+
     #get options as specified by the user
     args = getArgs()
     
-    ### data stuff ###
-    #questions to answer with report:
-        #top x donors by total amount donated
-        #top x donors by avg amount donated
-        #boxplots for top 5 cities and the average donation amount
-        #same for zipcodes ^
-
-        #given an event, total donations toward event y over time x (this might be included on the specific event page)
-        #descriptive stats over sample dataset
-            
-        
-
-    ### end data stuff ###
-    
     #connect to database
-    try:
-        conn = connect()
-    except Exception as e:
-        raise e
+
+    #args['os'] = 'l'
+    if 'os' in args.keys() and args['os'] == 'w':
+        conn = winConnect()
+    else:
+        conn = macConnect()
+    cur = conn.cursor()
 
     #Make the pdf object
     name = None
@@ -43,27 +34,42 @@ try:
     to write to the pdf. Replace this shiii with yo analysis fool.
     """ 
     #Insert a title
-    pdf.insertTitle("CHEEEEEEESSSSSSSSSSSSSSSEEEEE!!!!!!!!!!!!!!")
+    pdf.insertTitle("HELLO CASA PEOPLE THIS IS AN EXAMPLE")
 
     #Insert a subheading
-    pdf.insertSubheading("Why I like it")
+    pdf.insertSubheading("This is a Subheading")
 
     #Insert a series of paragraphs
-    pdf.insertParagraphs(["Because it is yummy. auidhcnaiuc niu d c hp hbcoer vhew ourhvbspi eruvpeirvpie uvhpeiufpeufv","And it is tasty."])
+    pdf.insertParagraphs(["CASA is a very cool organization and we are excited to be working with them. Sea of Thieves is also cool. It is a very fun video game where you drive a BOAT around and dig up treasure."])
 
     #Insert a single paragraph
-    pdf.insertParagraph("Y are U GAY????")
-
+    pdf.insertParagraph("Hey would you look at that we can have multiple paragraphs in a document isnt that cool. I am now going to say gibberish to demonstrate is working. odcnapidcnaipsdcnapisdjcasdc asdic asdc asc nqic asc adc iadcp ad apnc ap apicj jdcn apdijc a.")
     #Insert a table (make sure to include header row in the matrix boy)
-    data = [["PenarSize","FootSize"],[12,10],[40,12],[10000,10000]]
+    pdf.insertSubheading("Hey a table thats cool!!")
+    data = [["Money","Donors"],[1,10],[2,20],[3,30],[4,40],[5,50]]
     cellWidths = [70,70]
     pdf.insertTable(data,cellWidths)
 
     #Insert a graph
-    data = pd.DataFrame({"Height":[1,2,3,4,5,6,7,8,9,10],"Johnson":[2,4,6,8,10,12,14,16,18,20]})
-    plot = sns.scatterplot(data=data,x="Height",y="Johnson")
-    pdf.insertGraph(plot,5,5)
+    #data = pd.DataFrame({"Height":[1,2,3,4,5,6,7,8,9,10],"Width":[20,44,60,81,10,12,14,16,18,20]})
+    #sns.scatterplot(data=data,x="Height",y="Width")
 
+    #"fundraiser completion % for each event"
+    cur.execute("select id,name, goalAmount from dbevents where goalAmount is not null")
+    rows1 = cur.fetchall()
+    cur.execute("select amount, eventID from donations where amount is not null and eventID is not null")
+    rows2 = cur.fetchall()
+
+    cur.execute("select date from donations where date is not null")
+    donationDates = cur.fetchall()
+
+    fig2 = chartNumDonations(donationDates,"y","hist",12)
+    pdf.insertGraph(4,3,1) 
+    fig1 = chartNumDonations(donationDates,"y","line",12)
+    pdf.insertGraph(4,3,2)
+    fig3 = chartFundraiserGoals(rows1,rows2)
+    pdf.insertGraph(4,3,3)
+    
     #make the pdf (THIS MUST BE CALLED LAST)
     pdf.buildPDF()
 
@@ -74,3 +80,4 @@ try:
    
 except Exception as e:
     traceback.print_exc()
+    raise e

@@ -59,6 +59,7 @@
 			</div>
 			<div class="mb-3">
 			</div>
+			<input type = "hidden" id="os" name="os" value="<?php echo$os; ?>">
 			<button type="submit" class="btn btn-primary">Generate Report</button>
 		</form>
 	</div>
