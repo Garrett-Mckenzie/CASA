@@ -39,17 +39,12 @@
                 //require_once('domain/Event.php');
                 //$events = get_all_events();
                 $events = get_all_events_sorted_by_date_not_archived();
-                $archivedevents = get_all_events_sorted_by_date_and_archived();
+                $archivedEvents = get_all_events_sorted_by_date_and_archived();
                 $today = new DateTime(); // Current date
                 
                 // Filter out expired events
                 $upcomingEvents = array_filter($events, function($event) use ($today) {
-                    $eventDate = new DateTime($event->getDate());
-                    return $eventDate >= $today; // Only include events on or after today
-                });
-
-                $upcomingArchivedEvents = array_filter($archivedevents, function($event) use ($today) {
-                    $eventDate = new DateTime($event->getDate());
+                    $eventDate = new DateTime($event->getStartDate());
                     return $eventDate >= $today; // Only include events on or after today
                 });
 
@@ -62,9 +57,11 @@
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Event Type</th>
-                                <th style="width:1px">Date</th>
-                                <th style="width:1px">Capacity</th>
+                                <th>Start Date</th>
+                                <th>Start Time</th>
+                                <th style="width:1px">End Date</th>
+                                <th style="width:1px">End Time</th>
+                                <th style="width:1px">Fundraiser Goal</th>
                                 <th style="width:1px"></th>
                             </tr>
                         </thead>
@@ -76,28 +73,24 @@
                                 foreach ($upcomingEvents as $event) {
                                     $eventID = $event->getID();
                                     $title = $event->getName();
-                                    $date = $event->getDate();
+                                    $goalAmount = $event->getGoalAmount();
+                                    $startDate = $event->getStartDate();
+                                    $endDate = $event->getEndDate();
                                     $startTime = $event->getStartTime();
                                     $endTime = $event->getEndTime();
                                     $description = $event->getDescription();
-                                    $capacity = $event->getCapacity();
+                                    
                                     $completed = $event->getCompleted();
-                                    $restricted_signup = $event->getRestrictedSignup();
-                                    $type = $event->getEventType();
-                                     
-                                    // Fetch signups for the event
-                                    $signups = fetch_event_signups($eventID);
-                                    $numSignups = count($signups); // Number of people signed up
-                                    // Check if the user is signed up for this event
-                                    $isSignedUp = check_if_signed_up($eventID, $userID);
-
+                            
                                     echo "
                                     <tr data-event-id='$eventID'>
 
                                         <td><a href='event.php?id=$eventID'>$title</a></td>
-                                        <td>$type</td>
-                                        <td>$date</td>
-                                        <td>$numSignups / $capacity</td>";
+                                        <td>$startDate</td>
+                                        <td>$startTime</td>
+                                        <td>$endDate</td>
+                                        <td>$endTime</td>
+                                        <td>$$goalAmount</td>"; //money
                                     
                                     // Display Sign Up or Cancel button based on user sign-up status
                                        
@@ -172,33 +165,24 @@
                                 #require_once('database/dbPersons.php');
                                 #require_once('include/output.php');
                                 #$id_to_name_hash = [];
-                                foreach ($upcomingArchivedEvents as $event) {
-                                    $eventID = $event->getID();
+                                foreach ($archivedEvents as $event) {
+                                   $eventID = $event->getID();
                                     $title = $event->getName();
-                                    $date = $event->getDate();
+                                    $goalAmount = $event->getGoalAmount();
+                                    $startDate = $event->getStartDate();
+                                    $endDate = $event->getEndDate();
                                     $startTime = $event->getStartTime();
                                     $endTime = $event->getEndTime();
                                     $description = $event->getDescription();
-                                    $capacity = $event->getCapacity();
+                                    
                                     $completed = $event->getCompleted();
-                                    $restricted_signup = $event->getRestrictedSignup();
-                                    if ($restricted_signup == 0) {
-                                        $restricted_signup = "No";
-                                    } else {
-                                        $restricted_signup = "Yes";
-                                    }
-
-                                    // Fetch signups for the event
-                                    $signups = fetch_event_signups($eventID);
-                                    $numSignups = count($signups); // Number of people signed up
+                                    
                                     //if($accessLevel < 3) {
                                         echo "
                                         <tr data-event-id='$eventID'>
-                                            <td>$restricted_signup</td>
                                             <td><a href='event.php?id=$eventID'>$title</a></td>
-                                            <td>$date</td>
-                                            <td>$numSignups / $capacity</td>
-                                            <td><a class='button sign-up' href='eventSignUp.php?event_name=" . urlencode($title) . '&restricted=' . urlencode($restricted_signup) . "'>Sign Up</a></td>
+                                            <td>$startDate</td>
+                                            <td>$endDate</td>
                                         </tr>";
                                     //} else {
                                         /*echo "

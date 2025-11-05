@@ -48,13 +48,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // === Helper function to call Ollama API safely ===
 function generate_email($reason, $sender, $recipient_name, $recipient_email) {
     $prompt = "You are an assistant that writes short, professional, and warm emails.\n" .
-              "Sender: $sender\nRecipient name: $recipient_name\n" .
-              "Reason: $reason\n" .
-              "Write a concise, friendly email that could be sent to this recipient. " .
-              "Do not include any bracketed info for me to fill out; if unsure, leave it out.";
+          "Sender: $sender\nRecipient name: $recipient_name\n" .
+          "Reason: $reason\n" .
+          "My name is Rappahannock CASA\n".
+          "Write a concise (30–50 word) friendly email that could be sent to this recipient.\n\n" .
+          "NEVER include placeholders, brackets, or text like [name], [insert], or (your text here). " .
+          "Only write complete, natural sentences ready to send.";
 
     $data = [
-        "model" => "qwen3:14b",
+        "model" => "llama3.2:3b",
         "prompt" => $prompt,
         "stream" => false
     ];
@@ -80,7 +82,16 @@ function generate_email($reason, $sender, $recipient_name, $recipient_email) {
                 'name' => $recipient_name,
                 'email' => $recipient_email,
                 'response' => "Connection error: $error"
-            ];
+            ]);
+            exit;
+        }
+
+        if (!$response || trim($response) === '') {
+            echo json_encode([
+                'success' => false,
+                'response' => "Model returned no output. Make sure the Ollama container and llama3.2:3b are running."
+            ]);
+            exit;
         }
 
         $decoded = json_decode($response, true);

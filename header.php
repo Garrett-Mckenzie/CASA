@@ -709,18 +709,7 @@ date_default_timezone_set('America/New_York');
     <span>View Events</span>
   </div>
 </a>
-<a href="editHours.php" style="text-decoration: none;">
-  <div class="in-nav">
-    <img src="images/clock-regular.svg">
-    <span>Change Event Hours</span>
-  </div>
-</a>
-<a href="viewAllEventSignUps.php" style="text-decoration: none;">
-  <div class="in-nav">
-    <img src="images/users-solid.svg">
-    <span>Pending Sign-Ups</span>
-  </div>
-</a>
+
 <a href="adminViewingEvents.php" style="text-decoration: none;">
   <div class="in-nav">
     <img src="images/list-solid.svg">

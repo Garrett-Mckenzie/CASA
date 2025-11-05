@@ -5,31 +5,28 @@
 class Event {
     private $id;
     private $name;
-  
-    private $date;
+    private $goalAmount;
+    private $endDate;
+    private $startDate;
     private $startTime;
     private $endTime;
     private $description;
-   
-    private $capacity;
+    private $location;
     private $completed;
-    private $restricted_signup;
 
-    private $type;
    
 
-    function __construct($id, $name, $date, $startTime, $endTime, $description, $capacity, $completed, $restricted_signup, $type) {
+    function __construct($id, $name,$goalAmount, $startDate,$endDate, $startTime, $endTime, $description, $location, $completed) {
         $this->id = $id;
         $this->name = $name;
-        $this->date = $date;
+        $this->goalAmount = $goalAmount;
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
         $this->startTime = $startTime;
         $this->endTime = $endTime;
         $this->description = $description;
-        $this->capacity = $capacity;
+        $this->location = $location;
         $this->completed = $completed;
-        $this->restricted_signup = $restricted_signup;
-
-        $this->type = $type;
     }
 
     function getID() {
@@ -39,11 +36,16 @@ class Event {
     function getName() {
         return $this->name;
     }
-
+    function getGoalAmount() {
+        return $this->goalAmount;
+    }
    
     // new Event
-    function getDate() {
-        return $this->date;
+    function getStartDate() {
+        return $this->startDate;
+    }
+     function getEndDate() {
+        return $this->endDate;
     }
 
     function getStartTime() {
@@ -57,24 +59,14 @@ class Event {
     function getDescription() {
         return $this->description;
     }
-
-  
-
-    function getCapacity() {
-        return $this->capacity;
+    function getLocation() {
+        return $this->location;
     }
-
     function getCompleted() {
         return $this->completed;
     }
 
-    function getRestrictedSignup() {
-        return $this->restricted_signup;
-    }
 
-    function getEventType(){
-        return $this->type;
-    }
 
    
 }
