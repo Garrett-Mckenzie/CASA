@@ -7,82 +7,61 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
-        // Ensure the script runs only after the entire document is loaded
         document.addEventListener('DOMContentLoaded', () => {
-            // Get references to key DOM elements
             const queryTypeCheckboxes = document.querySelectorAll('input[name="query_type"]');
             const formContainers = document.querySelectorAll('.query-input-container');
             const searchForm = document.getElementById('search-form');
             const resultsContent = document.getElementById('results-content');
             
-            /**
-             * Updates the visibility and required status of the input fields
-             * based on which query type checkboxes are selected.
-             */
             function updateFormVisibility() {
-                // Determine which query types are selected
                 const selectedQueryTypes = Array.from(queryTypeCheckboxes)
                     .filter(checkbox => checkbox.checked)
                     .map(checkbox => checkbox.value);
 
-                // Default to 'all_donors' if no criteria are selected
                 if (selectedQueryTypes.length === 0) {
                     selectedQueryTypes.push('all_donors');
                 }
 
-                // Iterate over all input containers
                 formContainers.forEach(container => {
                     const containerType = container.getAttribute('data-query-type');
                     
-                    // Show the container if its type is selected
                     if (selectedQueryTypes.includes(containerType)) {
                         container.classList.remove('hidden');
                         container.classList.add('space-y-4');
-                        // Make inputs required if they have the 'required-if-active' attribute
                         container.querySelectorAll('[required-if-active]').forEach(input => {
                             input.setAttribute('required', 'required');
                         });
                     } else {
-                        // Hide the container if its type is not selected
                         container.classList.add('hidden');
                         container.classList.remove('space-y-4');
-                        // Remove 'required' attribute and clear values for hidden inputs
                         container.querySelectorAll('[required-if-active]').forEach(input => {
                             input.removeAttribute('required');
                             if (input.type === 'text' || input.type === 'date') {
-                                input.value = ''; // Clear value to prevent submitting stale data
+                                input.value = '';
                             }
                         });
                     }
                 });
             }
 
-            // Attach the visibility update function to all query type checkboxes
             queryTypeCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', updateFormVisibility);
             });
             
-            // Run on initial load to set up the default state (which is 'all_donors')
             updateFormVisibility();
 
 
-            /**
-             * Asynchronously fetches search results from the backend PHP script.
-             * @param {FormData} formData - The data collected from the search form.
-             */
             async function fetchResults(formData) {
-                // Re-read selected queries to ensure 'all_donors' is included if none are selected
                 const selectedQueries = formData.getAll('query_type');
                 
                 if (selectedQueries.length === 0) {
                     selectedQueries.push('all_donors');
                 }
 
-                let endpoint = 'search_multi_criteria.php'; // The backend script to call
-                let params = new URLSearchParams(); // Used to build the query string
-                let displayQuery = ''; // Human-readable summary of the query
+                let endpoint = 'search_multi_criteria.php';
+                let params = new URLSearchParams();
+                let displayQuery = '';
 
-                // Iterate through selected queries to build the URL parameters and display string
                 selectedQueries.forEach(queryType => {
                     params.append('query_types[]', queryType);
                     
@@ -120,43 +99,35 @@
                             displayQuery += `Donations NOT IN Range | `;
                             break;
                         case 'all_donors':
-                            // Only set 'All Donors' if this is the ONLY selected query
                             if (selectedQueries.length === 1) displayQuery = 'All Donors';
                             break;
                     }
                 });
                 
-                // Clean up trailing separator
                 displayQuery = displayQuery.replace(/ \| $/, '');
                 
-                // Construct the final URL
                 const url = `${endpoint}?${params.toString()}`;
                 console.log("Fetching URL:", url);
 
                 try {
                     const response = await fetch(url); 
                     
-                    // Check if the response content type is JSON
                     const contentType = response.headers.get("content-type");
                     if (contentType && contentType.indexOf("application/json") === -1) {
                          throw new Error(`Server returned non-JSON data. Check your PHP script for errors.`);
                     }
 
-                    // Check for HTTP error status codes (e.g., 404, 500)
                     if (!response.ok) {
                         const errorData = await response.json();
                         throw new Error(`HTTP error! Status: ${response.status}. Details: ${errorData.details || errorData.error}`);
                     }
                     
-                    // Parse the JSON response
                     const results = await response.json();
                     
                     return { results, displayQuery };
 
                 } catch (error) {
-                    // Handle any network or parsing errors
                     console.error("Fetch error:", error);
-                    // Display a user-friendly error message
                     resultsContent.innerHTML = `<p class="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
                         🚨 An error occurred while fetching data for **${displayQuery}**. Check the console for details. Error: ${error.message}
                         <br>
@@ -166,44 +137,31 @@
                 }
             }
 
-            // Event listener for form submission
             searchForm.addEventListener('submit', async (e) => {
-                e.preventDefault(); // Prevent default form submission and page reload
-                const formData = new FormData(searchForm); // Get all form data
+                e.preventDefault();
+                const formData = new FormData(searchForm); 
                 
-                // Fetch the results and display them
                 const { results, displayQuery } = await fetchResults(formData);
                 renderResults(displayQuery, results);
             });
             
-            /**
-             * Renders the fetched data into the results content div.
-             * @param {string} displayQuery - Human-readable query string.
-             * @param {Array<Object>} data - The array of result objects.
-             */
             function renderResults(displayQuery, data) {
-                resultsContent.innerHTML = ''; // Clear previous results
+                resultsContent.innerHTML = '';
                 
                 if (data.length === 0) {
-                    // Display message if no results are found
                     resultsContent.innerHTML = `
                         <p class="text-sm text-yellow-600 bg-yellow-50 p-3 rounded-lg border border-yellow-200">
                             No data found for: **${displayQuery}**.
                         </p>
                     `;
                 } else {
-                    // Display count and start building the results HTML
                     let html = `<p class="text-sm font-medium text-gray-700 mb-3">${data.length} result(s) found for **"${displayQuery}"**:</p>`;
                     
                     data.forEach(item => {
-                        // Extract and format donor/event name
                         const name = item.first && item.last ? `${item.first} ${item.last}` : item.name || 'Donor/Event Name';
-                        // Determine the secondary detail to display
                         const detail = item.email || item.event_name || `${item.city || 'N/A'}, ${item.state || 'N/A'}` || 'Details N/A';
-                        // Add donation count if available
                         const count = item.donation_count ? ` | Donations: ${item.donation_count}` : '';
 
-                        // Append a result card to the HTML
                         html += `
                             <div class="bg-white p-4 mb-2 rounded-lg shadow-sm border border-gray-100 transition duration-150 hover:shadow-md">
                                 <p class="text-base font-semibold text-gray-900">${name}${count}</p>
@@ -211,14 +169,13 @@
                             </div>
                         `;
                     });
-                    resultsContent.innerHTML = html; // Inject the results HTML
+                    resultsContent.innerHTML = html;
                 }
             }
         });
     </script>
 
     <style>
-        /* Simple style to set a modern font */
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
@@ -227,7 +184,7 @@
     <div class="w-full max-w-md bg-white shadow-xl rounded-xl p-8 space-y-6">
         <header class="text-center">
             <h1 class="text-3xl font-extrabold text-gray-900">
-                Donor Search
+                <span class="text-indigo-600">Multi-Criteria</span> Donor Search
             </h1>
             <p class="mt-2 text-sm text-gray-500">
                 Select one or more criteria below. Donors must match **ALL** selected criteria.
@@ -243,7 +200,7 @@
                         <input type="checkbox" name="query_type" value="donor_name" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
                         <span class="ml-2 text-sm font-medium text-gray-700">Donor by Name</span>
                     </label>
-                    </div>
+                </div>
             </div>
 
             <div class="space-y-4" id="dynamic-inputs">
@@ -256,9 +213,7 @@
                 <div class="query-input-container hidden" data-query-type="all_donors">
                     <p class="text-sm text-gray-500 p-2 border border-gray-200 rounded-lg bg-gray-50">This returns a list of **ALL** donors because no specific criteria were selected. Click "Execute Query".</p>
                 </div>
-                
-                </div>
-            
+            </div>
             <div class="pt-2">
                 <button type="submit"
                     class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-base font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 ease-in-out transform hover:scale-[1.01] active:scale-[0.99]">
@@ -278,22 +233,21 @@
             </div>
         </div>
 
-        <!--
         <div class="mt-4">
-            <a href="test.php"
+            <a href="index.php"
                 class="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-md text-base font-bold text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 ease-in-out transform hover:scale-[1.01] active:scale-[0.99]">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                Go to test.php Page
+                Go to main Page
             </a>
         </div>
+
         <div class="mt-4">
             <a href="all.php"
                 class="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-md text-base font-bold text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 ease-in-out transform hover:scale-[1.01] active:scale-[0.99]">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                Go to test.db Page
+                Go to testdb Page
             </a>
         </div>
-        -->
 
     </div>
 
