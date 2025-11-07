@@ -95,7 +95,7 @@ def import_excel():
         cols = data.columns
 
         #these arrays define the current state of the database its static to enforce that someone look at this code whenever changes are made to the db schema.
-        donation_columns = ["amount","id","reason","date","fee","thanked","eventID","donorID"]
+        donation_columns = ["amount","id","reason","date","fee","thanked","eventID","first","last","email"]
         donor_columns = ["id","first","last","email","zip","city","state","street","phone","gender","notes"] 
         events_columns = ["id","name","goalAmount","date","startDate","endDate","description","completed","location"]
 
@@ -120,11 +120,11 @@ def import_excel():
             print("No valid information to import")
             exit()
 
-        if (haveDonationData):
-            insertDonation(donationData,donation_columns,conn,cursor)
-
         if (haveDonorData):
             insertDonor(donorData,donor_columns,conn,cursor)
+
+        if (haveDonationData):
+            insertDonation(donationData,donation_columns,conn,cursor)
 
         if (haveEventData):
             insertEvent(eventData,events_columns,conn,cursor)
