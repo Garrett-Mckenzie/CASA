@@ -1,0 +1,13 @@
+To get everything working you may have to do the below
+
+A)
+Install python to your system. At the moment we should be using anything at or
+greater than python 3.13.7. For the exec functions to work throughout the
+system it must be the case that you can say python file.py to execute python
+anywhere on your system
+
+B)
+run the command python -m pip install requirements.txt 
+
+C) 
+go into the ai-email-gen directory and execute the MakeFile with make command
