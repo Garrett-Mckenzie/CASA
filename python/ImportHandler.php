@@ -18,26 +18,26 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['files'])){
 
 																if($return_var === 0){
 																				echo "Imported $name<br>";
-																				header("Location: ../import.php?success=1&file=$name");
+																				//header("Location: ../import.php?success=1&file=$name");
 																} else{
-																				echo "Error importing $name<br>";
+																				//echo "Error importing $name<br>";
 																}
 
 																unlink($temp);
 												}
 												else {
 																echo "Failed to fetch $name<br>";
-																header("Location: ../import.php?success=0");
+																//header("Location: ../import.php?success=0");
 												}
 								} else {
 												echo "Failed to upload $name<br>";
-												header("Location: ../import.php?success=0");
+												//header("Location: ../import.php?success=0");
 								}
 				}
 } else {
 				echo "Invalid Request<br>";
 				echo "Expected POST, Recieved " . $_SERVER['REQUEST_METHOD'] . "<br>";
 				echo "Recieved" . $_FILES['files'] . "<br>";
-				header("Location: ../import.php?success=0");
+				//header("Location: ../import.php?success=0");
 }
 ?>

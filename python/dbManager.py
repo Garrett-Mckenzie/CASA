@@ -8,6 +8,10 @@ import pandas as pd
 import mariadb
 import random
 import os
+import numpy as np
+from insertFunctions import *
+
+SYSTEM = os.name
 
 def winConnect():
     try:
@@ -40,7 +44,11 @@ def export_excel():
     output_file = sys.argv[3]
     try:
         #make the cursour and connection
-        conn = winConnect()
+        conn = None
+        if SYSTEM =='posix':
+            conn = macConnect()
+        else:
+            conn = winConnect()
         cursor = conn.cursor()
 
         cols = []
@@ -55,7 +63,10 @@ def export_excel():
         df = pd.DataFrame(data,columns = cols) 
         try:
             #this will need to change on a linux os worrying about it later
-            os.system('del exports\\Export.xlsx')
+            if SYSTEM == 'posix':
+                os.system('del exports\\Export.xlsx')
+            else:
+                os.system("rm exports/Export.xlsx")
         except Exception as e:
             print(e)
             pass
@@ -65,10 +76,64 @@ def export_excel():
         raise e
         
 """
-The code here just isnt good Ill replace it later
+need to work on this part here
 """
 def import_excel():
-    pass
+    try:
+        #make the cursour and connection
+        conn = None
+        if SYSTEM =='posix':
+            conn = macConnect()
+        else:
+            conn = winConnect()
+        cursor = conn.cursor()
+
+
+        #load up data
+        file_path = sys.argv[2]
+        data = pd.read_excel(file_path)
+        cols = data.columns
+
+        #these arrays define the current state of the database its static to enforce that someone look at this code whenever changes are made to the db schema.
+        donation_columns = ["amount","id","reason","date","fee","thanked","eventID","donorID"]
+        donor_columns = ["id","first","last","email","zip","city","state","street","phone","gender","notes"] 
+        events_columns = ["id","name","goalAmount","date","startDate","endDate","description","completed","location"]
+
+        donationData = pd.DataFrame()
+        donorData = pd.DataFrame()
+        eventData = pd.DataFrame()
+
+        for col in data.columns:
+            if col in donation_columns:
+                donationData[col] = data[col].values
+            if col in donor_columns:
+                donorData[col] = data[col].values
+            if col in events_columns:
+                eventData = data[col].values
+
+        #For a donation to be valid it must have at a minimum an amount
+        haveEventData = not (isinstance(eventData,np.ndarray)) 
+        haveDonorData = not (isinstance(donorData,np.ndarray))
+        haveDonationData = not (isinstance(donationData,np.ndarray))
+        
+        if (not haveEventData and not haveDonorData and not haveDonationData):
+            print("No valid information to import")
+            exit()
+
+        if (haveDonationData):
+            insertDonation(donationData,donation_columns,conn,cursor)
+
+        if (haveDonorData):
+            insertDonor(donorData,donor_columns,conn,cursor)
+
+        if (haveEventData):
+            insertEvent(eventData,events_columns,conn,cursor)
+                            
+    except Exception as e:
+        print(e)
+        raise e
+
+
 
 # Main
 def main():
