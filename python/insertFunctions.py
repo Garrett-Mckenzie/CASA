@@ -62,7 +62,7 @@ def insertDonation(donationData,donation_columns,conn,cursor):
                     donorId = cursor.fetchone()
                     if donorId == None:
                         goodInsert  = 0
-                        print(f"Donor {first + ' ' + last} was not found on row {i}")
+                        print(f"Donor {first + ' ' + last} was not found on row {i+1}")
                     else:
                         insertCol.append("donorID")
                         insertData.append(donorId[0])
@@ -95,18 +95,65 @@ def insertDonation(donationData,donation_columns,conn,cursor):
                     cursor.execute(query,executeTup)
                 except Exception as e:
                     print(e)
-            print(f"Could not insert row {i+1}")
+                    print(f"Could not insert row {i+1}")
+            else:
+                print(f"Could not insert row {i+1}")
 
         #attempts transaction commit
         try:
             conn.commit()
-            print("The data for donations was commited except for rows where otherwise specified.")
+            print("(GOOD) The data for donations was commited except for rows where otherwise specified.")
         except Exception as e:
             conn.rollback()
             print("There was a problem")
 
+# to insert col all you need is a unique name
 def insertEvent(eventData,event_columns,conn,cursor):
-    pass
+    if "eventName" not in deventData.columns:
+        print("could not insert event data no eventName column found")
+        return
+
+    for i,row in eventData.iterrows():
+        insertCol = []
+        insertData = []
+        goodInsert = 1
+        for col in event_columns:
+            try:
+                value = row[col]
+                if pd.isna(value):
+                    value = ""
+                insertCol.append(col)
+                insertData.append(value)
+            except KeyError as e:
+                pass
+
+        if insertData[insertCol.index("eventName") == ""]:
+            print(f"Event on row {i+1} was not named and therefore could not be inserted")
+            goodInsert = 0
+
+        if goodInsert:
+            #builds the query
+            queryCols = ",".join(insertCol)    
+            queryValues = "?,"*len(insertCol)
+            queryValues = queryValues[0:-1]
+            query = f"INSERT INTO events (" + queryCols  + ") VALUES (" + queryValues + ")" 
+            executeTup = tuple(insertData)
+            try:
+                #adds insert to transaction
+                cursor.execute(query,executeTup)
+            except Exception as e:
+                print(e)    
+                print(f"Could not insert row {i+1}")
+        else:
+            print(f"Could not insert row {i+1}")
+
+    #attempts transaction commit
+    try:
+        conn.commit()
+        print("(GOOD) he data for donors was commited except for rows where otherwise specified.")
+    except Exception as e:
+        conn.rollback()
+        print("There was a problem")
 
 #To insert a donor you need first,last,email
 def insertDonor(donorData,donor_columns,conn,cursor):
@@ -143,13 +190,15 @@ def insertDonor(donorData,donor_columns,conn,cursor):
                 #adds insert to transaction
                 cursor.execute(query,executeTup)
             except Exception as e:
-                print(e)
-        print(f"Could not insert row {i+1}")
+                print(e)    
+                print(f"Could not insert row {i+1}")
+        else:
+            print(f"Could not insert row {i+1}")
 
     #attempts transaction commit
     try:
         conn.commit()
-        print("The data for donors was commited except for rows where otherwise specified.")
+        print("(GOOD) The data for donors was commited except for rows where otherwise specified.")
     except Exception as e:
         conn.rollback()
         print("There was a problem")
