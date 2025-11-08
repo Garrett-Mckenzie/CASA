@@ -102,7 +102,7 @@ def insertDonation(donationData,donation_columns,conn,cursor):
         #attempts transaction commit
         try:
             conn.commit()
-            print("(GOOD) The data for donations was commited except for rows where otherwise specified.")
+            print("The data for donations was commited except for rows where otherwise specified.")
         except Exception as e:
             conn.rollback()
             print("There was a problem")
@@ -150,7 +150,7 @@ def insertEvent(eventData,event_columns,conn,cursor):
     #attempts transaction commit
     try:
         conn.commit()
-        print("(GOOD) he data for donors was commited except for rows where otherwise specified.")
+        print("The data for donors was commited except for rows where otherwise specified.")
     except Exception as e:
         conn.rollback()
         print("There was a problem")
@@ -198,7 +198,7 @@ def insertDonor(donorData,donor_columns,conn,cursor):
     #attempts transaction commit
     try:
         conn.commit()
-        print("(GOOD) The data for donors was commited except for rows where otherwise specified.")
+        print("The data for donors was commited except for rows where otherwise specified.")
     except Exception as e:
         conn.rollback()
         print("There was a problem")

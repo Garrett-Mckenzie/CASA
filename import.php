@@ -81,14 +81,24 @@
 
 		$message = "";
 		if ($status == 0){
-						$message = "There was a problem importing the file";
+						$message = "There was a problem importing the file no information has been put into the storage system.";
 		}
 		else if ($status == 1){
-						$message = "The file was imported!";
+						$message = "Import attempt has been made! The only information/files that have not been imported are mentioned below.";
 		}
 		
-		if ($status != -1){
-			echo "<div>".$message." </div>";
+		if ($status == 1){
+			echo "<div><b>".$message."</b></div>";
+			$message = "";
+			if (isset($_SESSION["importStatus"])){
+							foreach ($_SESSION["importStatus"] as $st){
+											$message = $message.$st."<br/>";
+							}
+							echo "<div>".$message."</div>";
+			}
+			else{
+				echo "<div>Could not retrieve import report</div>";
+			}
 		}		
 ?>
        <main>

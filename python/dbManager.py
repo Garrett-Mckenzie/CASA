@@ -120,6 +120,7 @@ def import_excel():
             print("No valid information to import")
             return
 
+        print(f"Attempting to import the file at {file_path}")
         if (haveDonorData):
             insertDonor(donorData,donor_columns,conn,cursor)
 
