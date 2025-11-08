@@ -95,9 +95,9 @@ def import_excel():
         cols = data.columns
 
         #these arrays define the current state of the database its static to enforce that someone look at this code whenever changes are made to the db schema.
-        donation_columns = ["amount","id","reason","date","fee","thanked","eventID","first","last","email"]
-        donor_columns = ["id","first","last","email","zip","city","state","street","phone","gender","notes"] 
-        events_columns = ["id","name","goalAmount","date","startDate","endDate","description","completed","location"]
+        donation_columns = ["amount","reason","date","fee","thanked","eventID","first","last","email","eventName"]
+        donor_columns = ["first","last","email","zip","city","state","street","phone","gender","notes"] 
+        events_columns = ["name","goalAmount","date","startDate","endDate","description","completed","location"]
 
         donationData = pd.DataFrame()
         donorData = pd.DataFrame()
@@ -132,8 +132,6 @@ def import_excel():
     except Exception as e:
         print(e)
         raise e
-
-
 
 # Main
 def main():

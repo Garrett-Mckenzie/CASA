@@ -37,15 +37,15 @@ def insertDonation(donationData,donation_columns,conn,cursor):
                 goodInsert = 0
 
             elif "first" in insertCol and "last" in insertCol and "email" in insertCol:
-                i = insertCol.index("first")
-                insertCol.pop(i)
-                first = insertData.pop(i)
-                i = insertCol.index("last")
-                insertCol.pop(i)
-                last = insertData.pop(i)
-                i = insertCol.index("email")
-                insertCol.pop(i)
-                email = insertData.pop(i)
+                j = insertCol.index("first")
+                insertCol.pop(j)
+                first = insertData.pop(j)
+                j = insertCol.index("last")
+                insertCol.pop(j)
+                last = insertData.pop(j)
+                j = insertCol.index("email")
+                insertCol.pop(j)
+                email = insertData.pop(j)
 
                 #kinda gross logic but it works so whateva
                 if (first == "" or last == "" or email == "") and not (first == "" and last == ""and email == ""):
@@ -68,8 +68,21 @@ def insertDonation(donationData,donation_columns,conn,cursor):
                         insertData.append(donorId[0])
 
             #deal with donation event relationship
-            #need to write this part
- 
+            #need to write this part 
+            if ("eventName" in insertCol and insertData[insertCol.index("eventName")] != ""):
+                j = insertCol.index("eventName")
+                eventName = insertData.pop(j)
+                query = "SELECT id FROM events WHERE name = ?"
+                executeTup = (eventName,)
+                cursor.execute(query,executeTup)
+                eventID = cursor.fetchone()
+                if eventID == None:
+                    print(f"Event {eventName} was not found in our database on row {i}")
+                    goodInsert = 1
+                else:
+                    insertCol.append("eventID")
+                    insertData.append(eventID[0])
+                    
             if goodInsert:
                 #builds the query
                 queryCols = ",".join(insertCol)    
@@ -87,7 +100,7 @@ def insertDonation(donationData,donation_columns,conn,cursor):
         #attempts transaction commit
         try:
             conn.commit()
-            print("The data for donations was commited")
+            print("The data for donations was commited except for rows where otherwise specified.")
         except Exception as e:
             conn.rollback()
             print("There was a problem")
@@ -136,7 +149,7 @@ def insertDonor(donorData,donor_columns,conn,cursor):
     #attempts transaction commit
     try:
         conn.commit()
-        print("The data for donors was commited")
+        print("The data for donors was commited except for rows where otherwise specified.")
     except Exception as e:
         conn.rollback()
         print("There was a problem")
