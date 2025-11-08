@@ -21,7 +21,7 @@ try:
 
     #pdf generation stuff with reportlab
     from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
-    from reportlab.platypus import Paragraph, Spacer, Image
+    from reportlab.platypus import Paragraph, Spacer, Image, PageBreak
     from reportlab.lib.pagesizes import LETTER
     from reportlab.lib import colors
     from reportlab.pdfgen import canvas
@@ -110,60 +110,66 @@ try:
     class PDF:
 
         def __init__(self,name):
-            self.doc = SimpleDocTemplate(f'reports/{name}.pdf',pagesize=LETTER)
+            self.story = []
+            self.doc = SimpleDocTemplate(f'./reports/{name}.pdf',pagesize=LETTER)
             self.elements = []
             self.styles = getSampleStyleSheet()
             self.styles.add(ParagraphStyle(name=".Title", alignment=TA_CENTER, fontSize=18, spaceAfter=20))
             self.styles.add(ParagraphStyle(name=".BodyText", fontSize=12, leading=15))
             self.styles.add(ParagraphStyle(name = ".Subheading" ,alignment=TA_LEFT,fontSize=14,spaceBefore=12,spaceAfter=8,leading=16,underlineWidth=0.5))
 
-        def insertTitle(self,txt):
-            self.elements.append(Paragraph(txt,self.styles[".Title"]))
+        def insertTitle(self, title):
+            self.story.append(Spacer(1, 0.3 * inch))
+            self.story.append(Paragraph(
+                f"<b><font size=22 color='#2E4053'>{title}</font></b>", self.styles["Title"]
+            ))
+            self.story.append(Spacer(1, 0.25 * inch))
+        def insertPageBreak(self):
+            self.story.append(PageBreak())
 
-        def insertSubheading(self,txt):
-            self.elements.append(Paragraph(txt,self.styles[".Subheading"]))
+        def insertSubheading(self, text):
+            self.story.append(Spacer(1, 0.25 * inch))
+            self.story.append(Paragraph(
+                f"<b><font size=14 color='#1F618D'>{text}</font></b>", self.styles["Heading2"]
+            ))
+            self.story.append(Spacer(1, 0.15 * inch))
 
-        #better make sure ts a list brotha. Every element in the list is its own paragraph
-        def insertParagraphs(self,paragraph):
-            for txt in paragraph:
-                self.elements.append(Paragraph(txt,self.styles[".BodyText"]))
-                self.elements.append(Spacer(1,12))
+        def insertParagraph(self, text):
+            self.story.append(Paragraph(text, self.styles["Normal"]))
+            self.story.append(Spacer(1, 0.1 * inch))
 
-        def insertParagraph(self,txt):
-            self.elements.append(Paragraph(txt,self.styles[".BodyText"]))
+        def insertParagraphs(self, paragraphs):
+            for p in paragraphs:
+                self.insertParagraph(p)
 
-        def insertTable(self,data,cellWidths):
-            table = Table(data , colWidths = cellWidths)
-            table_style = TableStyle([
-                ("BACKGROUND", (0, 0), (-1, 0), 
-                 colors.grey),
-                ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+        def insertGraph(self, width=4, height=3, index=1):
+            img_path = f"./reports/temp_plot_{index}.png"
+            plt.savefig(img_path, bbox_inches="tight")
+            plt.close()
+            self.story.append(Image(img_path, width * inch, height * inch))
+            self.story.append(Spacer(1, 0.25 * inch))
+
+        def insertTable(self, data, colWidths=None):
+            if not colWidths:
+                colWidths = [80] * len(data[0])
+            table = Table(data, colWidths=colWidths)
+            style = TableStyle([
+                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1F618D")),
+                ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
                 ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
-                ("BACKGROUND", (0, 1), (-1, -1), colors.whitesmoke),
                 ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-                ("BOX", (0,0),(-1,-1),1.0,colors.black),
-                ("INNERGRID",(0,0),(-1,-1),0.5,colors.grey)
-                ])
-            table.setStyle(table_style)
-            self.elements.append(table)
-            self.elements.append(Spacer(1,12))
-
-        def insertGraph(self,width,height,which=1):
-            """append graph to pdf
-
-            Args:
-                width (float): width of the graph inserted
-                height (float): height of inserted graph
-                which (int, optional): which png to write the graph to. Defaults to 1.
-            """
-            plt.savefig(f"./reports/plot{which}.png") 
-            self.elements.append(Image(f"reports/plot{which}.png",width=width*inch,height=height*inch))
-
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("BOTTOMPADDING", (0, 0), (-1, 0), 6),
+                ("BACKGROUND", (0, 1), (-1, -1), colors.HexColor("#EBF5FB"))
+            ])
+            table.setStyle(style)
+            self.story.append(table)
+            self.story.append(Spacer(1, 0.2 * inch))
+            
         #This method actually makes the pdf
         def buildPDF(self):
             self.doc.build(self.elements)
+            self.doc.build(self.story) #using stories
 except Exception as e:
     print(str(e))
     raise e
