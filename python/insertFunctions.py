@@ -209,7 +209,7 @@ def isValidDate(date , noFuture = False , noPast = False):
         print("vorp?")
         return False
     try:
-        month = date[0:date.index("/")] 
+        month = date[0 : date.index("/")] 
         date = date[date.index("/") + 1 :]
         day = date[0 : date.index("/")]
         date = date[date.index("/") + 1 :]
