@@ -95,9 +95,9 @@ def import_excel():
         cols = data.columns
 
         #these arrays define the current state of the database its static to enforce that someone look at this code whenever changes are made to the db schema.
-        donation_columns = ["amount","id","reason","date","fee","thanked","eventID","donorID"]
-        donor_columns = ["id","first","last","email","zip","city","state","street","phone","gender","notes"] 
-        events_columns = ["id","name","goalAmount","date","startDate","endDate","description","completed","location"]
+        donation_columns = ["amount","reason","date","fee","thanked","eventID","first","last","email","eventName"]
+        donor_columns = ["first","last","email","zip","city","state","street","phone","gender","notes"] 
+        event_columns = ["name","goalAmount","date","startDate","endDate","description","completed","location"]
 
         donationData = pd.DataFrame()
         donorData = pd.DataFrame()
@@ -108,7 +108,7 @@ def import_excel():
                 donationData[col] = data[col].values
             if col in donor_columns:
                 donorData[col] = data[col].values
-            if col in events_columns:
+            if col in event_columns:
                 eventData = data[col].values
 
         #For a donation to be valid it must have at a minimum an amount
@@ -118,22 +118,21 @@ def import_excel():
         
         if (not haveEventData and not haveDonorData and not haveDonationData):
             print("No valid information to import")
-            exit()
+            return
+
+        print(f"Attempting to import the file at {file_path}")
+        if (haveDonorData):
+            insertDonor(donorData,donor_columns,conn,cursor)
 
         if (haveDonationData):
             insertDonation(donationData,donation_columns,conn,cursor)
 
-        if (haveDonorData):
-            insertDonor(donorData,donor_columns,conn,cursor)
-
         if (haveEventData):
-            insertEvent(eventData,events_columns,conn,cursor)
+            insertEvent(eventData,event_columns,conn,cursor)
                             
     except Exception as e:
         print(e)
         raise e
-
-
 
 # Main
 def main():
