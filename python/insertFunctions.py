@@ -7,6 +7,7 @@ import mariadb
 import random
 import os
 import numpy as np
+from datetime import datetime
 
 #To insert a donation all it needs is an amount
 def insertDonation(donationData,donation_columns,conn,cursor):
@@ -202,3 +203,48 @@ def insertDonor(donorData,donor_columns,conn,cursor):
     except Exception as e:
         conn.rollback()
         print("There was a problem")
+
+def isValidDate(date , noFuture = False , noPast = False):
+    if noFuture and noPast:
+        print("vorp?")
+        return False
+    try:
+        month = date[0:date.index("/")] 
+        date = date[date.index("/") + 1 :]
+        day = date[0 : date.index("/")]
+        date = date[date.index("/") + 1 :]
+        year = date[0 : date.index("/")]
+    
+        month = int(month.lstrip('0'))
+        day = int(day.lstrip('0'))
+        year = int(year)
+
+        if month <= 0 or month > 12:
+            return False
+        if day <= 0 or day > 31:
+            return False
+
+        if noFuture or noPast:
+            today = datetime.today().strftime('%Y-%m-%d')
+            today = today.split("-")
+            curYear = int(today[0])
+            curMonth = int(today[1].lstrip('0'))
+            curDay = int(today[2].lstrip('0'))
+
+            if noFuture:
+                if year > curYear:
+                    return False
+                if year >= curYear and month > curMonth:
+                    return False
+                if year >= curYear and month >= curMonth and day > curDay:
+                    return False
+            if noPast:
+                if year < curYear:
+                    return False
+                if year <= curYear and month < curMonth:
+                    return False
+                if year <= curYear and month <= curMonth and day < curDay:
+                    return False
+        return True 
+    except:
+        return False
