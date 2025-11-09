@@ -22,7 +22,6 @@ SET time_zone = "+00:00";
 --
 
 -- --------------------------------------------------------
-<<<<<<< HEAD
 
 --
 -- Table structure for table `associations`
@@ -34,18 +33,6 @@ CREATE TABLE `associations` (
   `donorID` int(11) NOT NULL,
   `emailID` int(11) NOT NULL,
   `filePath` varchar(256) NOT NULL
-=======
---
--- Table structure for table `dbdiscussions`
---
-
-DROP TABLE IF EXISTS `dbdiscussions`;
-CREATE TABLE `dbdiscussions` (
-  `author_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `body` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `time` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
->>>>>>> origin/jbyrne_dev
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
