@@ -83,6 +83,17 @@ def insertDonation(donationData,donation_columns,conn,cursor):
                 else:
                     insertCol.append("eventID")
                     insertData.append(eventID[0])
+
+            if ("date" in insertCol):
+                j = insertCol.index("date")
+                insertCol.pop(j)
+                d = insertData.pop(j)
+                if isValidDate(d , noFuture = True):
+                    insertCol.append("date")
+                    insertData.append(d)
+                else:
+                    goodInsert = 0
+                    print(f"Date {d} was not a valid date on row {i}")
                     
             if goodInsert:
                 #builds the query
