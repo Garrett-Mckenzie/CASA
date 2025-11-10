@@ -422,7 +422,7 @@
 		</div>
 		<div class="full-width-bar">
 		<div class="content-box">
-				<img src="images/blank-white-background.jpg" style="filter: contrast(50%);"/>
+				<img src="images/blank-white-background.jpg"/>
 				<div class="small-text">Analyze the data!</div>
 				<div class="large-text">Generate Report</div>
 <button class="circle-arrow-button" onclick="window.location.href='reportGeneration/index.php'">

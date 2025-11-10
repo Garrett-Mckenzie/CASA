@@ -20,7 +20,6 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html">
-        <?php require_once('universal.inc') ?>
         <link rel="stylesheet" href="css/messages.css"></link>
         <script src="js/messages.js"></script>
         <title>Rappahannock CASA | Import</title>

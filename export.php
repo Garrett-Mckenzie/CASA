@@ -19,7 +19,6 @@ if (isset($_SESSION['_id'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <?php require_once('universal.inc') ?>
     <link rel="stylesheet" href="css/messages.css"></link>
     <script src="js/messages.js"></script>
     <title>Rappahannock CASA | Export</title>
@@ -120,6 +119,27 @@ if ($status != -1){
 	echo "<div>".$message." </div>";
 }		
 ?>
+
+<div class="full-width-bar-sub">
+        <div class="content-box-test" onclick="window.location.href=''">
+            <div class="icon-overlay">
+                <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
+            </div>
+            <img class="background-image" src="images/blank-white-background.jpg" />
+            <div class="large-text-sub">Export Donor Information</div>
+            <button class="arrow-button">→</button>
+        </div>
+
+
+        <div class="content-box-test" onclick="window.location.href=''">
+            <div class="icon-overlay">
+                <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
+            </div>
+            <img class="background-image" src="images/blank-white-background.jpg" />
+            <div class="large-text-sub">Export Donation Information</div>
+            <button class="arrow-button">→</button>
+        </div>
+    </div>
 
 	    <form action="python/ExportHandler.php" method="post" enctype="multipart/form-data">
 		<table>
