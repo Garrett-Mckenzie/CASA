@@ -41,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <?php require_once('header.php') ?>
-            <h1>Export</h1>
   <div class="container mt-4 p-4 bg-white rounded shadow">
     <h3 class="mb-3">AI Email Generator</h3>
     <form id="emailForm">

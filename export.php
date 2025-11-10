@@ -19,7 +19,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php require_once('universal.inc') ?>
     <link rel="stylesheet" href="css/messages.css"></link>
     <script src="js/messages.js"></script>
     <title>Rappahannock CASA | Export</title>
@@ -95,6 +94,27 @@
     <body>
         <?php require_once('header.php') ?>
         <h1>Export</h1>
+
+        <div class="full-width-bar-sub">
+                <div class="content-box-test" onclick="window.location.href=''">
+                    <div class="icon-overlay">
+                        <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
+                    </div>
+                    <img class="background-image" src="images/blank-white-background.jpg" />
+                    <div class="large-text-sub">Export Donor Information</div>
+                    <button class="arrow-button">→</button>
+                </div>
+
+
+                <div class="content-box-test" onclick="window.location.href=''">
+                    <div class="icon-overlay">
+                        <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
+                    </div>
+                    <img class="background-image" src="images/blank-white-background.jpg" />
+                    <div class="large-text-sub">Export Donation Information</div>
+                    <button class="arrow-button">→</button>
+                </div>
+        </div>
 
         <header>
             <nav>

@@ -1,5 +1,6 @@
 <?php
 require_once '../database/dbinfo.php';
+
 session_start();
 $con = connect();
 
