@@ -199,7 +199,7 @@
                         // Extract and format donor/event name
                         const name = item.first && item.last ? `${item.first} ${item.last}` : item.name || 'Donor/Event Name';
                         // Determine the secondary detail to display
-                        const detail = item.email || item.event_name || `${item.city || 'N/A'}, ${item.state || 'N/A'}` || 'Details N/A';
+                        const detail = item.email || item.name || `${item.city || 'N/A'}, ${item.state || 'N/A'}` || 'Details N/A';
                         // Add donation count if available
                         const count = item.donation_count ? ` | Donations: ${item.donation_count}` : '';
 
@@ -239,20 +239,32 @@
             <div class="border p-4 rounded-lg bg-gray-50 border-gray-200">
                 <p class="block text-sm font-semibold text-gray-700 mb-3">Select Query Mode(s):</p>
                 <div class="grid grid-cols-2 gap-3 sm:grid-cols-3"> 
+                    <!-- makes Donor Name checkbox -->
                     <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
                         <input type="checkbox" name="query_type" value="donor_name" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
                         <span class="ml-2 text-sm font-medium text-gray-700">Donor by Name</span>
                     </label>
-                    </div>
+                    <!-- makes Donor events checkbox -->
+                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
+                        <input type="checkbox" name="query_type" value="donor_events" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
+                        <span class="ml-2 text-sm font-medium text-gray-700">Donor events</span>
+                    </label>
+                    
+                </div>
             </div>
 
             <div class="space-y-4" id="dynamic-inputs">
-
+                    <!-- inputs needed for 'donor_name' -->
                 <div class="query-input-container hidden" data-query-type="donor_name">
                     <label for="donor-name-input-name" class="block text-sm font-semibold text-gray-700 mb-2">Donor Name (First or First & Last)</label>
                     <input type="text" id="donor-name-input-name" name="donor_name_query_name" placeholder="e.g., Jane Doe" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
                 </div>
-                
+                    <!-- inputs needed for 'donor_events' -->
+                <div class="query-input-container hidden" data-query-type="donor_events">
+                    <label for="donor-name-input-events" class="block text-sm font-semibold text-gray-700 mb-2">Donor Name for Events (First or First & Last)</label>
+                    <input type="text" id="donor-name-input-events" name="donor_name_query_events" placeholder="e.g., Jane Doe" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                </div>
+                    <!-- No inputs needed for 'all_donors' -->
                 <div class="query-input-container hidden" data-query-type="all_donors">
                     <p class="text-sm text-gray-500 p-2 border border-gray-200 rounded-lg bg-gray-50">This returns a list of **ALL** donors because no specific criteria were selected. Click "Execute Query".</p>
                 </div>
