@@ -101,33 +101,6 @@ function reset_password($id, $newPass) {
 	return $result;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Delete a single check-in/check-out pair as defined by the given parameters */
-
-
-/*@@@ end Thomas */
-
-
-/*
- * Updates the profile picture link of the corresponding
- * id.
- */
-
-
-
-
 /*
  * @return all rows from dbPersons table ordered by last name
  * if none there, return false
@@ -194,6 +167,7 @@ function get_new_volunteers_count($dateFrom, $dateTo) {
 
 
 function make_a_person($result_row) {
+	require_once './domain/Person.php';
 	$thePerson = new Person(
 		$result_row['id'],
 		$result_row['password'],
@@ -353,8 +327,3 @@ function get_name_from_id($id) {
 	mysqli_close($connection);
 	return $row['first_name'] . ' ' . $row['last_name'];
 }
-
-
-
-
-
