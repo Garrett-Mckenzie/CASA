@@ -1,0 +1,41 @@
+html {
+  font-family: "Lucida Console", "Consola", "Sans Serif";
+}
+
+.display {
+  list-style-type: none;
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+td {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+td .info {
+  padding-right: 1em;
+}
+#popup{
+  position:fixed;
+  top:50%;
+  left:50%;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #222;
+  background-color: #f5f5f5;
+  backdrop-filter: blur(5px);
+  border-radius: 10px;
+  display: flex;
+}
+#popup p{
+  color: #00447b;
+}
+#popup a:active, #popup a:visited{
+  color: #d90009;
+  align-content: center;
+  margin-left: 5px;
+}
+#popup button{
+  border-style:solid;
+  border-width:2px;
+}
