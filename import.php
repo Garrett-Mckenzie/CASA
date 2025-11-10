@@ -83,8 +83,36 @@
                 <table></table>
             </nav>
         </header>
-        <main>
-            <form action="python/ImportHandler.php" method="post" enctype="">
+ <?php
+		$status = -1;
+		if (array_key_exists("success" , $_GET)){
+						$status =$_GET["success"];	
+		}
+
+		$message = "";
+		if ($status == 0){
+						$message = "There was a problem importing the file no information has been put into the storage system.";
+		}
+		else if ($status == 1){
+						$message = "Import attempt has been made! The only information/files that have not been imported are mentioned below.";
+		}
+		
+		if ($status == 1){
+			echo "<div><b>".$message."</b></div>";
+			$message = "";
+			if (isset($_SESSION["importStatus"])){
+							foreach ($_SESSION["importStatus"] as $st){
+											$message = $message.$st."<br/>";
+							}
+							echo "<div>".$message."</div>";
+			}
+			else{
+				echo "<div>Could not retrieve import report</div>";
+			}
+		}		
+?>
+       <main>
+            <form action="python/ImportHandler.php" method="post" enctype="multipart/form-data">
                 <input type="file" name="files[]" multiple="multiple" onchange="displayImport(event)">
                 <ul id="fileDisplay" class="display"></ul>
                 <button type="submit">Import</button>

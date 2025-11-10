@@ -1,83 +1,205 @@
-
 try:
-    from importMeEthan import * #must come before importMeGarrett
+    from importMeEthan import *  # must come before importMeGarrett
     from importMeGarrett import *
     import time
+    import traceback
 
-    #get options as specified by the user
+    # ---------------------------------------------------------------
+    # ARGUMENTS & CONNECTION
+    # ---------------------------------------------------------------
     args = getArgs()
-    
-    #connect to database
 
-    #args['os'] = 'l'
     if 'os' in args.keys() and args['os'] == 'w':
         conn = winConnect()
     else:
         conn = macConnect()
     cur = conn.cursor()
 
-    #Make the pdf object
-    name = None
+    # ---------------------------------------------------------------
+    # PDF INIT
+    # ---------------------------------------------------------------
     if "reportName" not in args.keys():
-        time = str(datetime.now())
-        date = time[0:time.index(" ")].replace("-","_")
-        time = time[time.index(" ") + 1 : time.index(".")].replace(":","_")
-        name = "NotNamed_"+date+time
-    elif "reportName" in args.keys():
-        name = args["reportName"]
+        timeNow = str(datetime.now())
+        date = timeNow[0:timeNow.index(" ")].replace("-", "_")
+        hour = timeNow[timeNow.index(" ") + 1:timeNow.index(".")].replace(":", "_")
+        name = "NotNamed_" + date + "_" + hour
     else:
-        raise Exception("bad filename")
-    pdf = PDF(name); 
+        name = args["reportName"]
 
-    """
-    Everything below is example of using the methods of the pdf class
-    to write to the pdf. Replace this shiii with yo analysis fool.
-    """ 
-    #Insert a title
-    pdf.insertTitle("HELLO CASA PEOPLE THIS IS AN EXAMPLE")
+    pdf = PDF(name)
+    pdf.insertTitle("CASA Donations & Fundraising Report")
 
-    #Insert a subheading
-    pdf.insertSubheading("This is a Subheading")
-
-    #Insert a series of paragraphs
-    pdf.insertParagraphs(["CASA is a very cool organization and we are excited to be working with them. Sea of Thieves is also cool. It is a very fun video game where you drive a BOAT around and dig up treasure."])
-
-    #Insert a single paragraph
-    pdf.insertParagraph("Hey would you look at that we can have multiple paragraphs in a document isnt that cool. I am now going to say gibberish to demonstrate is working. odcnapidcnaipsdcnapisdjcasdc asdic asdc asc nqic asc adc iadcp ad apnc ap apicj jdcn apdijc a.")
-    #Insert a table (make sure to include header row in the matrix boy)
-    pdf.insertSubheading("Hey a table thats cool!!")
-    data = [["Money","Donors"],[1,10],[2,20],[3,30],[4,40],[5,50]]
-    cellWidths = [70,70]
-    pdf.insertTable(data,cellWidths)
-
-    #Insert a graph
-    #data = pd.DataFrame({"Height":[1,2,3,4,5,6,7,8,9,10],"Width":[20,44,60,81,10,12,14,16,18,20]})
-    #sns.scatterplot(data=data,x="Height",y="Width")
-
-    #"fundraiser completion % for each event"
-    cur.execute("select id,name, goalAmount from dbevents where goalAmount is not null")
-    rows1 = cur.fetchall()
-    cur.execute("select amount, eventID from donations where amount is not null and eventID is not null")
-    rows2 = cur.fetchall()
-
-    cur.execute("select date from donations where date is not null")
+    # ---------------------------------------------------------------
+    # DATA QUERIES
+    # ---------------------------------------------------------------
+    cur.execute("SELECT date FROM donations WHERE date IS NOT NULL")
     donationDates = cur.fetchall()
 
-    fig2 = chartNumDonations(donationDates,"y","hist",12)
-    pdf.insertGraph(4,3,1) 
-    fig1 = chartNumDonations(donationDates,"y","line",12)
-    pdf.insertGraph(4,3,2)
-    fig3 = chartFundraiserGoals(rows1,rows2)
-    pdf.insertGraph(4,3,3)
-    
-    #make the pdf (THIS MUST BE CALLED LAST)
-    pdf.buildPDF()
+    cur.execute("SELECT * FROM donors")
+    donorRows = cur.fetchall()
 
-    """
-    This part is mandatory no touchie
-    """
+    cur.execute("SELECT amount FROM donations WHERE amount IS NOT NULL")
+    donationAmounts = cur.fetchall()
+
+    cur.execute("SELECT amount, date FROM donations WHERE date IS NOT NULL")
+    amountDate = cur.fetchall()
+
+    cur.execute("SELECT donorID, MIN(STR_TO_DATE(date,'%m/%d/%Y')) AS date FROM donations WHERE date IS NOT NULL GROUP BY donorID ORDER BY date")
+    donorFirstDates = cur.fetchall()
+
+    cur.execute("SELECT id, name, goalAmount FROM dbevents WHERE goalAmount IS NOT NULL")
+    eventRows = cur.fetchall()
+
+    cur.execute("SELECT amount, eventID FROM donations WHERE amount IS NOT NULL AND eventID IS NOT NULL")
+    donationEventRows = cur.fetchall()
+
+    cur.execute("""
+    SELECT d.id AS donorID, d.first, d.last, dn.amount
+    FROM donations AS dn
+    JOIN donors AS d ON dn.donorID = d.id
+    """)
+    donorAmountRows = cur.fetchall()
+
+    cur.execute("""SELECT d.id AS donorID, d.state, SUM(dn.amount)
+            FROM donations AS dn
+            JOIN donors AS d ON dn.donorID = d.id
+            GROUP BY state""")
+    donorSumByState = cur.fetchall()
+
+    cur.execute("""SELECT d.id AS donorID, d.zip, SUM(dn.amount)
+            FROM donations AS dn
+            JOIN donors AS d ON dn.donorID = d.id
+            GROUP BY zip""")
+    donorSumByZip = cur.fetchall()
+
+    # ---------------------------------------------------------------
+    # SECTION 1: Overview Stats
+    # ---------------------------------------------------------------
+    pdf.insertSubheading("1. Overview of CASA Donations")
+
+    totals = numDonationsOverTime(donationDates)
+    pdf.insertParagraphs([
+        f"In the last month, CASA received {totals[0]} donations.",
+        f"In the last quarter, {totals[1]} donations were recorded.",
+        f"In the last year, {totals[2]} donations were recorded."
+    ])
+
+    avg = avgDonation(donationAmounts)
+    med = medDonation(donationAmounts)
+    donors = totalDonors(donorRows)
+    total = totalRaised(amountDate, "a", 0)
+
+    pdf.insertParagraphs([
+        f"CASA currently has {donors} total donors.",
+        f"The average donation amount is ${avg}.",
+        f"The median donation amount is ${med}.",
+        f"The total raised all-time is ${total}."
+    ])
+
+    # ---------------------------------------------------------------
+    # SECTION 2: Growth & Trends
+    # ---------------------------------------------------------------
+    pdf.insertSubheading("2. Growth & Trends")
+
+    yGrowth = donationGrowth(donationDates, "y")
+    qGrowth = donationGrowth(donationDates, "q")
+
+    pdf.insertParagraphs([
+        f"Year-over-year donation growth rate: {yGrowth}%.",
+        f"Quarter-over-quarter donation growth rate: {qGrowth}%."
+    ])
+
+    fig_hist = chartNumDonations(donationDates, "y", "hist", 1)
+    pdf.insertGraph(4, 3, 1)
+
+    fig_line = chartNumDonations(donationDates, "y", "line", 1)
+    pdf.insertGraph(4, 3, 2)
+
+    # ---------------------------------------------------------------
+    # SECTION 3: Fundraiser Performance
+    # ---------------------------------------------------------------
+    pdf.insertSubheading("3. Fundraiser Performance")
+
+    completionRate = totalCompletion(eventRows, donationEventRows)
+    pdf.insertParagraph(f"Overall, {completionRate}% of CASA fundraisers have achieved or exceeded their fundraising goals.")
+
+    fig_fund = chartFundraiserGoals(eventRows, donationEventRows)
+    pdf.insertGraph(4, 3, 3)
+
+    completionDF = goalAchievementRate(eventRows, donationEventRows)
+    pdf.insertTable(
+        [["Event Name", "Completion (%)"]] +
+        completionDF[["name", "completion"]].values.tolist(),
+        [175, 100]
+    )
+
+    # ---------------------------------------------------------------
+    # SECTION 4: Donor Insights
+    # ---------------------------------------------------------------
+    pdf.insertSubheading("4. Donor Insights")
+
+    top = topDonors(donorAmountRows, top_n=10)
+    pdf.insertParagraph("Top 10 donors by total contributions:")
+
+    pdf.insertTable(
+        [["Donor Name", "Total Donated ($)"]] +
+        top[["fullName", "totalAmount"]].values.tolist(),
+        [175, 100]
+    )
+
+    newDonors = donorAcqRate(donorFirstDates)
+    pdf.insertParagraphs([
+        f"New donors in the past month: {newDonors[0]}",
+        f"New donors in the past quarter: {newDonors[1]}",
+        f"New donors in the past year: {newDonors[2]}"
+    ])
+
+    # ---------------------------------------------------------------
+    # SECTION 5: Visual Analytics
+    # ---------------------------------------------------------------
+    pdf.insertPageBreak()
+    pdf.insertSubheading("5. Visual Analytics")
+
+    fig_pareto = chartParetoTopDonors(donorAmountRows,10)
+    pdf.insertGraph(4, 3, 4)
+
+    fig_funnel = chartDonorFunnel(donorAmountRows)
+    pdf.insertGraph(4, 3, 5)
+    pdf.insertParagraph(
+        "Note: repeat donor is a donor who has donated more than once. Major donors are those who have donated 5 or more times "
+    )
+
+    fig_geo = plotGeoDistributionBar(donorSumByState)
+    pdf.insertGraph(4, 3, 6)
+    pdf.insertParagraph(
+        "Note: ..."
+    )
+
+    fig_geo = plotGeoDistributionBar(donorSumByZip,"zipcode")
+    pdf.insertGraph(4, 3, 7)
+    pdf.insertParagraph(
+        "Note: ..."
+    )
+
+    # ---------------------------------------------------------------
+    # SECTION 6: Summary
+    # ---------------------------------------------------------------
+    pdf.insertPageBreak()
+    pdf.insertSubheading("6. Summary and Next Steps")
+    pdf.insertParagraph(
+        "The data indicates that CASA’s donor base continues to grow steadily, "
+        "with healthy year-over-year growth and a strong base of recurring donors. "
+        "However, the fundraiser completion rate suggests opportunities for better "
+        "goal calibration and follow-up engagement strategies. Efforts should focus "
+        "on converting first-time donors into repeat supporters and increasing major gifts."
+    )
+
+    # ---------------------------------------------------------------
+    # BUILD REPORT
+    # ---------------------------------------------------------------
+    pdf.buildPDF()
     print(f"{name}.pdf")
-   
+
 except Exception as e:
     traceback.print_exc()
     raise e

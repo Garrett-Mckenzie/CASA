@@ -410,38 +410,21 @@
     </script>
 <!--END TEST-->
 </head>
-<link rel="icon" type="image/x-icon" href="images/RAPPAHANNOCK_v_RedBlue.png">
+
 <!-- ONLY SUPER ADMIN WILL SEE THIS -->
 <?php if ($_SESSION['access_level'] >= 2): ?>
 <body>
 <?php require 'header.php';?>
 
-    <!-- Dummy content to enable scrolling -->
-    <div style="margin-top: 0px; padding: 30px 20px;">
-        <h2><b>Welcome <?php echo $person->get_name() ?>!</b> Let's get started.</h2>
-    </div>
-
-            <?php if (isset($_GET['pcSuccess'])): ?>
-                <div class="happy-toast">Password changed successfully!</div>
-            <?php elseif (isset($_GET['deleteService'])): ?>
-                <div class="happy-toast">Service successfully removed!</div>
-            <?php elseif (isset($_GET['serviceAdded'])): ?>
-                <div class="happy-toast">Service successfully added!</div>
-            <?php elseif (isset($_GET['animalRemoved'])): ?>
-                <div class="happy-toast">Animal successfully removed!</div>
-            <?php elseif (isset($_GET['locationAdded'])): ?>
-                <div class="happy-toast">Location successfully added!</div>
-            <?php elseif (isset($_GET['deleteLocation'])): ?>
-                <div class="happy-toast">Location successfully removed!</div>
-            <?php elseif (isset($_GET['registerSuccess'])): ?>
-                <div class="happy-toast">Volunteer registered successfully!</div>
-            <?php endif ?>
-
-    <div class="full-width-bar">
-    <div class="content-box">
-        <img src="images/blank-white-background.jpg"/>
-        <div class="small-text">Look at the data.</div>
-        <div class="large-text">Generate Report</div>
+		<!-- Dummy content to enable scrolling -->
+		<div style="margin-top: 0px; padding: 30px 20px;">
+				<h2><b>Welcome <?php echo $person->get_name() ?>!</b> Let's get started.</h2>
+		</div>
+		<div class="full-width-bar">
+		<div class="content-box">
+				<img src="images/blank-white-background.jpg" style="filter: contrast(50%);"/>
+				<div class="small-text">Analyze the data!</div>
+				<div class="large-text">Generate Report</div>
 <button class="circle-arrow-button" onclick="window.location.href='reportGeneration/index.php'">
     <span class="button-text">Go</span>
     <div class="circle">&gt;</div>

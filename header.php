@@ -744,7 +744,7 @@ date_default_timezone_set('America/New_York');
                     <div class="icon">
                         <img src="images/usaicon.png" alt="User Icon">
                         <div class="dropdown">
-                            <a href="changePassword.php" style="text-decoration: none;"><div>Change Password</div></a>
+                            <a href="index.php" style="text-decoration: none;"><div>Reload Page</div></a>
                             <a href="logout.php" style="text-decoration: none;"><div>Log Out</div></a>
                         </div>
                     </div>
