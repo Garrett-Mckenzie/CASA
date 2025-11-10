@@ -67,57 +67,70 @@
     <body>
         <?php require_once('header.php') ?>
         <h1>Import</h1>
-        <div class="full-width-bar-sub">
-                        <div class="content-box-test" onclick="window.location.href=''">
-                            <div class="icon-overlay">
-                                <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
-                            </div>
-                            <img class="background-image" src="images/blank-white-background.jpg" />
-                            <div class="large-text-sub">Import Files</div>
-                            <button class="arrow-button">→</button>
-                        </div>
-        </div>
         <header>
             <nav>
                 <table></table>
             </nav>
         </header>
- <?php
-		$status = -1;
-		if (array_key_exists("success" , $_GET)){
+            <?php
+		        $status = -1;
+		        if (array_key_exists("success" , $_GET)){
 						$status =$_GET["success"];	
-		}
+		        }
 
-		$message = "";
-		if ($status == 0){
+		        $message = "";
+		        if ($status == 0){
 						$message = "There was a problem importing the file no information has been put into the storage system.";
-		}
-		else if ($status == 1){
+		        }
+		        else if ($status == 1){
 						$message = "Import attempt has been made! The only information/files that have not been imported are mentioned below.";
-		}
+		        }
 		
-		if ($status == 1){
-			echo "<div><b>".$message."</b></div>";
-			$message = "";
-			if (isset($_SESSION["importStatus"])){
-							foreach ($_SESSION["importStatus"] as $st){
+		        if ($status == 1){
+		        	echo "<div><b>".$message."</b></div>";
+		        	$message = "";
+                    if (isset($_SESSION["importStatus"])){
+                                foreach ($_SESSION["importStatus"] as $st){
 											$message = $message.$st."<br/>";
 							}
 							echo "<div>".$message."</div>";
-			}
-			else{
-				echo "<div>Could not retrieve import report</div>";
-			}
-		}		
-?>
-       <main>
-            <form action="python/ImportHandler.php" method="post" enctype="multipart/form-data">
-                <input type="file" name="files[]" multiple="multiple" onchange="displayImport(event)">
-                <ul id="fileDisplay" class="display"></ul>
-                <button type="submit">Import</button>
-            </form>
-        </main>
-    <footer class="footer" style="footer">
+			    }
+			    else{
+				    echo "<div>Could not retrieve import report</div>";
+			    }
+		        }
+                 ?>
+                <main>
+                    <div class="full-width-bar-sub">
+                        <form
+                            class="content-box-test"
+                            action="python/ImportHandler.php"
+                            method="post"
+                            enctype="multipart/form-data"
+                            onsubmit="return validateFiles();"
+                        >
+                            <div class="icon-overlay">
+                                <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
+                            </div>
+                            <img class="background-image" src="images/blank-white-background.jpg" />
+
+                            <div class="large-text-sub">Import Files</div>
+
+                            <input
+                                type="file"
+                                name="files[]"
+                                multiple
+                                onchange="displayImport(event)"
+                                class="file-input"
+                                style="margin-top: 10px;"
+                            >
+                            <ul id="fileDisplay" class="display"></ul>
+
+                            <button type="submit" class="arrow-button">→</button>
+                        </form>
+                    </div>
+                </main>
+        <footer class="footer" style="footer">
             <!-- Left Side: Logo & Socials -->
             <div class="footer-left">
                 <img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">
