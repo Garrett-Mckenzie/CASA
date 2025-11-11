@@ -59,8 +59,6 @@ def insertDonation(donationData,donation_columns,conn,cursor):
                     executeTup = (first,last,email)
                     cursor.execute(query,executeTup)
                     donorId = cursor.fetchone()
-                    cursor.close()
-                    cursor = conn.cursor()
                     if donorId == None:
                         goodInsert  = 0
                         print(f"Donor {first + ' ' + last} was not found on row {i+1}")
@@ -76,8 +74,6 @@ def insertDonation(donationData,donation_columns,conn,cursor):
                 executeTup = (eventName,)
                 cursor.execute(query,executeTup)
                 eventID = cursor.fetchone()
-                cursor.close()
-                cursor = conn.cursor()
                 if eventID == None:
                     print(f"Event {eventName} was not found in our database on row {i}")
                     goodInsert = 1
@@ -92,13 +88,9 @@ def insertDonation(donationData,donation_columns,conn,cursor):
                 queryValues = queryValues[0:-1]
                 query = f"INSERT INTO donations (" + queryCols  + ") VALUES (" + queryValues + ")" 
                 executeTup = tuple(insertData)
-                print(query)
-                print(executeTup)
                 try:
                     #adds insert to transaction
                     cursor.execute(query,executeTup)
-                    cursor.close()
-                    cursor = conn.cursor()
                 except Exception as e:
                     print(e)
                     print(f"Could not insert row {i+1}")
@@ -108,6 +100,8 @@ def insertDonation(donationData,donation_columns,conn,cursor):
         #attempts transaction commit
         try:
             conn.commit()
+            cursor.close()
+            conn.close()
             print("The data for donations was commited except for rows where otherwise specified.")
         except Exception as e:
             conn.rollback()
@@ -147,8 +141,6 @@ def insertEvent(eventData,event_columns,conn,cursor):
             try:
                 #adds insert to transaction
                 cursor.execute(query,executeTup)
-                cursor.close()
-                cursor = conn.cursor()
             except Exception as e:
                 print(e)    
                 print(f"Could not insert row {i+1}")
@@ -158,6 +150,8 @@ def insertEvent(eventData,event_columns,conn,cursor):
     #attempts transaction commit
     try:
         conn.commit()
+        cursor.close()
+        conn.close()
         print("The data for donors was commited except for rows where otherwise specified.")
     except Exception as e:
         conn.rollback()
@@ -197,8 +191,6 @@ def insertDonor(donorData,donor_columns,conn,cursor):
             try:
                 #adds insert to transaction
                 cursor.execute(query,executeTup)
-                cursor.close()
-                cursor = conn.cursor()
             except Exception as e:
                 print(e)    
                 print(f"Could not insert row {i+1}")
@@ -208,7 +200,8 @@ def insertDonor(donorData,donor_columns,conn,cursor):
     #attempts transaction commit
     try:
         conn.commit()
+        cursor.close()
+        conn.close()
         print("The data for donors was commited except for rows where otherwise specified.")
     except Exception as e:
         conn.rollback()
-        print("There was a problem")
