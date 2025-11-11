@@ -69,9 +69,6 @@
         <?php require_once('header.php') ?>
         <h1>Import</h1>
         <header>
-            <nav>
-                <table></table>
-            </nav>
         </header>
  <?php
 		$status = -1;

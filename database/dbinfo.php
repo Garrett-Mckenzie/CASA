@@ -34,4 +34,5 @@ function connect() {
 	if (!$selected) { echo "database not selected"; return mysqli_error($con); }
 	else return $con;
 }
+
 ?>

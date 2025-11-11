@@ -19,7 +19,6 @@ if (isset($_SESSION['_id'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <?php require_once('universal.inc') ?>
     <link rel="stylesheet" href="css/messages.css"></link>
     <script src="js/messages.js"></script>
     <title>Rappahannock CASA | Export</title>

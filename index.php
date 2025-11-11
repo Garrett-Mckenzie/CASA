@@ -401,21 +401,38 @@ function toggleInfo(event) {
 </script>
 <!--END TEST-->
 </head>
-
+<link rel="icon" type="image/x-icon" href="images/RAPPAHANNOCK_v_RedBlue.png">
 <!-- ONLY SUPER ADMIN WILL SEE THIS -->
 <?php if ($_SESSION['access_level'] >= 2): ?>
 <body>
 <?php require 'header.php';?>
 
-		<!-- Dummy content to enable scrolling -->
-		<div style="margin-top: 0px; padding: 30px 20px;">
-				<h2><b>Welcome <?php echo $person->get_name() ?>!</b> Let's get started.</h2>
-		</div>	
-		<div class="full-width-bar">
-		<div class="content-box">
-				<img src="images/blank-white-background.jpg" style="filter: contrast(50%);"/>
-				<div class="small-text">Analyze the data!</div>
-				<div class="large-text">Generate Report</div>
+    <!-- Dummy content to enable scrolling -->
+    <div style="margin-top: 0px; padding: 30px 20px;">
+        <h2><b>Welcome <?php echo $person->get_name() ?>!</b> Let's get started.</h2>
+    </div>
+
+            <?php if (isset($_GET['pcSuccess'])): ?>
+                <div class="happy-toast">Password changed successfully!</div>
+            <?php elseif (isset($_GET['deleteService'])): ?>
+                <div class="happy-toast">Service successfully removed!</div>
+            <?php elseif (isset($_GET['serviceAdded'])): ?>
+                <div class="happy-toast">Service successfully added!</div>
+            <?php elseif (isset($_GET['animalRemoved'])): ?>
+                <div class="happy-toast">Animal successfully removed!</div>
+            <?php elseif (isset($_GET['locationAdded'])): ?>
+                <div class="happy-toast">Location successfully added!</div>
+            <?php elseif (isset($_GET['deleteLocation'])): ?>
+                <div class="happy-toast">Location successfully removed!</div>
+            <?php elseif (isset($_GET['registerSuccess'])): ?>
+                <div class="happy-toast">Volunteer registered successfully!</div>
+            <?php endif ?>
+
+    <div class="full-width-bar">
+    <div class="content-box">
+        <img src="images/blank-white-background.jpg"/>
+        <div class="small-text">Look at the data.</div>
+        <div class="large-text">Generate Report</div>
 <button class="circle-arrow-button" onclick="window.location.href='reportGeneration/index.php'">
 		<span class="button-text">Go</span>
 		<div class="circle">&gt;</div>
@@ -461,7 +478,7 @@ require_once('database/dbPersons.php');
 						<button class="arrow-button">→</button>
 				</div>
 
-			<div class="content-box-test" onclick="window.location.href='emailgen.php'">
+			<div class="content-box-test" onclick="window.location.href='ai-email-gen'">
 						<div class="icon-overlay">
 								<img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
 						</div>
@@ -470,18 +487,16 @@ require_once('database/dbPersons.php');
 						<button class="arrow-button">→</button>
 				</div>
 
-			<div class="content-box-test" onclick="window.location.href='Search-donor-db/index.php'">
-				<div class="icon-overlay">
-			<img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
-				</div>
-				<img class="background-image" src="images/blank-white-background.jpg" />
-				<div class="large-text-sub">Search donors</div>
-				<button class="arrow-button">→</button>
-
-		</div>
-			</div>
-		</div>
-
+        <div class="content-box-test" onclick="window.location.href='Search-donor-db/index.php'">
+            <div class="icon-overlay">
+                <img style="border-radius: 5px;" src="images/magnifying-glass.svg" alt="Search Icon">
+            </div>
+            <img class="background-image" src="images/blank-white-background.jpg" />
+            <div class="large-text-sub">Search</div>
+            <button class="arrow-button">→</button>
+            
+        </div>
+    </div>
 
 <div style="width: 90%; /* Stops before page ends */
 						height: 100%;
