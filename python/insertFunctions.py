@@ -3,7 +3,6 @@ from importlib.metadata import distributions
 from pathlib import Path
 from credentials import HOST, USER, PASSWORD, DATABASE
 import pandas as pd
-import mariadb
 import random
 import os
 import numpy as np
@@ -56,26 +55,29 @@ def insertDonation(donationData,donation_columns,conn,cursor):
                     insertCol.append("donorID")
                     insertData.append(999)
                 else:    
-                    query = "SELECT id FROM donors WHERE first = ? AND last = ? AND email = ?"
+                    query = "SELECT id FROM donors WHERE first = %s AND last = %s AND email = %s"
                     executeTup = (first,last,email)
                     cursor.execute(query,executeTup)
                     donorId = cursor.fetchone()
+                    cursor.close()
+                    cursor = conn.cursor()
                     if donorId == None:
                         goodInsert  = 0
                         print(f"Donor {first + ' ' + last} was not found on row {i+1}")
                     else:
                         insertCol.append("donorID")
                         insertData.append(donorId[0])
-
             #deal with donation event relationship
             #need to write this part 
             if ("eventName" in insertCol and insertData[insertCol.index("eventName")] != ""):
                 j = insertCol.index("eventName")
                 eventName = insertData.pop(j)
-                query = "SELECT id FROM events WHERE name = ?"
+                query = "SELECT id FROM events WHERE name = %s"
                 executeTup = (eventName,)
                 cursor.execute(query,executeTup)
                 eventID = cursor.fetchone()
+                cursor.close()
+                cursor = conn.cursor()
                 if eventID == None:
                     print(f"Event {eventName} was not found in our database on row {i}")
                     goodInsert = 1
@@ -86,13 +88,17 @@ def insertDonation(donationData,donation_columns,conn,cursor):
             if goodInsert:
                 #builds the query
                 queryCols = ",".join(insertCol)    
-                queryValues = "?,"*len(insertCol)
+                queryValues = "%s,"*len(insertCol)
                 queryValues = queryValues[0:-1]
                 query = f"INSERT INTO donations (" + queryCols  + ") VALUES (" + queryValues + ")" 
                 executeTup = tuple(insertData)
+                print(query)
+                print(executeTup)
                 try:
                     #adds insert to transaction
                     cursor.execute(query,executeTup)
+                    cursor.close()
+                    cursor = conn.cursor()
                 except Exception as e:
                     print(e)
                     print(f"Could not insert row {i+1}")
@@ -134,13 +140,15 @@ def insertEvent(eventData,event_columns,conn,cursor):
         if goodInsert:
             #builds the query
             queryCols = ",".join(insertCol)    
-            queryValues = "?,"*len(insertCol)
+            queryValues = "%s,"*len(insertCol)
             queryValues = queryValues[0:-1]
             query = f"INSERT INTO events (" + queryCols  + ") VALUES (" + queryValues + ")" 
             executeTup = tuple(insertData)
             try:
                 #adds insert to transaction
                 cursor.execute(query,executeTup)
+                cursor.close()
+                cursor = conn.cursor()
             except Exception as e:
                 print(e)    
                 print(f"Could not insert row {i+1}")
@@ -182,13 +190,15 @@ def insertDonor(donorData,donor_columns,conn,cursor):
         if goodInsert:
             #builds the query
             queryCols = ",".join(insertCol)    
-            queryValues = "?,"*len(insertCol)
+            queryValues = "%s,"*len(insertCol)
             queryValues = queryValues[0:-1]
             query = f"INSERT INTO donors (" + queryCols  + ") VALUES (" + queryValues + ")" 
             executeTup = tuple(insertData)
             try:
                 #adds insert to transaction
                 cursor.execute(query,executeTup)
+                cursor.close()
+                cursor = conn.cursor()
             except Exception as e:
                 print(e)    
                 print(f"Could not insert row {i+1}")

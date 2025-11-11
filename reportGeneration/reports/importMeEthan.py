@@ -35,8 +35,8 @@ try:
     import sys
     import os
     import traceback
-    import mariadb
     from datetime import datetime
+    import mariadb
 
 except Exception as e:
     print(str(e))

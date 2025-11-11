@@ -5,34 +5,21 @@ from importlib.metadata import distributions
 from pathlib import Path
 from credentials import HOST, USER, PASSWORD, DATABASE
 import pandas as pd
-import mariadb
 import random
 import os
 import numpy as np
 from insertFunctions import *
+import mysql.connector
 
 SYSTEM = os.name
 
-def winConnect():
+def connect():
     try:
-        conn = mariadb.connect(
+        conn = mysql.connector.connect(
                 user = USER,
                 password = PASSWORD,
                 host = HOST,
                 database = DATABASE
-                )
-        return conn
-    except Exception as e:
-        raise e
-
-def macConnect():
-    try:
-        conn = mariadb.connect(
-                user=USER,
-                password=PASSWORD,
-                host=HOST,
-                database=DATABASE,
-                unix_socket="/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock"
                 )
         return conn
     except Exception as e:
@@ -82,10 +69,11 @@ def import_excel():
     try:
         #make the cursour and connection
         conn = None
-        if SYSTEM =='posix':
-            conn = macConnect()
-        else:
-            conn = winConnect()
+        try:
+            conn = connect()
+        except Exception as e:
+            print(e)
+            raise(e)
         cursor = conn.cursor()
 
 
