@@ -1,0 +1,35 @@
+[11-Nov-2025 13:04:13 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'casadb'@'localhost' (using password: YES) in /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php:31
+Stack trace:
+#0 /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php(31): mysqli_connect('localhost', 'casadb', Object(SensitiveParameterValue), 'casadb')
+#1 /home/customer/www/jenniferp216.sg-host.com/public_html/include/input-validation.php(52): connect()
+#2 /home/customer/www/jenniferp216.sg-host.com/public_html/login.php(24): sanitize(Array, Array)
+#3 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php on line 31
+[11-Nov-2025 13:08:56 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'casadb'@'localhost' (using password: YES) in /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php:31
+Stack trace:
+#0 /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php(31): mysqli_connect('localhost', 'casadb', Object(SensitiveParameterValue), 'casadb')
+#1 /home/customer/www/jenniferp216.sg-host.com/public_html/include/input-validation.php(52): connect()
+#2 /home/customer/www/jenniferp216.sg-host.com/public_html/login.php(24): sanitize(Array, Array)
+#3 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php on line 31
+[11-Nov-2025 13:09:04 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'casadb'@'localhost' (using password: YES) in /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php:31
+Stack trace:
+#0 /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php(31): mysqli_connect('localhost', 'casadb', Object(SensitiveParameterValue), 'casadb')
+#1 /home/customer/www/jenniferp216.sg-host.com/public_html/include/input-validation.php(52): connect()
+#2 /home/customer/www/jenniferp216.sg-host.com/public_html/login.php(24): sanitize(Array, Array)
+#3 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php on line 31
+[11-Nov-2025 13:11:39 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'casadb'@'localhost' (using password: YES) in /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php:31
+Stack trace:
+#0 /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php(31): mysqli_connect('localhost', 'casadb', Object(SensitiveParameterValue), 'casadb')
+#1 /home/customer/www/jenniferp216.sg-host.com/public_html/include/input-validation.php(52): connect()
+#2 /home/customer/www/jenniferp216.sg-host.com/public_html/login.php(24): sanitize(Array, Array)
+#3 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php on line 31
+[11-Nov-2025 13:13:46 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'casadb'@'localhost' (using password: YES) in /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php:31
+Stack trace:
+#0 /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php(31): mysqli_connect('localhost', 'casadb', Object(SensitiveParameterValue), 'casadb')
+#1 /home/customer/www/jenniferp216.sg-host.com/public_html/include/input-validation.php(52): connect()
+#2 /home/customer/www/jenniferp216.sg-host.com/public_html/login.php(24): sanitize(Array, Array)
+#3 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/database/dbinfo.php on line 31
