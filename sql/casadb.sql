@@ -30,11 +30,11 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS `associations`; 
 CREATE TABLE `associations` (
-	`eventID` int DEFAULT NULL,
-	`donationID` int DEFAULT NULL,
-	`donorID` int DEFAULT NULL,
-	`emailID` int DEFAULT NULL,
-	`filePath` varchar(256) DEFAULT NULL,
+	`eventID` int,
+	`donationID` int,
+	`donorID` int,
+	`emailID` int,
+	`filePath` varchar(256),
 	FOREIGN KEY (`eventID`) REFERENCES dbevents(`id`),
 	FOREIGN KEY (`donationID`) REFERENCES donations(`id`),
 	FOREIGN KEY (`donorID`) REFERENCES donors(`id`),
