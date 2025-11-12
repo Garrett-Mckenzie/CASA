@@ -51,7 +51,7 @@ header('Expires: 0');
 				<label><b>Donation Analysis Statistical Complexity</b></label><br/>
 				<input type="radio" name="QuantStatSize" value="all"> All Statistics</input><br/>
 				<input type="radio" name="QuantStatSize" value="simple"> Simplified Statistics</input><br/>
-				<input type="checkbox" name="QuantStatDesc" value="True"> Include Meaning Of Statistics as a Description</input><br/>	
+				<input type="checkbox" name="graphDesc" value="True"> Include Graph Description</input><br/>	
 
 			<!-- Put Other Parts Of The Form In These Divs -->
 			</div>

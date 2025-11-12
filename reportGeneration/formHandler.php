@@ -53,9 +53,9 @@ foreach ($_POST as $key => $value){
 $pyPath = "./reports/makeReport.py";
 
 //linux and mac command (ETHAN's Problem)
-#$venvPath = "../venv/bin/python"; //Venv
+//$venvPath = "../venv/bin/python"; //Venv
 #$Path = "python3"; //No Venv Linux Default Pthon
-#$command =  "$venvPath $pyPath " . implode(" ",$args). " 2>&1";
+//$command =  "$venvPath $pyPath " . implode(" ",$args). " 2>&1";
 
 //Windows command
 $command = "python ".$pyPath." ".implode(" ",$args). " 2>&1";
