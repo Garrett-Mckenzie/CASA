@@ -13,6 +13,13 @@ try:
     cur = conn.cursor(buffered=True)
 
     # ---------------------------------------------------------------
+    # report content control
+    # ---------------------------------------------------------------
+    graphDesc = True
+    if "graphDesc" not in args.keys():
+        graphDesc = False
+
+    # ---------------------------------------------------------------
     # PDF INIT
     # ---------------------------------------------------------------
     if "reportName" not in args.keys():
@@ -69,6 +76,8 @@ try:
             GROUP BY zip""")
     donorSumByZip = cur.fetchall()
 
+    conn.close()
+
     # ---------------------------------------------------------------
     # SECTION 1: Overview Stats
     # ---------------------------------------------------------------
@@ -108,9 +117,17 @@ try:
 
     fig_hist = chartNumDonations(donationDates, "y", "hist", 1)
     pdf.insertGraph(4, 3, 1)
+    if graphDesc:
+        pdf.insertParagraph(
+            "Note: ..."
+        )
 
     fig_line = chartNumDonations(donationDates, "y", "line", 1)
     pdf.insertGraph(4, 3, 2)
+    if graphDesc:
+        pdf.insertParagraph(
+            "Note: ..."
+        )
 
     # ---------------------------------------------------------------
     # SECTION 3: Fundraiser Performance
@@ -122,6 +139,10 @@ try:
 
     fig_fund = chartFundraiserGoals(eventRows, donationEventRows)
     pdf.insertGraph(4, 3, 3)
+    if graphDesc:
+        pdf.insertParagraph(
+            "Note: ..."
+        )
 
     completionDF = goalAchievementRate(eventRows, donationEventRows)
     pdf.insertTable(
@@ -159,24 +180,31 @@ try:
 
     fig_pareto = chartParetoTopDonors(donorAmountRows,10)
     pdf.insertGraph(4, 3, 4)
+    if graphDesc:
+        pdf.insertParagraph(
+            "Note: ..."
+        )
 
     fig_funnel = chartDonorFunnel(donorAmountRows)
     pdf.insertGraph(4, 3, 5)
-    pdf.insertParagraph(
-        "Note: repeat donor is a donor who has donated more than once. Major donors are those who have donated 5 or more times "
-    )
+    if graphDesc:
+        pdf.insertParagraph(
+            "Note: repeat donor is a donor who has donated more than once. Major donors are those who have donated 5 or more times "
+        )
 
     fig_geo = plotGeoDistributionBar(donorSumByState)
     pdf.insertGraph(4, 3, 6)
-    pdf.insertParagraph(
-        "Note: ..."
-    )
+    if graphDesc:
+        pdf.insertParagraph(
+            "Note: ..."
+        )
 
     fig_geo = plotGeoDistributionBar(donorSumByZip,"zipcode")
     pdf.insertGraph(4, 3, 7)
-    pdf.insertParagraph(
-        "Note: ..."
-    )
+    if graphDesc:
+        pdf.insertParagraph(
+            "Note: ..."
+        )
 
     # ---------------------------------------------------------------
     # SECTION 6: Summary
