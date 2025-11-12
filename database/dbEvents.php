@@ -202,7 +202,8 @@ function retrieve_event($id) {
     $result_row = mysqli_fetch_assoc($result);
     // var_dump($result_row);
     $theEvent = make_an_event($result_row);
-//    mysqli_close($con);
+
+    mysqli_close($con);
     return $theEvent;
 }
 
@@ -216,6 +217,7 @@ function retrieve_event2($id) {
     }
     $result_row = mysqli_fetch_assoc($result);
 //    var_dump($result_row);
+    mysqli_close($con);
     return $result_row;
 }
 

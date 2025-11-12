@@ -57,9 +57,9 @@
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Start Date</th>
-                                <th>Start Time</th>
+                                <th>Start Date</th>     
                                 <th style="width:1px">End Date</th>
+                                <th>Start Time</th>
                                 <th style="width:1px">End Time</th>
                                 <th style="width:1px">Fundraiser Goal</th>
                                 <th style="width:1px"></th>
@@ -87,8 +87,8 @@
 
                                         <td><a href='event.php?id=$eventID'>$title</a></td>
                                         <td>$startDate</td>
-                                        <td>$startTime</td>
                                         <td>$endDate</td>
+                                        <td>$startTime</td>
                                         <td>$endTime</td>
                                         <td>$$goalAmount</td>"; //money
                                     
