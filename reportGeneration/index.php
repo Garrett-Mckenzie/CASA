@@ -1,5 +1,11 @@
 <?php
-				$os = NULL;
+header('Cache-Control: no-cache, no-store, must-revalidate');
+header('Pragma: no-cache');
+header('Expires: 0');
+
+?>
+<?php
+					$os = NULL;
 				if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'){
 								$os = "w";
 				}
@@ -14,7 +20,6 @@
 				else{
 								exec("ls reports",$output);
 				}
-				var_dump($output);
 ?>
 
 <!DOCTYPE html>
@@ -77,6 +82,8 @@
 						echo "<td><a target='_blank' href=./reports/".$value.">".$value."</a></td>";
 						echo "<td><input type='checkbox' id =".$value." name=".$value."></input></td>";
 						echo "</tr>";
+					flush();
+					ob_flush();
 					}
 				}
 			?>
