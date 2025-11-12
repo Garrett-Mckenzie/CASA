@@ -14,6 +14,7 @@
 				else{
 								exec("ls reports",$output);
 				}
+				var_dump($output);
 ?>
 
 <!DOCTYPE html>

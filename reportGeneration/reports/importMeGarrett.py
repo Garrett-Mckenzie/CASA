@@ -18,6 +18,7 @@ def numDonationsOverTime(queryRows):
     """
     chungus = []
     for date in queryRows:
+
         if isinstance(date[0], (str)):
             dateObj = datetime.strptime(date[0], "%m/%d/%Y")
             chungus.append(dateObj)
@@ -44,7 +45,7 @@ def numDonationsOverTime(queryRows):
                 qTot += 1
                 if(perchance <= row <= onFleek):
                     mTot += 1
-                        
+    
     return [mTot,qTot,yTot]
     
 
@@ -92,7 +93,6 @@ def medDonation(queryRows):
     # select amount from donations
 
     queryRows = [row[0] for row in queryRows]
-
 
     arrr = np.array(queryRows)
     return np.median(arrr)
@@ -142,6 +142,7 @@ def donationGrowth(queryRows, rType):
 
     donationsDates = []
     for date in queryRows:
+
         if isinstance(date[0], (str)):
             dateObj = datetime.strptime(date[0], "%m/%d/%Y")
             donationsDates.append(dateObj)
