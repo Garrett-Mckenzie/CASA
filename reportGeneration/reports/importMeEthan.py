@@ -36,40 +36,23 @@ try:
     import os
     import traceback
     from datetime import datetime
-    import mariadb
+    import mysql.connector
 
 except Exception as e:
     print(str(e))
 
-
 try:
-    def winConnect():
+    def connect():
         try:
-            conn = mariadb.connect(
-                    user = "casadb",
-                    password = "casadb",
+            conn = mysql.connector.connect(
+                    user = "ueowkedxfqqge",
+                    password = "7zygsg3zaypd",
                     host = "localhost",
-                    database = "casadb"
+                    database = "dbt9ozuchwr5nz"
                     )
             return conn
         except Exception as e:
             raise e
-
-    def macConnect():
-        try:
-            conn = mariadb.connect(
-                    user="casadb",
-                    password="casadb",
-                    host="localhost",
-                    database="casadb",
-                    unix_socket="/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock"
-                    )
-            return conn
-        except Exception as e:
-            raise e
-
-
-
 
     def executeQuery(query,conn):
         try:

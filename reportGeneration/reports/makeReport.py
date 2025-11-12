@@ -1,19 +1,16 @@
+import traceback
 try:
     from importMeEthan import *  # must come before importMeGarrett
     from importMeGarrett import *
     import time
-    import traceback
 
     # ---------------------------------------------------------------
     # ARGUMENTS & CONNECTION
     # ---------------------------------------------------------------
     args = getArgs()
 
-    if 'os' in args.keys() and args['os'] == 'w':
-        conn = winConnect()
-    else:
-        conn = macConnect()
-    cur = conn.cursor()
+    conn = connect()
+    cur = conn.cursor(buffered=True)
 
     # ---------------------------------------------------------------
     # PDF INIT
