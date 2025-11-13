@@ -13,11 +13,61 @@ try:
     cur = conn.cursor(buffered=True)
 
     # ---------------------------------------------------------------
-    # report content control
+    # report content control and global variables
     # ---------------------------------------------------------------
+    startDate = "NoStart"
+    if "startDate" in args.keys():
+        startDate = args["startDate"]
+    
+    endDate = "NoEnd"
+    if "startDate" in args.keys():
+        endDate = args["endDate"]
+
+    DonationStatOverview = True
+    if "DonationStatsOverview" not in args.keys():
+        DonationStatOverview = False
+
+    GrowthAndTrends = True
+    if "GrowthAndTrends" not in args.keys():
+        GrowthAndTrends = False
+    
+    IncludeGraph = True
+    if "IncludeGraph" not in args.keys():
+        IncludeGraph = False
+
+    IncludeTable = True
+    if "IncludeTable" not in args.keys():
+        IncludeTable = False
+
+    NumTopDonors = 10
+    if "NumTopDonors" in args.keys():
+        NumTopDonors = int(args["NumTopDonors"])
+
+    IncludeNewDonors = True
+    if "IncudeNewDonors" not in args.keys():
+        IncludeNewDonors = False
+
+    IncludePareto = True
+    if "IncludePareto" not in args.keys():
+        IncludePareto = False
+
+    IncludeFunnel = True
+    if "IncludeFunnel" not in args.keys():
+        IncludeFunnel = False
+
+    IncludeDonationsByState = True
+    if "IncludeDonationsByState" not in args.keys():
+        IncludeDonationsByState = False
+
+    IncludeSummarySection = True
+    if "IncludeSummarySection" not in args.keys():
+        IncludeSummarySection = False
+
     graphDesc = True
     if "graphDesc" not in args.keys():
         graphDesc = False
+
+    section = 1
 
     # ---------------------------------------------------------------
     # PDF INIT

@@ -35,38 +35,62 @@ header('Expires: 0');
 		<h3 class="mb-3">Report Generator</h3>
 		<hr style = "height: 1px; background-color: black;"></hr>
 		<form id="emailForm" action="./formHandler.php" method="post">
+
 			<div class = "mb-3">
 				<label><b>Name of Report</b></label><br/>
 				<input type = "text" id="reportName" name="reportName"></input>
 			</div>
+
 			<div class="mb-3">	
 				<label><b>Starting Date For Report</b></label><br/>
 				<input type = "datetime-local" id="startDate" name="startDate"></input>
 			</div>
+
 			<div class="mb-3">
 				<label><b>Ending Date For Report</b></label><br/>
 				<input type = "datetime-local" id="endDate" name="endDate"></input>
 			</div>
+
 			<div class="mb-3">
-				<label><b>Donation Analysis Statistical Complexity</b></label><br/>
-				<input type="radio" name="QuantStatSize" value="all"> All Statistics</input><br/>
-				<input type="radio" name="QuantStatSize" value="simple"> Simplified Statistics</input><br/>
-				<input type="checkbox" name="graphDesc" value="True"> Include Graph Description</input><br/>	
+				<label><b>Donation Statistics</b></label><br/>
+				<input type="checkbox" name="DonationsStatsOverview" value="True"> Incldue Donations Statistics Overview</input><br/>
+				<input type="checkbox" name="GrowthAndTrends" value="True"> Include Growth/Trend Analysis</input><br/>
+			</div>
 
 			<!-- Put Other Parts Of The Form In These Divs -->
-			</div>
 			<div class="mb-3">
+				<label><b>Fundraiser Performance</b></label></br>
+				<input type="checkbox" name="IncludeGraph" value="True"> Include Graph</input><br/>
+				<input type="checkbox" name="IncludeTable" value="True"> Include Table</input><br/>
 			</div>
+		
 			<div class="mb-3">
+				<label><b>Donor Insights</b></label></br>
+				 Number of Top Donors To Display <input type="quantity" name="NumTopDonors" min="0" max="100" step="1" value="10"></input><br/>
+				<input type="checkbox" name="IncludeNewDonors" value="True"> Include New Donor Information</input><br/>
 			</div>
+
 			<div class="mb-3">
+				<label><b>Visual Analysis</b></label></br>
+				<input type="checkbox" name="IncludePareto" value="True"> Include Pareto Chart</label><br/>
+				<input type="checkbox" name="IncludeFunnel" value="True"> Include Donor Funnel Chart</label><br/>
+				<input type="checkbox" name="IncludeDonationsByState" value="True"> Include Top Donations By State</label><br/>
+				<input type="checkbox" name="IncludeDonationsByZip" value="True"> Include Top Donations By Zip</input><br/>
 			</div>
+
 			<div class="mb-3">
+				<label><b>Summary Section</b></label></br>
+				<input type="checkbox" name="IncludeSummarySection" value="True"> Include Summary Paragraph </input></br>
 			</div>
+
 			<div class="mb-3">
+				<label><b>Graph Descrpiptions</b></label><br/>
+				<input type="checkbox" name="graphDesc" value="True"> Include Graph Descriptions</input><br/>	
 			</div>
+
 			<input type = "hidden" id="os" name="os" value="<?php echo$os; ?>">
 			<button type="submit" class="btn btn-primary">Generate Report</button>
+
 		</form>
 	</div>
 	<div class="container mt-4 p-4 bg-white rounded shadow">
