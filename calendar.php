@@ -163,9 +163,9 @@
                                     $extraAttributes .= ' data-month="' . date('Y-m', $date) . '"';
                                 }
                                 $eventsStr = '';
-                                $e = date('Y-m-d', $date);
+                                $e = strtotime(date('Y-m-d', $date));
 
-                                $dayEvents = array_filter($events , fn($event)=> $event["startDate"]<=$e && $event["endDate"]>=$e);
+                                $dayEvents = array_filter($events , fn($event)=> strtotime($event["startDate"])<=$e && strtotime($event["endDate"])>=$e);
                                 foreach ($dayEvents as $info) {
 
                                     $backgroundCol = $info['color']; // default color

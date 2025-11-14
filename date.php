@@ -26,7 +26,7 @@
     }
     require_once('include/input-validation.php');
     $get = sanitize($_GET);
-    $date = $get['date'];
+    $date = strtotime($get['date']);
     $datePattern = '/[0-9]{4}-[0-9]{2}-[0-9]{2}/';
     $timeStamp = strtotime($date);
     if (!preg_match($datePattern, $date) || !$timeStamp) {
@@ -52,7 +52,7 @@
                 require('include/time.php');
                 require('database/dbDonations.php');
                 $events = fetch_all_events();
-                $events = array_filter($events , fn($event)=> $event["startDate"]<=$date && $event["endDate"]>=$date);
+                $events = array_filter($events , fn($event)=> strtotime($event["startDate"])<=$date && strtotime($event["endDate"])>=$date);
 
                 if ($events) {
                     foreach ($events as $event) {

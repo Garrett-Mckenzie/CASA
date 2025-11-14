@@ -5,6 +5,8 @@
     // data with the logged-in user.
     session_cache_expire(30);
     session_start();
+    date_default_timezone_set("America/New_York");
+
 
     $loggedIn = false;
     $accessLevel = 0;
@@ -17,7 +19,6 @@
     }  
     include 'database/dbEvents.php';
     
-    //include 'domain/Event.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,6 +32,7 @@
         <?php require_once('header.php') ?>
         <?php require_once('database/dbEvents.php');?>
         <?php require_once('database/dbPersons.php');?>
+        <?php require_once('database/dbDonations.php');?>
         <h1>Events</h1>
         <main class="general">
             <?php 
@@ -38,16 +40,11 @@
                 //require_once('database/dbevents.php');
                 //require_once('domain/Event.php');
                 //$events = get_all_events();
-                $events = get_all_events_sorted_by_date_not_archived();
-                $archivedEvents = get_all_events_sorted_by_date_and_archived();
-                $today = new DateTime(); // Current date
+                $events = fetch_all_events();
+                $today = strtotime(date("Y-m-d"));
                 
                 // Filter out expired events
-                $upcomingEvents = array_filter($events, function($event) use ($today) {
-                    $eventDate = new DateTime($event->getStartDate());
-                    return $eventDate >= $today; // Only include events on or after today
-                });
-
+                $upcomingEvents = array_filter($events , fn($event)=> strtotime($event["endDate"])>=$today);
                 $user = retrieve_person($userID);
 
                 if (sizeof($upcomingEvents) > 0): ?>
@@ -71,16 +68,28 @@
                                 #require_once('include/output.php');
                                 #$id_to_name_hash = [];
                                 foreach ($upcomingEvents as $event) {
-                                    $eventID = $event->getID();
-                                    $title = $event->getName();
-                                    $goalAmount = $event->getGoalAmount();
-                                    $startDate = $event->getStartDate();
-                                    $endDate = $event->getEndDate();
-                                    $startTime = $event->getStartTime();
-                                    $endTime = $event->getEndTime();
-                                    $description = $event->getDescription();
-                                    
-                                    $completed = $event->getCompleted();
+                                    $eventID = $event['id'];
+                                    $title = $event['name'];
+                                    $goalAmount = $event['goalAmount'];
+                                    $startDate = $event['startDate'];
+                                    $endDate = $event['endDate'];
+                                    $startTime = $event['startTime'];
+                                    $endTime = $event['endTime'];
+                                    $description = $event['description'];
+
+                                    $donations = fetch_donations_for_event($eventID);
+                                    $totalRaised = 0;
+                                    if ($donations){
+                                        foreach ($donations as $donation){
+                                            $totalRaised += $donation["amount"];
+                                        }
+                                        $completion = round($totalRaised/$goalAmount,2)*100;
+                                        }
+                                        else{
+                                            $completion = 0;
+                                        }
+
+                                    $completed = ($completion>=100)? 1:0;
                             
                                     echo "
                                     <tr data-event-id='$eventID'>
@@ -96,104 +105,7 @@
                                        
                                     echo "</tr>";
 
-                                    /*echo "
-                                        <td>
-                                            <a class='button cancel' href='#' onclick='document.getElementById(\"cancel-confirmation-wrapper-$eventID\").classList.remove(\"hidden\")'>Cancel</a>
-                                            <div id='cancel-confirmation-wrapper-$eventID' class='modal hidden'>
-                                                <div class='modal-content'>
-                                                    <p>Are you sure you want to cancel your sign-up for this event?</p>
-                                                    <p>This action cannot be undone.</p>
-                                                    <form method='post' action='cancelEvent.php'>
-                                                        <input type='submit' value='Cancel Sign-Up' class='button danger'>
-                                                        <input type='hidden' name='event_id' value='$eventID'>
-                                                        <input type='hidden' name='user_id' value='$userID'>
-                                                    </form>
-                                                    <button onclick=\"document.getElementById('cancel-confirmation-wrapper-$eventID').classList.add('hidden')\" class='button cancel'>Cancel</button>
-                                                </div>
-                                            </div>
-                                        </td>";*/
-                                    //if($accessLevel < 3) {
-                                    //if($numSignups < $capacity) {
-                                        /*echo "
-                                        <tr data-event-id='$eventID'>
-                                            <td>$restricted_signup</td>
-                                            <td><a href='specificEvent.php?id=$eventID'>$title</a></td>
-                                            <td>$date</td>
-                                            <td>$numSignups / $capacity</td>
-                                            <td><a class='button sign-up' href='eventSignUp.php?event_name=" . urlencode($title) . '&restricted=' . urlencode($restricted_signup) . "'>Sign Up</a></td>
-                                        </tr>";*/
-                                    //} else {
-                                        /*echo "
-                                        <tr data-event-id='$eventID'>
-                                            <td>$restricted_signup</td>
-                                            <td><a href='specificEvent.php?id=$eventID'>$title</a></td>
-                                            <td>$date</td>
-                                            <td>$numSignups / $capacity</td>
-                                            <td><a class='button sign-up' style='background-color:#c73d06'>Sign Ups Closed!</a></td>
-                                        </tr>";*/
-                                    //}
-                                    
-                                    //} else {
-                                        /*echo "
-                                        <tr data-event-id='$eventID'>
-                                            <td>$restricted_signup</td>
-                                            <td><a href='Event.php?id=$eventID'>$title</a></td> <!-- Link updated here -->
-                                            <td>$date</td>
-                                            <td></td>
-                                        </tr>";
                                     }
-                                */}
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="table-wrapper">
-                    <h2>Archived Events</h2>
-                    <table class="general">
-                        <thead>
-                            <tr>
-                                <th style="width:1px">Restricted</th>
-                                <th>Title</th>
-                                <th style="width:1px">Date</th>
-                                <th style="width:1px">Capacity</th>
-                                <th style="width:1px"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="standout">
-                            <?php 
-                                #require_once('database/dbPersons.php');
-                                #require_once('include/output.php');
-                                #$id_to_name_hash = [];
-                                foreach ($archivedEvents as $event) {
-                                   $eventID = $event->getID();
-                                    $title = $event->getName();
-                                    $goalAmount = $event->getGoalAmount();
-                                    $startDate = $event->getStartDate();
-                                    $endDate = $event->getEndDate();
-                                    $startTime = $event->getStartTime();
-                                    $endTime = $event->getEndTime();
-                                    $description = $event->getDescription();
-                                    
-                                    $completed = $event->getCompleted();
-                                    
-                                    //if($accessLevel < 3) {
-                                        echo "
-                                        <tr data-event-id='$eventID'>
-                                            <td><a href='specificEvent.php?id=$eventID'>$title</a></td>
-                                            <td>$startDate</td>
-                                            <td>$endDate</td>
-                                        </tr>";
-                                    //} else {
-                                        /*echo "
-                                        <tr data-event-id='$eventID'>
-                                            <td>$restricted_signup</td>
-                                            <td><a href='Event.php?id=$eventID'>$title</a></td> <!-- Link updated here -->
-                                            <td>$date</td>
-                                            <td></td>
-                                        </tr>";
-                                    }
-                                */}
                             ?>
                         </tbody>
                     </table>
