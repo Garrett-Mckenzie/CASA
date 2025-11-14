@@ -736,7 +736,7 @@ def chartDonorFunnel(queryRows):
 
     donor_counts = df.groupby("donorID").size()
     funnel = pd.DataFrame({
-        "Stage": ["First-time Donors", "Repeat Donors", "Major Donors"],
+        "Stage": ["First-time Donors", "Repeat Donors", "Frequent Donors"],
         "Count": [
             (donor_counts == 1).sum(),
             ((donor_counts >= 2) & (donor_counts < 5)).sum(),

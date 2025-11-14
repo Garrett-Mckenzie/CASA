@@ -175,16 +175,14 @@ try:
 
         fig_hist = chartNumDonations(donationDates, "y", "hist", 1)
         pdf.insertGraph(4, 3, 1)
-        if graphDesc:
-            pdf.insertParagraph(
-                "Note: ..."
-            )
 
         fig_line = chartNumDonations(donationDates, "y", "line", 1)
         pdf.insertGraph(4, 3, 2)
         if graphDesc:
             pdf.insertParagraph(
-                "Note: ..."
+                "The two graphs above display the frequency of donations over two month periods."
+                "On the y-axis is the number of donations and on the x-axis is the 2 month time frame in consideration."
+                "Both graphs represent the same underlying information.The only diffrence is that the first uses bars and the second uses a line."
             )
         section += 1
 
@@ -202,7 +200,8 @@ try:
             pdf.insertGraph(4, 3, 3)
             if graphDesc:
                 pdf.insertParagraph(
-                    "Note: ..."
+                    "This figure compares target fundraising amounts to the actual amount raised for each event within the timeframe of the report."
+                    "The y-axis denotes the total amount of money raised for that event while the x-axis denotes the name of the event in question."
                 )
 
         if IncludeTable:
@@ -223,7 +222,7 @@ try:
         pdf.insertSubheading(f"{section}. Donor Insights")
 
         top = topDonors(donorAmountRows, top_n=NumTopDonors) 
-        pdf.insertParagraph("Top 10 donors by total contributions:")
+        pdf.insertParagraph(f"Top {NumTopDonors} donors by total contributions:")
 
         pdf.insertTable(
             [["Donor Name", "Total Donated ($)"]] +
@@ -244,16 +243,17 @@ try:
     # SECTION: Visual Analytics
     # ---------------------------------------------------------------
     if (IncludePareto or IncludeFunnel or IncludeDonationsByState or IncludeDonationsByZip):
-        pdf.insertPageBreak()
         
         pdf.insertSubheading(f"{section}. Visual Analytics")
 
         if IncludePareto:
-            fig_pareto = chartParetoTopDonors(donorAmountRows,10)
+            fig_pareto = chartParetoTopDonors(donorAmountRows,NumTopDonors)
             pdf.insertGraph(4, 3, 4)
             if graphDesc:
                 pdf.insertParagraph(
-                    "Note: ..."
+                    "This figure displays information about CASA's top donors as well as what % of total dollars donated to CASA the collection of top donors represents."
+                    "The x-axis is the name of each respective donor while the left-hand y-axis is the amount of money a specific donor gave."
+                    "The right-hand y-axis tells what % of total money donated to CASA is made up of the donations from donors up to and including the donor along the x-axis that is in line with that point on that Pareto chart."
                 )
         
         if IncludeFunnel:
@@ -261,7 +261,10 @@ try:
             pdf.insertGraph(4, 3, 5)
             if graphDesc:
                 pdf.insertParagraph(
-                    "Note: repeat donor is a donor who has donated more than once. Major donors are those who have donated 5 or more times "
+                    "This graph displays donors grouped by the frequency of their donations."
+                    "On the y-axis is what group is being represented."
+                    "Note that a repeat donor is a donor who has donated more than once. On the other hand, frequent donors are those who have donated 5 or more times "
+                    "Finally, the x-axis displays the number of donors falling into each respective group."
                 )
 
         if IncludeDonationsByState:
@@ -269,7 +272,9 @@ try:
             pdf.insertGraph(4, 3, 6)
             if graphDesc:
                 pdf.insertParagraph(
-                    "Note: ..."
+                    "This graph represents the total amount of money donated by the 10 states with the most cummulative donations."
+                    "On the y-axis is the amount of money donated by a certain state."
+                    "On the x-axis is the state being refrenced."
                 )
         
         if IncludeDonationsByZip:
@@ -277,7 +282,10 @@ try:
             pdf.insertGraph(4, 3, 7)
             if graphDesc:
                 pdf.insertParagraph(
-                    "Note: ..."
+                    "This graph represents the total amount of money donated by the 10 zipcodes with the most cummulative donations."
+                    "On the y-axis is the amount of money donated by a certain zip."
+                    "On the x-axis is the zipcode being refrenced."
+
                 )
         section += 1
 
@@ -285,7 +293,6 @@ try:
     # SECTION: Summary
     # ---------------------------------------------------------------
     if IncludeSummarySection:
-        pdf.insertPageBreak()
         """
         totals = numDonationsOverTime(donationDates)
         pdf.insertParagraphs([
@@ -294,8 +301,6 @@ try:
             f"In the last year, {totals[2]} donations were recorded."
         ])
         """
-
-        #STFU I know its not efficient
 
         avg = avgDonation(donationAmounts)
         top = topDonors(donorAmountRows, top_n=5) 

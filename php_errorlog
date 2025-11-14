@@ -29,3 +29,7 @@ Stack trace:
 [11-Nov-2025 18:51:41 UTC] PHP Parse error:  Unmatched '}' in /home/customer/www/jenniferp216.sg-host.com/public_html/emailgen.php on line 37
 [11-Nov-2025 18:51:55 UTC] PHP Parse error:  Unmatched '}' in /home/customer/www/jenniferp216.sg-host.com/public_html/emailgen.php on line 37
 [11-Nov-2025 18:52:26 UTC] PHP Parse error:  Unmatched '}' in /home/customer/www/jenniferp216.sg-host.com/public_html/emailgen.php on line 37
+[14-Nov-2025 12:48:44 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined method Event::getDate() in /home/customer/www/jenniferp216.sg-host.com/public_html/adminViewingEvents.php:58
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/adminViewingEvents.php on line 58
