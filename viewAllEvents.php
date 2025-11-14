@@ -117,7 +117,7 @@
                                         /*echo "
                                         <tr data-event-id='$eventID'>
                                             <td>$restricted_signup</td>
-                                            <td><a href='event.php?id=$eventID'>$title</a></td>
+                                            <td><a href='specificEvent.php?id=$eventID'>$title</a></td>
                                             <td>$date</td>
                                             <td>$numSignups / $capacity</td>
                                             <td><a class='button sign-up' href='eventSignUp.php?event_name=" . urlencode($title) . '&restricted=' . urlencode($restricted_signup) . "'>Sign Up</a></td>
@@ -126,7 +126,7 @@
                                         /*echo "
                                         <tr data-event-id='$eventID'>
                                             <td>$restricted_signup</td>
-                                            <td><a href='event.php?id=$eventID'>$title</a></td>
+                                            <td><a href='specificEvent.php?id=$eventID'>$title</a></td>
                                             <td>$date</td>
                                             <td>$numSignups / $capacity</td>
                                             <td><a class='button sign-up' style='background-color:#c73d06'>Sign Ups Closed!</a></td>

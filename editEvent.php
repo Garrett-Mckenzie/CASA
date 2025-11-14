@@ -54,7 +54,7 @@
                     echo "Oopsy!";
                     die();
                 }
-                header('Location: event.php?id=' . $id . '&editSuccess');
+                header('Location: specificEvent.php?id=' . $id . '&editSuccess');
             }
         }
     }
@@ -161,7 +161,7 @@
                     ?>
                 </select>---><p></p>
                 <input type="submit" value="Update Event">
-                <a class="button cancel" href="event.php?id=<?php echo htmlspecialchars($_GET['id']) ?>" style="margin-top: .5rem">Cancel</a>
+                <a class="button cancel" href="specificEvent.php?id=<?php echo htmlspecialchars($_GET['id']) ?>" style="margin-top: .5rem">Cancel</a>
             </form>
 
             <script type="text/javascript">

@@ -50,26 +50,45 @@
                 require('database/dbEvents.php');
                 require('include/output.php');
                 require('include/time.php');
-                $events = fetch_events_on_date($date);
+                require('database/dbDonations.php');
+                $events = fetch_all_events();
+                $events = array_filter($events , fn($event)=> $event["startDate"]<=$date && $event["endDate"]>=$date);
+
                 if ($events) {
                     foreach ($events as $event) {
                         require_once('include/output.php');
                         $event_name = $event['name'];
                         $event_startTime = time24hto12h($event['startTime']);
                         $event_description = $event['description'];
+                        $goal = $event["goalAmount"];
+
+                        $donations = fetch_donations_for_event($event["id"]);
+                        $totalRaised = 0;
+                        if ($donations){
+                            foreach ($donations as $donation){
+                                $totalRaised += $donation["amount"];
+                            }
+                            $completion = round($totalRaised/$goal,2)*100;
+                        }
+                        else{
+                            $completion = 0;
+                        }
+                        $completed = ($completion>=100)? "complete":"incomplete";
                         require_once('include/time.php');
         
                         echo "
                             <table class='event'>
                                 <thead>
                                     <tr>
-                                        <th colspan='2' data-event-id='" . $event['id'] . "'>" . $event['name'] . "</th>
+                                        <th colspan='2' data-event-id='" . $event['id'] . "'>" . $event['name'] . " (". $completed.")"."</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr><td>Time</td><td>" . time24hto12h($event['startTime']) . "</td></tr>
                                     <tr><td>Location</td><td>" . /*$location .*/ "</td></tr>
                                     <tr><td>Description</td><td>" . $event['description'] . "</td></tr>
+                                    <tr><td>Fundraiser Goal</td><td> $" . $goal . "</td></tr>
+                                    <tr><td>Total Amount Raised</td><td> $" . $totalRaised . "</td></tr>
                                 </tbody>
                               </table>
                         ";
