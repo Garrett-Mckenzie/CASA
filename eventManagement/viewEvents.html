@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="css/messages.css"></link>
+        <script src="js/messages.js"></script>
+        <title>Rappahannock CASA | Events</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+        <script lang="js">
+            document.addEventListener("DOMContentLoaded", () => {
+                
+            });
+            function filterEvents(status){
+            }
+        </script>
+    </head>
+    <body>
+        <main>
+            <article>
+                <table class="inProgress">
+                    <tr class="eventButtons"><button id="notStartedBtn" onclick="filterEvents('notStarted')">Not Started</button>
+                    <button id="inProgressBtn" onclick="filterEvents('inProgress')">In Progress</button>
+                    <button id="completedBtn" onclick="filterEvents('completed')">Completed</button></tr>
+                    <thead>
+                        <tr id="headers">
+                            <th id="Name">Name</th>
+                            <th id="Goal">Goal</th>
+                            <th id="startD">Start Date</th>
+                            <th id="endD">End Date</th>
+                            <th id="startT">Start Time</th>
+                            <th id="endT">End Time</th>
+                            <th id="desc">Description</th>
+                            <th id="loc">Location</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventBody">
+                    </tbody>
+                </table>
+            </article>
+        </main>
+    </body>
+</html>

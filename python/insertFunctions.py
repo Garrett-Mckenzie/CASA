@@ -1,7 +1,7 @@
 import sys
 from importlib.metadata import distributions
 from pathlib import Path
-from credentials import HOST, USER, PASSWORD, DATABASE
+from auth.credentials import HOST, USER, PASSWORD, DATABASE
 import pandas as pd
 import mariadb
 import random
@@ -109,7 +109,7 @@ def insertDonation(donationData,donation_columns,conn,cursor):
 
 # to insert col all you need is a unique name
 def insertEvent(eventData,event_columns,conn,cursor):
-    if "eventName" not in deventData.columns:
+    if "eventName" not in eventData.columns:
         print("could not insert event data no eventName column found")
         return
 

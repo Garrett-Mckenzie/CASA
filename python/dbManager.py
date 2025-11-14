@@ -3,7 +3,7 @@
 import sys
 from importlib.metadata import distributions
 from pathlib import Path
-from credentials import HOST, USER, PASSWORD, DATABASE
+from auth.credentials import HOST, USER, PASSWORD, DATABASE
 import pandas as pd
 import mariadb
 import random
