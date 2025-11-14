@@ -85,7 +85,7 @@
                                     echo "
                                     <tr data-event-id='$eventID'>
 
-                                        <td><a href='event.php?id=$eventID'>$title</a></td>
+                                        <td><a href='specificEvent.php?id=$eventID'>$title</a></td>
                                         <td>$startDate</td>
                                         <td>$endDate</td>
                                         <td>$startTime</td>
@@ -180,7 +180,7 @@
                                     //if($accessLevel < 3) {
                                         echo "
                                         <tr data-event-id='$eventID'>
-                                            <td><a href='event.php?id=$eventID'>$title</a></td>
+                                            <td><a href='specificEvent.php?id=$eventID'>$title</a></td>
                                             <td>$startDate</td>
                                             <td>$endDate</td>
                                         </tr>";
