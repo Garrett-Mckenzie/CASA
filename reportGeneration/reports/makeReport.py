@@ -59,6 +59,10 @@ try:
     if "IncludeDonationsByState" not in args.keys():
         IncludeDonationsByState = False
 
+    IncludeDonationsByZip = True
+    if "IncludeDonationsByZip" not in args.keys():
+        IncludeDonationsByZip = False
+
     IncludeSummarySection = True
     if "IncludeSummarySection" not in args.keys():
         IncludeSummarySection = False
@@ -129,150 +133,191 @@ try:
     conn.close()
 
     # ---------------------------------------------------------------
-    # SECTION 1: Overview Stats
+    # SECTION: Overview Stats
     # ---------------------------------------------------------------
-    pdf.insertSubheading("1. Overview of CASA Donations")
+    if DonationStatOverview:
+        pdf.insertSubheading(f"{section}. Overview of CASA Donations")
 
-    totals = numDonationsOverTime(donationDates)
-    pdf.insertParagraphs([
-        f"In the last month, CASA received {totals[0]} donations.",
-        f"In the last quarter, {totals[1]} donations were recorded.",
-        f"In the last year, {totals[2]} donations were recorded."
-    ])
+        totals = numDonationsOverTime(donationDates)
+        pdf.insertParagraphs([
+            f"In the last month, CASA received {totals[0]} donations.",
+            f"In the last quarter, {totals[1]} donations were recorded.",
+            f"In the last year, {totals[2]} donations were recorded."
+        ])
 
-    avg = avgDonation(donationAmounts)
-    med = medDonation(donationAmounts)
-    donors = totalDonors(donorRows)
-    total = totalRaised(amountDate, "a", 0)
+        avg = avgDonation(donationAmounts)
+        med = medDonation(donationAmounts)
+        donors = totalDonors(donorRows)
+        total = totalRaised(amountDate, "a", 0)
 
-    pdf.insertParagraphs([
-        f"CASA currently has {donors} total donors.",
-        f"The average donation amount is ${avg}.",
-        f"The median donation amount is ${med}.",
-        f"The total raised all-time is ${total}."
-    ])
+        pdf.insertParagraphs([
+            f"CASA currently has {donors} total donors.",
+            f"The average donation amount is ${avg}.",
+            f"The median donation amount is ${med}.",
+            f"The total raised all-time is ${total}."
+        ])
+
+        section += 1
 
     # ---------------------------------------------------------------
-    # SECTION 2: Growth & Trends
+    # SECTION: Growth & Trends
     # ---------------------------------------------------------------
-    pdf.insertSubheading("2. Growth & Trends")
 
-    yGrowth = donationGrowth(donationDates, "y")
-    qGrowth = donationGrowth(donationDates, "q")
+    if (GrowthAndTrends):
+        pdf.insertSubheading(f"{section}. Growth & Trends")
+        yGrowth = donationGrowth(donationDates, "y")
+        qGrowth = donationGrowth(donationDates, "q")
 
-    pdf.insertParagraphs([
-        f"Year-over-year donation growth rate: {yGrowth}%.",
-        f"Quarter-over-quarter donation growth rate: {qGrowth}%."
-    ])
+        pdf.insertParagraphs([
+            f"Year-over-year donation growth rate: {yGrowth}%.",
+            f"Quarter-over-quarter donation growth rate: {qGrowth}%."
+        ])
 
-    fig_hist = chartNumDonations(donationDates, "y", "hist", 1)
-    pdf.insertGraph(4, 3, 1)
-    if graphDesc:
-        pdf.insertParagraph(
-            "Note: ..."
+        fig_hist = chartNumDonations(donationDates, "y", "hist", 1)
+        pdf.insertGraph(4, 3, 1)
+        if graphDesc:
+            pdf.insertParagraph(
+                "Note: ..."
+            )
+
+        fig_line = chartNumDonations(donationDates, "y", "line", 1)
+        pdf.insertGraph(4, 3, 2)
+        if graphDesc:
+            pdf.insertParagraph(
+                "Note: ..."
+            )
+        section += 1
+
+    # ---------------------------------------------------------------
+    # SECTION: Fundraiser Performance
+    # ---------------------------------------------------------------
+    if IncludeGraph or IncludeTable:
+        pdf.insertSubheading(f"{section}. Fundraiser Performance")
+
+        completionRate = totalCompletion(eventRows, donationEventRows)
+        pdf.insertParagraph(f"Overall, {completionRate}% of CASA fundraisers have achieved or exceeded their fundraising goals.")
+
+        fig_fund = chartFundraiserGoals(eventRows, donationEventRows)
+        if IncludeGraph:
+            pdf.insertGraph(4, 3, 3)
+            if graphDesc:
+                pdf.insertParagraph(
+                    "Note: ..."
+                )
+
+        if IncludeTable:
+            completionDF = goalAchievementRate(eventRows, donationEventRows)
+            pdf.insertTable(
+                [["Event Name", "Completion (%)"]] +
+                completionDF[["name", "completion"]].values.tolist(),
+                [175, 100]
+            )
+        section += 1
+
+    # ---------------------------------------------------------------
+    # SECTION: Donor Insights
+    # ---------------------------------------------------------------
+    
+    if NumTopDonors > 0 or IncludeNewDonors:
+
+        pdf.insertSubheading(f"{section}. Donor Insights")
+
+        top = topDonors(donorAmountRows, top_n=NumTopDonors) 
+        pdf.insertParagraph("Top 10 donors by total contributions:")
+
+        pdf.insertTable(
+            [["Donor Name", "Total Donated ($)"]] +
+            top[["fullName", "totalAmount"]].values.tolist(),
+            [175, 100]
         )
 
-    fig_line = chartNumDonations(donationDates, "y", "line", 1)
-    pdf.insertGraph(4, 3, 2)
-    if graphDesc:
+        if IncludeNewDonors:
+            newDonors = donorAcqRate(donorFirstDates)
+            pdf.insertParagraphs([
+                f"New donors in the past month: {newDonors[0]}",
+                f"New donors in the past quarter: {newDonors[1]}",
+                f"New donors in the past year: {newDonors[2]}"
+            ])
+        section += 1
+
+    # ---------------------------------------------------------------
+    # SECTION: Visual Analytics
+    # ---------------------------------------------------------------
+    if (IncludePareto or IncludeFunnel or IncludeDonationsByState or IncludeDonationsByZip):
+        pdf.insertPageBreak()
+        
+        pdf.insertSubheading(f"{section}. Visual Analytics")
+
+        if IncludePareto:
+            fig_pareto = chartParetoTopDonors(donorAmountRows,10)
+            pdf.insertGraph(4, 3, 4)
+            if graphDesc:
+                pdf.insertParagraph(
+                    "Note: ..."
+                )
+        
+        if IncludeFunnel:
+            fig_funnel = chartDonorFunnel(donorAmountRows)
+            pdf.insertGraph(4, 3, 5)
+            if graphDesc:
+                pdf.insertParagraph(
+                    "Note: repeat donor is a donor who has donated more than once. Major donors are those who have donated 5 or more times "
+                )
+
+        if IncludeDonationsByState:
+            fig_geo = plotGeoDistributionBar(donorSumByState)
+            pdf.insertGraph(4, 3, 6)
+            if graphDesc:
+                pdf.insertParagraph(
+                    "Note: ..."
+                )
+        
+        if IncludeDonationsByZip:
+            fig_geo = plotGeoDistributionBar(donorSumByZip,"zipcode")
+            pdf.insertGraph(4, 3, 7)
+            if graphDesc:
+                pdf.insertParagraph(
+                    "Note: ..."
+                )
+        section += 1
+
+    # ---------------------------------------------------------------
+    # SECTION: Summary
+    # ---------------------------------------------------------------
+    if IncludeSummarySection:
+        pdf.insertPageBreak()
+        """
+        totals = numDonationsOverTime(donationDates)
+        pdf.insertParagraphs([
+            f"In the last month, CASA received {totals[0]} donations.",
+            f"In the last quarter, {totals[1]} donations were recorded.",
+            f"In the last year, {totals[2]} donations were recorded."
+        ])
+        """
+
+        #STFU I know its not efficient
+
+        avg = avgDonation(donationAmounts)
+        top = topDonors(donorAmountRows, top_n=5) 
+        newDonors = donorAcqRate(donorFirstDates)
+        totals = numDonationsOverTime(donationDates)
+        completionRate = totalCompletion(eventRows, donationEventRows)
+        yGrowth = donationGrowth(donationDates, "y")
+        pdf.insertSubheading(f"{section}. Summary and Next Steps")
         pdf.insertParagraph(
-            "Note: ..."
+            f"Over the last year, {totals[2]} donations were recorded."
+            f"This represents year over year growth of {yGrowth}%."
+            f"Futher, average donation amount was {avg}."
+            f"As for donors, your top donor is {top.values.tolist()[0][1]}."
+            f"They donated {top.values.tolist()[0][0]}"
+            f"You also gained {newDonors[2]} new donors over the year!"
+            f"Finally, {completionRate}% of events were complete."
         )
-
-    # ---------------------------------------------------------------
-    # SECTION 3: Fundraiser Performance
-    # ---------------------------------------------------------------
-    pdf.insertSubheading("3. Fundraiser Performance")
-
-    completionRate = totalCompletion(eventRows, donationEventRows)
-    pdf.insertParagraph(f"Overall, {completionRate}% of CASA fundraisers have achieved or exceeded their fundraising goals.")
-
-    fig_fund = chartFundraiserGoals(eventRows, donationEventRows)
-    pdf.insertGraph(4, 3, 3)
-    if graphDesc:
-        pdf.insertParagraph(
-            "Note: ..."
-        )
-
-    completionDF = goalAchievementRate(eventRows, donationEventRows)
-    pdf.insertTable(
-        [["Event Name", "Completion (%)"]] +
-        completionDF[["name", "completion"]].values.tolist(),
-        [175, 100]
-    )
-
-    # ---------------------------------------------------------------
-    # SECTION 4: Donor Insights
-    # ---------------------------------------------------------------
-    pdf.insertSubheading("4. Donor Insights")
-
-    top = topDonors(donorAmountRows, top_n=10)
-    pdf.insertParagraph("Top 10 donors by total contributions:")
-
-    pdf.insertTable(
-        [["Donor Name", "Total Donated ($)"]] +
-        top[["fullName", "totalAmount"]].values.tolist(),
-        [175, 100]
-    )
-
-    newDonors = donorAcqRate(donorFirstDates)
-    pdf.insertParagraphs([
-        f"New donors in the past month: {newDonors[0]}",
-        f"New donors in the past quarter: {newDonors[1]}",
-        f"New donors in the past year: {newDonors[2]}"
-    ])
-
-    # ---------------------------------------------------------------
-    # SECTION 5: Visual Analytics
-    # ---------------------------------------------------------------
-    pdf.insertPageBreak()
-    pdf.insertSubheading("5. Visual Analytics")
-
-    fig_pareto = chartParetoTopDonors(donorAmountRows,10)
-    pdf.insertGraph(4, 3, 4)
-    if graphDesc:
-        pdf.insertParagraph(
-            "Note: ..."
-        )
-
-    fig_funnel = chartDonorFunnel(donorAmountRows)
-    pdf.insertGraph(4, 3, 5)
-    if graphDesc:
-        pdf.insertParagraph(
-            "Note: repeat donor is a donor who has donated more than once. Major donors are those who have donated 5 or more times "
-        )
-
-    fig_geo = plotGeoDistributionBar(donorSumByState)
-    pdf.insertGraph(4, 3, 6)
-    if graphDesc:
-        pdf.insertParagraph(
-            "Note: ..."
-        )
-
-    fig_geo = plotGeoDistributionBar(donorSumByZip,"zipcode")
-    pdf.insertGraph(4, 3, 7)
-    if graphDesc:
-        pdf.insertParagraph(
-            "Note: ..."
-        )
-
-    # ---------------------------------------------------------------
-    # SECTION 6: Summary
-    # ---------------------------------------------------------------
-    pdf.insertPageBreak()
-    pdf.insertSubheading("6. Summary and Next Steps")
-    pdf.insertParagraph(
-        "The data indicates that CASA’s donor base continues to grow steadily, "
-        "with healthy year-over-year growth and a strong base of recurring donors. "
-        "However, the fundraiser completion rate suggests opportunities for better "
-        "goal calibration and follow-up engagement strategies. Efforts should focus "
-        "on converting first-time donors into repeat supporters and increasing major gifts."
-    )
 
     # ---------------------------------------------------------------
     # BUILD REPORT
     # ---------------------------------------------------------------
-    pdf.buildPDF()
+    pdf.buildPDF() #Garrett Is super cool for making this easy
     print(f"{name}.pdf")
 
 except Exception as e:
