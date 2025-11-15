@@ -32,7 +32,12 @@
         <?php require_once('header.php') ?>
         <?php require_once('database/dbEvents.php');?>
         <?php require_once('database/dbPersons.php');?>
-        <?php require_once('database/dbDonations.php');?>
+        <?php 
+            require_once('database/dbDonations.php');
+            require('include/output.php');
+            require('include/time.php');
+        ?>
+        
         <h1>Events</h1>
         <main class="general">
             <?php 
@@ -54,10 +59,8 @@
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Start Date</th>     
-                                <th style="width:1px">End Date</th>
-                                <th>Start Time</th>
-                                <th style="width:1px">End Time</th>
+                                <th>Date</th>     
+                                <th>Time</th>
                                 <th style="width:1px">Fundraiser Goal</th>
                                 <th style="width:1px"></th>
                             </tr>
@@ -73,8 +76,8 @@
                                     $goalAmount = $event['goalAmount'];
                                     $startDate = $event['startDate'];
                                     $endDate = $event['endDate'];
-                                    $startTime = $event['startTime'];
-                                    $endTime = $event['endTime'];
+                                    $startTime = time24hto12h($event['startTime']);
+                                    $endTime = time24hto12h($event['endTime']);
                                     $description = $event['description'];
 
                                     $donations = fetch_donations_for_event($eventID);
@@ -90,18 +93,23 @@
                                         }
 
                                     $completed = ($completion>=100)? 1:0;
+
+                                    if ($startDate == $endDate){
+                                        $dates = $startDate;
+                                    }
+                                    else{
+                                        $dates = $startDate . " to " . $endDate;
+                                    }
                             
                                     echo "
                                     <tr data-event-id='$eventID'>
 
                                         <td><a href='specificEvent.php?id=$eventID'>$title</a></td>
-                                        <td>$startDate</td>
-                                        <td>$endDate</td>
-                                        <td>$startTime</td>
-                                        <td>$endTime</td>
+                                        <td>$dates</td>
+                                        <td>$startTime - $endTime</td>
                                         <td>$$goalAmount</td>"; //money
                                     
-                                    // Display Sign Up or Cancel button based on user sign-up status
+                                   
                                        
                                     echo "</tr>";
 

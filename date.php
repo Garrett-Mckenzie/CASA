@@ -26,13 +26,16 @@
     }
     require_once('include/input-validation.php');
     $get = sanitize($_GET);
-    $date = strtotime($get['date']);
+    $date = $get['date']; //do not strtotime() this, it is needed in string format later
     $datePattern = '/[0-9]{4}-[0-9]{2}-[0-9]{2}/';
     $timeStamp = strtotime($date);
+    
+    //requires date in string format
     if (!preg_match($datePattern, $date) || !$timeStamp) {
         header('Location: calendar.php');
         die();
     }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -52,7 +55,7 @@
                 require('include/time.php');
                 require('database/dbDonations.php');
                 $events = fetch_all_events();
-                $events = array_filter($events , fn($event)=> strtotime($event["startDate"])<=$date && strtotime($event["endDate"])>=$date);
+                $events = array_filter($events , fn($event)=> strtotime($event["startDate"])<=$timeStamp && strtotime($event["endDate"])>=$timeStamp);
 
                 if ($events) {
                     foreach ($events as $event) {
@@ -84,7 +87,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td>Time</td><td>" . time24hto12h($event['startTime']) . "</td></tr>
+                                    <tr><td>Time</td><td>" . time24hto12h($event['startTime']) ." - ".time24hto12h($event['endTime']). "</td></tr>
                                     <tr><td>Location</td><td>" . /*$location .*/ "</td></tr>
                                     <tr><td>Description</td><td>" . $event['description'] . "</td></tr>
                                     <tr><td>Fundraiser Goal</td><td> $" . $goal . "</td></tr>
