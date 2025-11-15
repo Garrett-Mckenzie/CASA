@@ -4,8 +4,10 @@
         <?php require_once('universal.inc');?>
         <?php require_once('database/dbEvents.php');?>
         <?php require_once('database/dbDonations.php');?>
-        <?php require_once('database/dbPersons.php');  
-            $event = retrieve_event2($_GET["id"])
+        <?php require_once('database/dbPersons.php');
+            require_once('include/input-validation.php');  
+            $get = sanitize($_GET);
+            $event = retrieve_event2($get["id"])
         ?>
         
         
@@ -21,7 +23,7 @@
                 $goal = $event["goalAmount"];
                 $desc = $event["description"];
 
-                $donations = fetch_donations_for_event($_GET["id"]);
+                $donations = fetch_donations_for_event($get["id"]);
                 $totalRaised = 0;
                 if ($donations){
                     foreach ($donations as $donation){

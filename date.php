@@ -26,13 +26,16 @@
     }
     require_once('include/input-validation.php');
     $get = sanitize($_GET);
-    $date = $get['date'];
+    $date = $get['date']; //do not strtotime() this, it is needed in string format later
     $datePattern = '/[0-9]{4}-[0-9]{2}-[0-9]{2}/';
     $timeStamp = strtotime($date);
+    
+    //requires date in string format
     if (!preg_match($datePattern, $date) || !$timeStamp) {
         header('Location: calendar.php');
         die();
     }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -50,26 +53,45 @@
                 require('database/dbEvents.php');
                 require('include/output.php');
                 require('include/time.php');
-                $events = fetch_events_on_date($date);
+                require('database/dbDonations.php');
+                $events = fetch_all_events();
+                $events = array_filter($events , fn($event)=> strtotime($event["startDate"])<=$timeStamp && strtotime($event["endDate"])>=$timeStamp);
+
                 if ($events) {
                     foreach ($events as $event) {
                         require_once('include/output.php');
                         $event_name = $event['name'];
                         $event_startTime = time24hto12h($event['startTime']);
                         $event_description = $event['description'];
+                        $goal = $event["goalAmount"];
+
+                        $donations = fetch_donations_for_event($event["id"]);
+                        $totalRaised = 0;
+                        if ($donations){
+                            foreach ($donations as $donation){
+                                $totalRaised += $donation["amount"];
+                            }
+                            $completion = round($totalRaised/$goal,2)*100;
+                        }
+                        else{
+                            $completion = 0;
+                        }
+                        $completed = ($completion>=100)? "complete":"incomplete";
                         require_once('include/time.php');
         
                         echo "
                             <table class='event'>
                                 <thead>
                                     <tr>
-                                        <th colspan='2' data-event-id='" . $event['id'] . "'>" . $event['name'] . "</th>
+                                        <th colspan='2' data-event-id='" . $event['id'] . "'>" . $event['name'] . " (". $completed.")"."</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td>Time</td><td>" . time24hto12h($event['startTime']) . "</td></tr>
+                                    <tr><td>Time</td><td>" . time24hto12h($event['startTime']) ." - ".time24hto12h($event['endTime']). "</td></tr>
                                     <tr><td>Location</td><td>" . /*$location .*/ "</td></tr>
                                     <tr><td>Description</td><td>" . $event['description'] . "</td></tr>
+                                    <tr><td>Fundraiser Goal</td><td> $" . $goal . "</td></tr>
+                                    <tr><td>Total Amount Raised</td><td> $" . $totalRaised . "</td></tr>
                                 </tbody>
                               </table>
                         ";
