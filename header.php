@@ -665,6 +665,10 @@ date_default_timezone_set('America/New_York');
         $permission_array['import.php'] = 3;
         $permission_array['export.php'] = 3;
         $permission_array['emailgen.php'] = 3;
+        $permission_array['adddonor.php'] = 2;
+        $permission_array['specificevent.php'] = 1;
+
+
 
 
         
