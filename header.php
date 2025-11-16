@@ -563,7 +563,7 @@ date_default_timezone_set('America/New_York');
                 <a href="index.php"><img src="images/RAPPAHANNOCK_v_RedBlue2.png" style="filter: brightness(1000%)"" alt="Logo"></a>
             </div>
             <div class="nav-links">
-		<div class="nav-item"><span class="font-change">Volunteer Management System</span>
+
 		</div>
            </div>
         </div>
@@ -699,33 +699,36 @@ date_default_timezone_set('America/New_York');
                 <a href="index.php"><img src="images/RAPPAHANNOCK_v_RedBlue2.png" style="filter: brightness(1000%)"" alt="Logo"></a>
             </div>
             <div class="nav-links">
-                <div class="nav-item">Events
+                <div class="nav-item">Fundraisers
                     <div class="dropdown">
 
-<a href="addEvent.php" style="text-decoration: none;">
-  <div class="in-nav">
-    <img src="images/plus-solid.svg">
-    <span>Create Event</span>
-  </div>
-</a>
-<a href="viewAllEvents.php" style="text-decoration: none;">
-  <div class="in-nav">
-    <img src="images/list-solid.svg">
-    <span>View Events</span>
-  </div>
-</a>
-
-<a href="adminViewingEvents.php" style="text-decoration: none;">
-  <div class="in-nav">
-    <img src="images/list-solid.svg">
-    <span>Edit Event</span>
-  </div>
-</a>
-
+                        <a href="addEvent.php" style="text-decoration: none;">
+                        <div class="in-nav">
+                            <img src="images/plus-solid.svg">
+                            <span>Create Event</span>
+                        </div>
+                        </a>
+                        <a href="viewAllEvents.php" style="text-decoration: none;">
+                        <div class="in-nav">
+                            <img src="images/list-solid.svg">
+                            <span>View Events</span>
+                        </div>
+                        </a>
 
                     </div>
                 </div>
-                
+                <div class="nav-item">Donations
+                    <div class="dropdown">
+
+                        <a href="addDonor.php" style="text-decoration: none;">
+                        <div class="in-nav">
+                            <img src="images/plus-solid.svg">
+                            <span>Add Donor</span>
+                        </div>
+                        </a>
+
+                    </div>
+                </div>
             </div>
         </div>
 
