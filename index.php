@@ -425,7 +425,7 @@
 				<img src="images/blank-white-background.jpg"/>
 				<div class="small-text">Analyze the data!</div>
 				<div class="large-text">Generate Report</div>
-<button class="circle-arrow-button" onclick="window.location.href='reportGeneration/index.php'">
+<button class="circle-arrow-button" onclick="window.location.href='ReportGeneration.php'">
     <span class="button-text">Go</span>
     <div class="circle">&gt;</div>
 </button>
@@ -481,7 +481,7 @@
         </div>
 
 
-        <div class="content-box-test" onclick="window.location.href='Search-donor-db/index.php'">
+        <div class="content-box-test" onclick="window.location.href='Search.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/magnifying-glass.svg" alt="Search Icon">
             </div>

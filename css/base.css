@@ -88,6 +88,19 @@ table, td, tr, th, form, fieldset, em, button, a {
     font-family: Montserrat;
     font-weight: 300;
 }
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;          /* Full viewport height */
+    display: flex;
+    flex-direction: column;    /* Stack header → main → footer */
+}
+
+main {
+    flex: 1 0 auto;             /* This is the key: main grows and pushes footer down */
+}
 
 /* Page Sections */
 
@@ -255,19 +268,18 @@ input[type=text]:focus, input[type=password]:active, input[type=email]:focus, in
     outline: var(--text-field-border);
 }
 
-input[type=submit], button, .button {
+/*input[type=submit], button, .button {
     color: var(--button-font-color);
     background-color: var(--main-color);
     padding: var(--button-padding);
     border: none;
     border-radius: var(--button-border-radius);
     font-weight: 500;
-    width: 100%;
 
     transition: background-color .3s;
     cursor: pointer;
     text-align: center;
-}
+}*/
 
 input[type=submit]:hover, button:hover, .button:hover {
     background-color: var(--accent-color);
@@ -309,7 +321,9 @@ main.login {
 main.login > p {
     margin-bottom: 1rem;
 }
-
+main {
+    flex-grow: 1; /* This is the line that forces the footer down */
+}
 h1 {
     font-size: 1.5rem;
     font-weight: 500;
@@ -934,4 +948,76 @@ img.profile-pic {
 .dashboard-item i {
     font-size: 55px; /* Set the desired size */
     color: #ffffff; /* Optional: set color */
+}
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    background-color: #00447b; /* var(--main-color) */
+    color: var(--page-background-color);
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+}
+.footer {
+    background-color: #00447b;
+    color: var(--accent-color);
+    padding: 3rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;        /* ← this pushes everything to the bottom */
+    gap: 2rem;
+    margin-top: auto;             /* keeps sticky-footer behavior */
+}
+
+.footer-left {
+    display: flex;
+    align-items: flex-end;        /* ensures logo sits at the very bottom */
+    min-height: 120px;            /* optional: gives the left side height so logo has room to drop */
+}
+
+.footer-logo {
+    height: 110px;               /* adjust size if needed */
+    width: auto;
+}
+
+.footer-right {
+    display: flex;
+    gap: 4rem;
+    text-align: left;
+}
+
+.footer-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.footer-topic {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #a3e0f7;
+}
+
+.footer a {
+    color: white;
+    text-decoration: none;
+    transition:hover {
+        text-decoration: underline;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .footer-right {
+        gap: 2rem;
+    }
+    .footer-left {
+        min-height: auto;
+    }
 }

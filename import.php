@@ -20,6 +20,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html">
+        <link rel="stylesheet" href="css/base.css">
         <link rel="stylesheet" href="css/messages.css"></link>
         <script src="js/messages.js"></script>
         <title>Rappahannock CASA | Import</title>
@@ -38,13 +39,6 @@
 
                     main {
                         flex: 1; /* pushes the footer down */
-                    }
-
-                    .footer {
-                        background-color: #333;
-                        color: #fff;
-                        text-align: center;
-                        padding: 20px 0;
                     }
                 </style>
         <script type="text/javascript">
@@ -66,12 +60,7 @@
     </head>
     <body>
         <?php require_once('header.php') ?>
-        <h1>Import</h1>
-        <header>
-            <nav>
-                <table></table>
-            </nav>
-        </header>
+        <h1 class="page-title">Import</h1>
             <?php
 		        $status = -1;
 		        if (array_key_exists("success" , $_GET)){
