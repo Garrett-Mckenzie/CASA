@@ -16,7 +16,7 @@ try {
 
     foreach ($emails as $email) {
 
-        $cmd = "python3 send_email.py";
+        $cmd = "python send_email.py";
 
         $proc = proc_open($cmd, [
             0 => ["pipe", "r"],
@@ -37,6 +37,7 @@ try {
         fwrite($pipes[0], json_encode($email));
         fclose($pipes[0]);
 
+        // Capture Python stdout/stderr
         $output = stream_get_contents($pipes[1]);
         $error  = stream_get_contents($pipes[2]);
 
