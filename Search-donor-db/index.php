@@ -201,6 +201,8 @@
                         // Determine the secondary detail to display
                         const detail = item.email || item.name || `${item.city || 'N/A'}, ${item.state || 'N/A'}` || 'Details N/A';
                         // Add donation count if available
+                        //$sql = "SELECT DISTINCT d.id FROM donors d JOIN donations don ON d.id = don.donorID";
+
                         const count = item.donation_count ? ` | Donations: ${item.donation_count}` : '';
 
                         // Append a result card to the HTML
@@ -247,9 +249,37 @@
                     <!-- makes Donor events checkbox -->
                     <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
                         <input type="checkbox" name="query_type" value="donor_events" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
-                        <span class="ml-2 text-sm font-medium text-gray-700">Donor events</span>
+                        <span class="ml-2 text-sm font-medium text-gray-700">Donor by events</span>
+                    </label>
+                    <!-- makes event Donors checkbox -->
+                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
+                        <input type="checkbox" name="query_type" value="event_donors" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
+                        <span class="ml-2 text-sm font-medium text-gray-700">Event return Donors</span>
+                    </label>
+                    <!-- makes Donors zip checkbox -->
+                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
+                        <input type="checkbox" name="query_type" value="donor_zip" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
+                        <span class="ml-2 text-sm font-medium text-gray-700">Donor zip</span>
                     </label>
                     
+                    <!-- makes Donors donations date range checkbox -->
+                    <!--
+                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
+                        <input type="checkbox" name="query_type" value="donor_donations_date_range" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
+                        <span class="ml-2 text-sm font-medium text-gray-700">Donor Donations (Date Range)</span>
+                    </label>
+                    -->
+                    <!-- makes Donors by donations date range in checkbox -->
+                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
+                        <input type="checkbox" name="query_type" value="donors_by_donation_range_in" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
+                        <span class="ml-2 text-sm font-medium text-gray-700">Donors *IN* Date Range</span>
+                    </label>
+                    <!-- makes Donors by donations date range not in checkbox -->
+                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
+                        <input type="checkbox" name="query_type" value="donors_by_donation_range_not_in" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
+                        <span class="ml-2 text-sm font-medium text-gray-700">Donors *NOT IN* Date Range</span>
+                    </label>
+
                 </div>
             </div>
 
@@ -264,11 +294,48 @@
                     <label for="donor-name-input-events" class="block text-sm font-semibold text-gray-700 mb-2">Donor Name for Events (First or First & Last)</label>
                     <input type="text" id="donor-name-input-events" name="donor_name_query_events" placeholder="e.g., Jane Doe" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
                 </div>
+                    <!-- inputs needed for 'event_donors' -->
+                <div class="query-input-container hidden" data-query-type="event_donors">
+                    <label for="donor-name-input-events" class="block text-sm font-semibold text-gray-700 mb-2">Event Name for Donors </label>
+                    <input type="text" id="donor-name-input-events" name="donor_name_query_events" placeholder="e.g., Jane Doe" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                </div>
+                    <!-- inputs needed for 'zip' -->
+                <div class="query-input-container hidden" data-query-type="donor_zip">
+                    <label for="zip-input" class="block text-sm font-semibold text-gray-700 mb-2">Donor Zip Code</label>
+                    <input type="text" id="zip-input" name="zip_query" placeholder="e.g., 22401" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                </div>
+                
+                    <!-- inputs needed for 'donor donations date range' -->
+    <!--
+                <div class="query-input-container hidden" data-query-type="donor_donations_date_range">
+                    <label for="donor-name-input-donations" class="block text-sm font-semibold text-gray-700 mb-2">Donor Name for Donation Count</label>
+                    <input type="text" id="donor-name-input-donations" name="donor_name_query_donations" placeholder="e.g., John Smith" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 mb-4" required-if-active>
+                    <label for="start-date-donations" class="block text-sm font-semibold text-gray-700 mb-2">Start Date (YYYY-MM-DD)</label>
+                    <input type="date" id="start-date-donations" name="start_date_donations" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                    <label for="end-date-donations" class="block text-sm font-semibold text-gray-700 mb-2 mt-4">End Date (YYYY-MM-DD)</label>
+                    <input type="date" id="end-date-donations" name="end_date_donations" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                </div>
+    -->
+                    <!-- inputs needed for 'donor by donation range in' -->
+                <div class="query-input-container hidden" data-query-type="donors_by_donation_range_in">
+                    <label for="start-date-in" class="block text-sm font-semibold text-gray-700 mb-2">Start Date (YYYY-MM-DD)</label>
+                    <input type="date" id="start-date-in" name="start_date_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                    <label for="end-date-in" class="block text-sm font-semibold text-gray-700 mb-2 mt-4">End Date (YYYY-MM-DD)</label>
+                    <input type="date" id="end-date-in" name="end_date_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                </div>
+                    <!-- inputs needed for 'donor by donation range not in' -->
+                <div class="query-input-container hidden" data-query-type="donors_by_donation_range_not_in">
+                    <label for="start-date-not-in" class="block text-sm font-semibold text-gray-700 mb-2">Start Date (YYYY-MM-DD)</label>
+                    <input type="date" id="start-date-not-in" name="start_date_not_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                    <label for="end-date-not-in" class="block text-sm font-semibold text-gray-700 mb-2 mt-4">End Date (YYYY-MM-DD)</label>
+                    <input type="date" id="end-date-not-in" name="end_date_not_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                </div>
                     <!-- No inputs needed for 'all_donors' -->
                 <div class="query-input-container hidden" data-query-type="all_donors">
                     <p class="text-sm text-gray-500 p-2 border border-gray-200 rounded-lg bg-gray-50">This returns a list of **ALL** donors because no specific criteria were selected. Click "Execute Query".</p>
                 </div>
                 
+
                 </div>
             
             <div class="pt-2">

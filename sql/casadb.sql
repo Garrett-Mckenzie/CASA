@@ -414,6 +414,7 @@ INSERT IGNORE INTO `donors` (`id`, `first`, `last`, `email`, `zip`, `city`, `sta
 (285, 'Marietta', 'D''Ostilio', NULL, '22406', 'Fredericksburg', 'VA', '31 Sanibel Drive', NULL, NULL, 'In memory of Bobby Anderson'),
 (286, 'Michael', 'D''Ostilio', NULL, '22406', 'Fredericksburg', 'VA', '31 Sanibel Drive', NULL, NULL, 'In memory of Bobby Anderson');
 
+
 INSERT IGNORE INTO `donations` (`date`, `amount`, `reason`, `eventID`, `donorID`, `fee`, `thanked`) VALUES
 -- Donor ID 1: Phillip Jenkins
 ('01/01/2015', 50.00, '2014, 2015 and 2016 Community Give', NULL, 1, 0.00, 0),
