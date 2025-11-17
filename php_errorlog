@@ -33,3 +33,6 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/adminViewingEvents.php on line 58
+[16-Nov-2025 16:17:40 America/New_York] PHP Warning:  Undefined array key "adddonor.php" in /home/customer/www/jenniferp216.sg-host.com/public_html/header.php on line 679
+[16-Nov-2025 16:19:27 America/New_York] PHP Warning:  Undefined array key "specificevent.php" in /home/customer/www/jenniferp216.sg-host.com/public_html/header.php on line 679
+[17-Nov-2025 11:25:11 America/New_York] PHP Warning:  Undefined array key "specificevent.php" in /home/customer/www/jenniferp216.sg-host.com/public_html/header.php on line 679
