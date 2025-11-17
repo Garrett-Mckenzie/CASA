@@ -3,7 +3,6 @@ from importlib.metadata import distributions
 from pathlib import Path
 from credentials import HOST, USER, PASSWORD, DATABASE
 import pandas as pd
-import mariadb
 import random
 import os
 import numpy as np
@@ -56,7 +55,7 @@ def insertDonation(donationData,donation_columns,conn,cursor):
                     insertCol.append("donorID")
                     insertData.append(999)
                 else:    
-                    query = "SELECT id FROM donors WHERE first = ? AND last = ? AND email = ?"
+                    query = "SELECT id FROM donors WHERE first = %s AND last = %s AND email = %s"
                     executeTup = (first,last,email)
                     cursor.execute(query,executeTup)
                     donorId = cursor.fetchone()
@@ -66,13 +65,12 @@ def insertDonation(donationData,donation_columns,conn,cursor):
                     else:
                         insertCol.append("donorID")
                         insertData.append(donorId[0])
-
             #deal with donation event relationship
             #need to write this part 
             if ("eventName" in insertCol and insertData[insertCol.index("eventName")] != ""):
                 j = insertCol.index("eventName")
                 eventName = insertData.pop(j)
-                query = "SELECT id FROM events WHERE name = ?"
+                query = "SELECT id FROM events WHERE name = %s"
                 executeTup = (eventName,)
                 cursor.execute(query,executeTup)
                 eventID = cursor.fetchone()
@@ -86,7 +84,7 @@ def insertDonation(donationData,donation_columns,conn,cursor):
             if goodInsert:
                 #builds the query
                 queryCols = ",".join(insertCol)    
-                queryValues = "?,"*len(insertCol)
+                queryValues = "%s,"*len(insertCol)
                 queryValues = queryValues[0:-1]
                 query = f"INSERT INTO donations (" + queryCols  + ") VALUES (" + queryValues + ")" 
                 executeTup = tuple(insertData)
@@ -102,6 +100,8 @@ def insertDonation(donationData,donation_columns,conn,cursor):
         #attempts transaction commit
         try:
             conn.commit()
+            cursor.close()
+            conn.close()
             print("The data for donations was commited except for rows where otherwise specified.")
         except Exception as e:
             conn.rollback()
@@ -134,7 +134,7 @@ def insertEvent(eventData,event_columns,conn,cursor):
         if goodInsert:
             #builds the query
             queryCols = ",".join(insertCol)    
-            queryValues = "?,"*len(insertCol)
+            queryValues = "%s,"*len(insertCol)
             queryValues = queryValues[0:-1]
             query = f"INSERT INTO events (" + queryCols  + ") VALUES (" + queryValues + ")" 
             executeTup = tuple(insertData)
@@ -150,6 +150,8 @@ def insertEvent(eventData,event_columns,conn,cursor):
     #attempts transaction commit
     try:
         conn.commit()
+        cursor.close()
+        conn.close()
         print("The data for donors was commited except for rows where otherwise specified.")
     except Exception as e:
         conn.rollback()
@@ -182,7 +184,7 @@ def insertDonor(donorData,donor_columns,conn,cursor):
         if goodInsert:
             #builds the query
             queryCols = ",".join(insertCol)    
-            queryValues = "?,"*len(insertCol)
+            queryValues = "%s,"*len(insertCol)
             queryValues = queryValues[0:-1]
             query = f"INSERT INTO donors (" + queryCols  + ") VALUES (" + queryValues + ")" 
             executeTup = tuple(insertData)
@@ -198,7 +200,8 @@ def insertDonor(donorData,donor_columns,conn,cursor):
     #attempts transaction commit
     try:
         conn.commit()
+        cursor.close()
+        conn.close()
         print("The data for donors was commited except for rows where otherwise specified.")
     except Exception as e:
         conn.rollback()
-        print("There was a problem")

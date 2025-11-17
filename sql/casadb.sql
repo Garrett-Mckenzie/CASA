@@ -10,6 +10,7 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
+SET FOREIGN_KEY_CHECKS = 0;
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -27,12 +28,19 @@ SET time_zone = "+00:00";
 -- Table structure for table `associations`
 --
 
+DROP TABLE IF EXISTS `associations`; 
 CREATE TABLE `associations` (
-  `eventID` int(11) NOT NULL,
-  `donationID` int(11) NOT NULL,
-  `donorID` int(11) NOT NULL,
-  `emailID` int(11) NOT NULL,
-  `filePath` varchar(256) NOT NULL
+	`eventID` int,
+	`donationID` int,
+	`donorID` int,
+	`emailID` int,
+	`filePath` varchar(256),
+	FOREIGN KEY (`eventID`) REFERENCES dbevents(`id`),
+	FOREIGN KEY (`donationID`) REFERENCES donations(`id`),
+	FOREIGN KEY (`donorID`) REFERENCES donors(`id`),
+	FOREIGN KEY (`emailID`) REFERENCES emails(`id`),
+	FOREIGN KEY (`filePath`) REFERENCES files(`filePath`),
+	PRIMARY KEY (`eventID`,`donationID`,`donorID`,`emailID`,`filePath`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -41,18 +49,20 @@ CREATE TABLE `associations` (
 -- Table structure for table `dbevents`
 --
 
+DROP TABLE IF EXISTS `dbevents`; 
 CREATE TABLE `dbevents` (
-  `id` int(11) NOT NULL,
-  `name` text DEFAULT NULL,
-  `goalAmount` decimal(12,2) DEFAULT NULL,
-  `date` char(10) DEFAULT NULL,
-  `startDate` char(10) DEFAULT NULL,
-  `endDate` char(10) DEFAULT NULL,
-  `startTime` char(5) DEFAULT '00:00',
-  `endTime` char(5) DEFAULT '00:00',
-  `description` text DEFAULT NULL,
-  `completed` text DEFAULT NULL,
-  `location` text DEFAULT NULL
+	`id` int NOT NULL AUTO_INCREMENT,
+	`name` text,
+	`goalAmount` DECIMAL(12,2),
+	`date` char(10),
+	`startDate` char(10),
+	`endDate` char(10), 
+	`startTime` char(5) DEFAULT '00:00',
+	`endTime` char(5) DEFAULT '00:00',
+	`description` text,
+	`completed` text,
+	`location` text,
+	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -70,11 +80,13 @@ INSERT INTO `dbevents` (`id`, `name`, `goalAmount`, `date`, `startDate`, `endDat
 -- Table structure for table `dbpersons`
 --
 
+DROP TABLE IF EXISTS `dbpersons`; 
 CREATE TABLE `dbpersons` (
-  `id` varchar(256) NOT NULL,
-  `name` text DEFAULT NULL,
-  `password` text DEFAULT NULL,
-  `accessLevel` int(11) DEFAULT NULL
+	`id` varchar(256) NOT NULL,
+	`name` text,
+   	`password` text,
+	`accessLevel` int,
+	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -90,22 +102,26 @@ INSERT INTO `dbpersons` (`id`, `name`, `password`, `accessLevel`) VALUES
 -- Table structure for table `donations`
 --
 
+DROP TABLE IF EXISTS `donations`; 
 CREATE TABLE `donations` (
-  `amount` decimal(12,2) DEFAULT NULL,
-  `id` int(11) NOT NULL,
-  `reason` text DEFAULT NULL,
-  `date` char(10) DEFAULT NULL,
-  `fee` decimal(12,2) DEFAULT NULL,
-  `thanked` int(11) DEFAULT NULL,
-  `eventID` int(11) DEFAULT NULL,
-  `donorID` int(11) DEFAULT NULL
+	`amount` DECIMAL(12,2),
+	`id` int NOT NULL AUTO_INCREMENT,
+	`reason` text,
+	`date` char(10),
+	`fee` DECIMAL(12,2),
+	`thanked` int,
+	`eventID` int DEFAULT NULL,
+	`donorID` int DEFAULT NULL,
+	PRIMARY KEY (`id`),
+	FOREIGN KEY (`eventID`) REFERENCES dbevents(`id`),
+	FOREIGN KEY (`donorID`) REFERENCES donors(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `donations`
 --
 
-INSERT INTO `donations` (`amount`, `id`, `reason`, `date`, `fee`, `thanked`, `eventID`, `donorID`) VALUES
+INSERT ignore INTO `donations` (`amount`, `id`, `reason`, `date`, `fee`, `thanked`, `eventID`, `donorID`) VALUES
 (50.00, 1, '2014, 2015 and 2016 Community Give', '01/01/2015', 0.00, 0, NULL, 1),
 (50.00, 2, 'Community Give; $100 in 2024 Giving Tuesday', '01/01/2016', 0.00, 0, NULL, 2),
 (25.00, 3, 'Community Give: gave $25 in 2014, 2015 & 2016', '05/05/2015', 0.00, 0, NULL, 3),
@@ -302,25 +318,27 @@ INSERT INTO `donations` (`amount`, `id`, `reason`, `date`, `fee`, `thanked`, `ev
 -- Table structure for table `donors`
 --
 
+DROP TABLE IF EXISTS `donors`; 
 CREATE TABLE `donors` (
-  `id` int(11) NOT NULL,
-  `first` varchar(30) DEFAULT NULL,
-  `last` varchar(30) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `zip` varchar(30) DEFAULT NULL,
-  `city` varchar(30) DEFAULT NULL,
-  `state` varchar(30) DEFAULT NULL,
-  `street` varchar(100) DEFAULT NULL,
-  `phone` varchar(30) DEFAULT NULL,
-  `gender` varchar(30) DEFAULT NULL,
-  `notes` text DEFAULT NULL
+	`id` int NOT NULL AUTO_INCREMENT,
+	`first` varchar(30),
+	`last` varchar(30),
+	`email` varchar(100),
+	`zip` varchar(30),
+	`city` varchar(30),
+	`state` varchar(30),
+	`street` varchar(100),
+	`phone` varchar(30),
+	`gender` varchar(30),
+	`notes` text,
+	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `donors`
 --
 
-INSERT INTO `donors` (`id`, `first`, `last`, `email`, `zip`, `city`, `state`, `street`, `phone`, `gender`, `notes`) VALUES
+INSERT ignore INTO `donors` (`id`, `first`, `last`, `email`, `zip`, `city`, `state`, `street`, `phone`, `gender`, `notes`) VALUES
 (1, 'Phillip', 'Jenkins', '1philjenkins@gmail.com', '22405', 'Fredericksburg', 'VA', '54 Hamlin Drive', NULL, NULL, 'former colleagues of Janet and Edie'),
 (2, 'Jeri', 'Phillips', '4jphillips@comcast.net', '22551', 'Spotsylvania', 'VA', '8432 Battle Park Drive', NULL, NULL, 'CASA volunteer'),
 (3, 'Christine', 'Repp', 'abcrepp@yahoo.com', '22401', 'Fredericksburg', 'VA', '1407 Washington Ave', NULL, NULL, 'Christine & Brad Repp established the Repp Family Fund @ Comm Foundation; Brad is CEO at Dynovis & Chris is Comms director'),
@@ -616,10 +634,12 @@ INSERT INTO `donors` (`id`, `first`, `last`, `email`, `zip`, `city`, `state`, `s
 -- Table structure for table `emails`
 --
 
+DROP TABLE IF EXISTS `emails`; 
 CREATE TABLE `emails` (
-  `id` int(11) NOT NULL,
-  `message` text DEFAULT NULL,
-  `purpose` text DEFAULT NULL
+	`id` int NOT NULL AUTO_INCREMENT,
+	`message` text,
+	`purpose` text,
+	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -628,9 +648,11 @@ CREATE TABLE `emails` (
 -- Table structure for table `files`
 --
 
+DROP TABLE IF EXISTS `files`; 
 CREATE TABLE `files` (
-  `filePath` varchar(256) NOT NULL,
-  `linkToDrive` varchar(256) NOT NULL
+	`filePath` varchar(256) NOT NULL,
+	`linkToDrive` varchar(256) NOT NULL,
+	PRIMARY KEY (`filePath`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -639,21 +661,18 @@ CREATE TABLE `files` (
 -- Table structure for table `reports`
 --
 
+DROP TABLE IF EXISTS `reports`; 
 CREATE TABLE `reports` (
-  `id` int(11) NOT NULL,
-  `reportType` varchar(30) DEFAULT NULL,
-  `dateRangeStart` char(10) DEFAULT NULL,
-  `dateRangeEnd` char(10) DEFAULT NULL,
-  `name` varchar(30) DEFAULT NULL,
-  `filePath` varchar(256) DEFAULT NULL
+	`id` int NOT NULL AUTO_INCREMENT,
+	`reportType` varchar(30),
+	`dateRangeStart` char(10),
+	`dateRangeEnd` char(10),
+	`name` varchar(30),
+	`filePath` varchar(256), 
+	PRIMARY KEY (`id`),
+	FOREIGN KEY (`filePath`) REFERENCES files(`filePath`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Indexes for table `associations`
---
-ALTER TABLE `associations`
-  ADD PRIMARY KEY (`eventID`,`donationID`,`donorID`,`emailID`,`filePath`),
-  ADD KEY `donationID` (`donationID`),
-  ADD KEY `donorID` (`donorID`),
-  ADD KEY `emailID` (`emailID`),
-  ADD KEY `filePath` (`filePath`);
+
+SET FOREIGN_KEY_CHECKS = 1;
+COMMIT;

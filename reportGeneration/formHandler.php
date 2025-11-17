@@ -52,13 +52,13 @@ foreach ($_POST as $key => $value){
 //Path to the pyFile no matter what OS. NO TOUCHIE
 $pyPath = "./reports/makeReport.py";
 
-//linux and mac command
-$venvPath = "../venv/bin/python"; //Venv
-$Path = "python3"; //No Venv Linux Default Pthon
-$command =  "$venvPath $pyPath " . implode(" ",$args). " 2>&1";
+//linux and mac command (ETHAN's Problem)
+//$venvPath = "../venv/bin/python"; //Venv
+#$Path = "python3"; //No Venv Linux Default Pthon
+//$command =  "$venvPath $pyPath " . implode(" ",$args). " 2>&1";
 
 //Windows command
-//$command = "python ".$pyPath." ".implode(" ",$args). " 2>&1";
+$command = "python ".$pyPath." ".implode(" ",$args). " 2>&1";
 	
 #Execute reportGen.py with options
 $output = null;

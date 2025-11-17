@@ -5,34 +5,21 @@ from importlib.metadata import distributions
 from pathlib import Path
 from credentials import HOST, USER, PASSWORD, DATABASE
 import pandas as pd
-import mariadb
 import random
 import os
 import numpy as np
 from insertFunctions import *
+import mysql.connector
 
 SYSTEM = os.name
 
-def winConnect():
+def connect():
     try:
-        conn = mariadb.connect(
+        conn = mysql.connector.connect(
                 user = USER,
                 password = PASSWORD,
                 host = HOST,
                 database = DATABASE
-                )
-        return conn
-    except Exception as e:
-        raise e
-
-def macConnect():
-    try:
-        conn = mariadb.connect(
-                user=USER,
-                password=PASSWORD,
-                host=HOST,
-                database=DATABASE,
-                unix_socket="/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock"
                 )
         return conn
     except Exception as e:
@@ -43,13 +30,8 @@ def export_excel():
     query = sys.argv[2]
     output_file = sys.argv[3]
     try:
-        #make the cursour and connection
-        conn = None
-        if SYSTEM =='posix':
-            conn = macConnect()
-        else:
-            conn = winConnect()
-        cursor = conn.cursor()
+        conn = connect()
+        cursor = conn.cursor(buffered=True)
 
         cols = []
         cursor.execute(f"SHOW COLUMNS FROM {query.split(" ")[-1]}")
@@ -80,13 +62,8 @@ need to work on this part here
 """
 def import_excel():
     try:
-        #make the cursour and connection
-        conn = None
-        if SYSTEM =='posix':
-            conn = macConnect()
-        else:
-            conn = winConnect()
-        cursor = conn.cursor()
+        conn = connect()
+        cursor = conn.cursor(buffered=True)
 
 
         #load up data
@@ -123,12 +100,18 @@ def import_excel():
         print(f"Attempting to import the file at {file_path}")
         if (haveDonorData):
             insertDonor(donorData,donor_columns,conn,cursor)
+            conn = connect()
+            cursor = conn.cursor(buffered=True)
 
         if (haveDonationData):
             insertDonation(donationData,donation_columns,conn,cursor)
+            conn = connect()
+            cursor = conn.cursor(buffered=True)
 
         if (haveEventData):
             insertEvent(eventData,event_columns,conn,cursor)
+            conn = connect()
+            cursor = conn.cursor(buffered=True)
                             
     except Exception as e:
         print(e)

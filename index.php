@@ -410,7 +410,7 @@
     </script>
 <!--END TEST-->
 </head>
-
+<link rel="icon" type="image/x-icon" href="images/RAPPAHANNOCK_v_RedBlue2.png">
 <!-- ONLY SUPER ADMIN WILL SEE THIS -->
 <?php if ($_SESSION['access_level'] >= 2): ?>
 <body>

@@ -23,10 +23,10 @@ function connect() {
 	$database = "casadb";
 	$user = "casadb";
 	$pass = "casadb";
-	if ($_SERVER['SERVER_NAME'] == 'jenniferp160.sg-host.com') {
-		$user = 'uknrzrk8sj1e7';
-		$database = 'dbkzrh4cfmxbt0';
-		$pass = 'fxextih7mssg';
+	if ($_SERVER['SERVER_NAME'] == 'jenniferp216.sg-host.com') {
+		$user = 'ueowkedxfqqge';
+		$database = 'dbt9ozuchwr5nz';
+		$pass = '7zygsg3zaypd';
 	} 
 	$con = mysqli_connect($host,$user,$pass,$database);
 	if (!$con) { echo "not connected to server"; return mysqli_error($con);}
