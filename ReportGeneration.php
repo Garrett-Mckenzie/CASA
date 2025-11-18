@@ -5,21 +5,21 @@ header('Expires: 0');
 
 ?>
 <?php
-					$os = NULL;
-				if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'){
-								$os = "w";
-				}
-				else{
-								$os = "l";
-				}
+	$os = NULL;
+	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'){
+		$os = "w";
+	}
+	else{
+		$os = "l";
+	}
 
-				$output = [];	
-				if ($os == "w"){
-								exec("dir reports /b",$output);
-				}
-				else{
-								exec("ls reports",$output);
-				}
+	$output = [];	
+	if ($os == "w"){
+		exec("dir reports /b",$output);
+	}
+	else{
+		exec("ls reports",$output);
+	}
 ?>
 <?php
     // Template for new VMS pages. Base your new page on this one
