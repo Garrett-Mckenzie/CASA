@@ -79,14 +79,110 @@
     <head>
         <?php require_once('universal.inc') ?>
         <title>Rappahannock CASA | Create Event</title>
+        <style>
+        /* ---- Page Layout ---- */
+        main.date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        /* ---- Form Card ---- */
+        #new-event-form {
+            width: 100%;
+            max-width: 920px; /* WIDER FORM */
+            background: #ffffff;
+            padding: 35px 32px;
+            border-radius: 14px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* ---- Headings ---- */
+        main.date h2 {
+            margin-bottom: 18px;
+            color: #024b79;
+            font-size: 26px;
+        }
+
+        /* ---- Labels ---- */
+        #new-event-form label {
+            font-weight: 600;
+            color: #333;
+            margin-top: 10px;
+            font-size: 15px;
+        }
+
+        /* ---- Inputs ---- */
+        #new-event-form input[type="text"],
+        #new-event-form input[type="date"],
+        #new-event-form textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1px solid #bbb;
+            font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        /* ---- Large description box ---- */
+        #new-event-form textarea {
+            min-height: 140px;       /* MUCH larger */
+            resize: vertical;        /* allow user to stretch if needed */
+        }
+
+        /* ---- Focus states ---- */
+        #new-event-form input:focus,
+        #new-event-form textarea:focus {
+            border-color: #2a6fb0;
+            box-shadow: 0 0 4px rgba(42, 111, 176, 0.4);
+            outline: none;
+        }
+
+        /* ---- Submit Button ---- */
+        #new-event-form input[type="submit"] {
+            margin-top: 12px;
+            padding: 14px;
+            background: #2a6fb0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        #new-event-form input[type="submit"]:hover {
+            background: #1e5d94;
+        }
+
+        #new-event-form input[type="submit"]:active {
+            transform: scale(0.97);
+        }
+
+        /* ---- Return Link ---- */
+        .button.cancel {
+            margin-top: 25px;
+            font-size: 16px;
+        }
+        </style>
+
+
     </head>
     <body>
         <?php require_once('header.php') ?>
         <h1>Create Event</h1>
         <main class="date">
-            <h2>New Event Form</h2>
+            <p style="font-size:14px; color:red; margin-top:-8px; margin-bottom:18px; padding-left:5rem;">
+                <em>* indicates required fields</em>
+            </p>
+
             <form id="new-event-form" method="POST">
-                <label for="name">* Event Name </label>
+                <label for="name">* Fundraiser Name </label>
                 <input type="text" id="name" name="name" required placeholder="Enter name"> 
 
                 <label for="name">* Fundraiser Goal </label>
@@ -104,9 +200,9 @@
                 <label for="name">* End Time </label>
                 <input type="text" id="endTime" name="endTime" pattern="([1-9]|10|11|12):[0-5][0-9] ?([aApP][mM])" required placeholder="Enter end time. Ex. 1:00 PM">
 
-                <label for="name">* Description </label>
-                <input type="text" id="description" name="description" required placeholder="Enter description">
-  
+                <label for="description">* Description </label>
+                <textarea id="description" name="description" required placeholder="Enter description"></textarea>
+                
                 <label for="name">Location </label>
                 <input type="text" id="location" name="location" placeholder="Enter location">
 
