@@ -670,6 +670,9 @@ date_default_timezone_set('America/New_York');
     $permission_array['emailgen.php'] = 3;
     $permission_array['Search.php'] = 3;
     $permission_array['ReportGeneration.php'] = 3;
+    $permission_array['specificevent.php'] = 1;
+    $permission_array['adddonor.php'] = 3;
+
 
 
     // LOWERCASE
