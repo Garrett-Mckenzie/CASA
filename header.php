@@ -707,8 +707,7 @@ date_default_timezone_set('America/New_York');
           <div class="nav-links">
             <div class="nav-item">Search
               <div class="dropdown">
-
-                <a href="emailgen.php" style="text-decoration: none;">
+                <a href="/Search-donor-db/index.php" style="text-decoration: none;">
                   <div class="in-nav">
                     <img src="images/add-person.svg">
                     <span style="font-size:24px;">Search</span>
@@ -737,13 +736,13 @@ date_default_timezone_set('America/New_York');
             <div class="nav-item">Document Management
               <div class="dropdown">
 
-                <a href="Import.php" style="text-decoration: none;">
+                <a href="import.php" style="text-decoration: none;">
                   <div class="in-nav">
                     <img src="images/plus-solid.svg">
                     <span>Import</span>
                   </div>
                 </a>
-                <a href="Export.php" style="text-decoration: none;">
+                <a href="export.php" style="text-decoration: none;">
                   <div class="in-nav">
                     <img src="images/list-solid.svg">
                     <span>Export</span>
