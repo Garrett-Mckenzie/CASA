@@ -40,9 +40,5 @@ var form = null;
         }
     }
 
-    function clearCache(){
-        localStorage.removeItem(KEY);
-    }
-
     setInterval(saveData, 5000);
 })();

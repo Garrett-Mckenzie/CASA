@@ -9,6 +9,14 @@
         <head>
             <?php require_once('universal.inc') ?>
             <title>Rappahannock CASA | Create Event</title>
+            <script>
+                const KEY = "AddEventData";
+                const cache = localStorage.getItem(KEY);
+                if (cache) {
+                    localStorage.removeItem(KEY);
+                }
+            </script>
+                
         </head>
         <body>
             <?php require_once('header.php') ?>
