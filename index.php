@@ -426,7 +426,7 @@ function toggleInfo(event) {
 				<img src="images/blank-white-background.jpg" style="filter: contrast(50%);" />
 				<div class="small-text">Let’s raie some money!</div>
 				<div class="large-text">Event Management</div>
-<button class="circle-arrow-button">
+<button class="circle-arrow-button" onclick="window.location.href='viewAllEvents.php'">
 <span class="button-text"><?php 
 				require_once('database/dbEvents.php');
 require_once('database/dbPersons.php');

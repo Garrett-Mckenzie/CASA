@@ -26,6 +26,16 @@
         <link rel="stylesheet" href="css/messages.css"></link>
         <script src="js/messages.js"></script>
         <title>Rappahannock CASA | Events</title>
+        <script lang="js">
+			function dateError(){
+				const box = document.getElementById('errorBox');
+				box.style.visibility = 'visible';
+			}
+			function close(ObjID){
+				const box = document.getElementById(ObjId);
+				box.style.visibility = 'hidden';
+			}
+		</script>
     </head>
     <body>
         <?php require_once('header.php') ?>
@@ -33,6 +43,7 @@
         <?php require_once('database/dbPersons.php');?>
         <h1>Events</h1>
         <main class="general">
+            <!-- Fetch Events from Database and Display in Table -->
             <?php 
               
                 //require_once('database/dbevents.php');
@@ -49,6 +60,23 @@
                 });
 
                 $user = retrieve_person($userID);
+
+                if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['filter'])) {
+                    $filter = $_GET['filter'];
+                    if($filter === 'notStarted') {
+                        $archivedEvents = array_filter($archivedEvents, function($event) {
+                            return $event->getCompleted() == 0;
+                        });
+                    } elseif($filter === 'inProgress') {
+                        $archivedEvents = array_filter($archivedEvents, function($event) {
+                            return $event->getCompleted() == 1;
+                        });
+                    } elseif($filter === 'completed') {
+                        $archivedEvents = array_filter($archivedEvents, function($event) {
+                            return $event->getCompleted() == 2;
+                        });
+                    }
+                }
 
                 if (sizeof($upcomingEvents) > 0): ?>
                 <div class="table-wrapper">
@@ -151,6 +179,11 @@
                 <div class="table-wrapper">
                     <h2>Archived Events</h2>
                     <table class="general">
+                        <tr>
+                            <button onclick="window.location.href='viewAllEvents.php?filter=notStarted';">Not Started</button>
+                            <button onclick="window.location.href='viewAllEvents.php?filter=inProgress';">In Progress</button>
+                            <button onclick="window.location.href='viewAllEvents.php?filter=completed';">Completed</button>
+                        </tr>
                         <thead>
                             <tr>
                                 <th style="width:1px">Restricted</th>

@@ -1,0 +1,69 @@
+/* Font Formatting and Root Variables */
+@font-face {
+	font-family: 'Montserrat';
+	src: url('../fonts/Montserrat-VariableFont_wght.ttf') format("truetype-variations");
+	font-weight: 100 900;
+}
+@font-face {
+	font-family: 'Montserrat';
+	src: url('../fonts/Montserrat-Italic-VariableFont_wght.ttf') format("truetype-variations");
+	font-weight: 100 900;
+	font-style: italic;
+}
+
+:root{
+	--accent-color: #c52e81;
+	--cancel-button-background-color: #000;
+	--primary-color: #33C;
+}
+
+			
+/* Alert Items */
+p {
+	margin-top: 0em;
+	margin-bottom: 1em;
+}
+tr{
+	margin-top: 0em;
+	margin-bottom: 2rem;
+}
+button {
+	width: fit-content;
+	align-self: center;
+	margin-top: 1em;
+}
+button.cancel, a.cancel {
+	background-color: var(--cancel-button-background-color);
+}
+button.cancel:hover, a.cancel:hover {
+	background-color: var(--accent-color);
+}
+
+table {
+	margin: 2rem;
+}
+
+
+/* Containers */
+.bContainer {
+	display: flex;
+	flex-direction: column;
+}
+
+.errorBox {
+	width: fit-content;
+	height: fit-content;
+	left: 45%;
+	top: 40%;
+	border-width: 2px;
+	border-style: solid;
+	position: absolute;
+	visibility: hidden;
+}
+.errorHead {
+	color: var(--primary-color);
+}
+.errorText {
+	color: var(--primary-color);
+	padding-bottom: 10px;
+}

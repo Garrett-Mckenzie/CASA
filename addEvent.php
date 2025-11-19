@@ -21,6 +21,33 @@
         echo 'bad access level';
         die();
     }
+
+    function to24h($time12){
+        $timeIn = strtoupper(trim($time12));
+        $time = DateTime::createFromFormat('g:i A', $time12);
+        if (!$time){
+            return false;
+        }
+        return $time->format('H:i:s');
+    }
+    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['error'])){
+        if($_POST['error'] == 'bad time range'){
+            echo <<<ERROR
+            <script type="text/javascript">
+                function dateError(){
+                    const box = document.getElementById('errorBox');
+                    box.style.visibility = 'visible';
+                }
+                function closeError(objId){
+                    const box = document.getElementById(objId);
+                    box.style.visibility = 'hidden';
+                }
+                // Call the function to show the error
+                dateError();
+            </script>
+            ERROR;
+        }
+    }
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         require_once('include/input-validation.php');
         require_once('database/dbEvents.php');
@@ -33,14 +60,27 @@
             echo 'bad form data';
             die();
         } else {
-            $validated = validate12hTimeRangeAndConvertTo24h($args["startTime"], $args["endTime"]);
-            if (!$validated) {
-                echo 'bad time range';
-                die();
+            $startTime = to24h($args['startTime']);
+            $endTime = to24h($args['endTime']);
+            $start = DateTime::createFromFormat('Y-m-d H:i', $args['startDate'] . ' ' . $startTime);
+            $end = DateTime::createFromFormat('Y-m-d H:i', $args['endDate'] . ' ' . $endTime);
+            $valid = $start < $end;
+            if (!$valid) {
+                $url = "addEvent.php";
+                $data = ['error' => 'bad time range'];
+                $settings = [
+                    'http' => [
+                        'method' => 'POST',
+                        'header' => 'Content-Type: application/x-www-form-urlencoded',
+                        'content' => http_build_query($data),
+                    ],
+                ];
+                $context = stream_context_create($settings);
+                $file = file_get_contents($url, false, $context);
             }
 
-            $startTime = $args['startTime'] = $validated[0];
-            $endTime = $args['endTime'] = $validated[1];
+            $startTime = $args['startTime'] = $startTime;
+            $endTime = $args['endTime'] = $endTime;
             $startDate = $args['startDate'] = validateDate($args["startDate"]);
             $endDate = $args['endDate'] = validateDate($args["endDate"]);
             
@@ -54,7 +94,7 @@
             if(!$id){
                 die();
             } else {
-                header('Location: eventSuccess.php');
+                header('Location: eventSuccess.php?valid=' . $start);
                 exit();
             }
             
@@ -79,11 +119,33 @@
     <head>
         <?php require_once('universal.inc') ?>
         <title>Rappahannock CASA | Create Event</title>
+        <script src="addEventCache.js"></script>
+        <link rel="stylesheet" href="css/eventStyler.scss"></link>
+        <script lang="js">
+			function dateError(){
+				const box = document.getElementById('errorBox');
+				box.style.visibility = 'visible';
+			}
+			function close(ObjID){
+				const box = document.getElementById(ObjId);
+				box.style.visibility = 'hidden';
+			}
+		</script>
     </head>
     <body>
         <?php require_once('header.php') ?>
         <h1>Create Event</h1>
         <main class="date">
+            <!-- Error Box for invalid date formatting -->
+            <div class="errorBox" id="errorBox">
+				<table>
+					<tr> <th></th> <th class="errorHead"><p><strong>Error</strong></p></th> <th></th> </tr>
+					<tr> <td></td> <td class="errorText"><p>Invalid Date Formatting</p></td> <td></td> </tr>
+					<tr> <td></td> <td class="bContainer" id="bContainer"><button onclick="close('errorBox')">Close</button></td> <td></td> </tr>
+				</table>
+			</div>
+
+
             <h2>New Event Form</h2>
             <form id="new-event-form" method="POST">
                 <label for="name">* Event Name </label>
@@ -109,7 +171,6 @@
   
                 <label for="name">Location </label>
                 <input type="text" id="location" name="location" placeholder="Enter location">
-
                 
                 <input type="submit" value="Create Event">
                 
