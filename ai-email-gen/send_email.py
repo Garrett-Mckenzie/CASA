@@ -4,32 +4,45 @@ import json
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
 import os
+import traceback
 
 def main():
-    load_dotenv()  # load EMAIL_USER and EMAIL_PASS from .env
+    try:
+        load_dotenv()
 
-    sender = os.getenv("SMTP_USER")
-    password = os.getenv("SMTP_PASS")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port   = int(os.getenv("SMTP_PORT", "587"))
+        sender      = os.getenv("SMTP_USER")
+        password    = os.getenv("SMTP_PASS")
 
-    if not sender or not password:
-        print("Missing EMAIL_USER or EMAIL_PASS in .env file")
-        return
+        if not sender or not password:
+            print("ERROR: Missing SMTP_USER or SMTP_PASS")
+            sys.exit(1)
 
-    data = json.loads(sys.stdin.read())
-    recipient = data["recipient_email"]
-    body = data["body"]
+        raw = sys.stdin.read()
+        data = json.loads(raw)
 
-    msg = MIMEText(body)
-    msg["Subject"] = "Message from CASA"
-    msg["From"] = sender
-    msg["To"] = recipient
+        recipient = data["recipient_email"]
+        body      = data["body"]
 
-    # Gmail SMTP
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(sender, password)
-        server.send_message(msg)
+        msg = MIMEText(body)
+        msg["Subject"] = "Message from CASA"
+        msg["From"]    = sender
+        msg["To"]      = recipient
 
-    print("Email sent successfully.")
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.ehlo()
+            server.starttls()
+            server.login(sender, password)
+            server.send_message(msg)
+
+        print("Email sent successfully.")
+        sys.exit(0)
+
+    except Exception as e:
+        print("ERROR:", str(e))
+        traceback.print_exc()
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

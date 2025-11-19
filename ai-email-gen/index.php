@@ -1,8 +1,13 @@
 <?php
-set_time_limit(120);                // allow script up to 2 minutes
+set_time_limit(120);
 ini_set('max_execution_time', 120);
-// Always return JSON, even for PHP warnings/errors
 ini_set('display_errors', 0);
+
+// === GLOBAL CONFIG ===
+$OPENAI_API_KEY = getenv("OPENAI_API_KEY");
+$OPENAI_MODEL   = "gpt-4o-mini";
+
+// === Unified JSON error handling ===
 set_error_handler(function ($errno, $errstr, $errfile, $errline) {
     header('Content-Type: application/json');
     echo json_encode(['success' => false, 'response' => "PHP error: $errstr"]);
@@ -14,175 +19,205 @@ set_exception_handler(function ($e) {
     exit;
 });
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
 
-    $reason = $_POST['reason'] ?? '';
-    $recipient_email = $_POST['recipient_email'] ?? '';
-    $recipient_name = $_POST['recipient_name'] ?? '';
-    $sender = $_POST['sender'] ?? '';
+    $reason        = $_POST['reason'] ?? '';
+    $sender        = $_POST['sender'] ?? '';
+    $multiple      = trim($_POST['recipients'] ?? '');
+    $custom_prompt = $_POST['custom_prompt'] ?? '';
 
-    $prompt = "You are an assistant that writes short, professional, and warm emails.\n" .
-          "Sender: $sender\nRecipient name: $recipient_name\n" .
-          "Reason: $reason\n" .
-          "My name is Rappahannock CASA\n".
-          "Write a concise (30–50 word) friendly email that could be sent to this recipient.\n\n" .
-          "NEVER include placeholders, brackets, or text like [name], [insert], or (your text here). " .
-          "Only write complete, natural sentences ready to send.";
-
-    $data = [
-        "model" => "llama3.2:3b",
-        "prompt" => $prompt,
-        "stream" => false
-    ];
-
-    try {
-        //use IPv4 loopback (faster + avoids IPv6/localhost timeout)
-        $ch = curl_init('http://127.0.0.1:11434/api/generate');
-        curl_setopt_array($ch, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
-            CURLOPT_POSTFIELDS => json_encode($data),
-            CURLOPT_TIMEOUT => 120,                // allow long model load
-            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4 // force IPv4
-        ]);
-
-        $response = curl_exec($ch);
-        $error = curl_error($ch);
-        curl_close($ch);
-
-        if ($error) {
-            echo json_encode([
-                'success' => false,
-                'response' => "Connection error: $error"
-            ]);
-            exit;
-        }
-
-        if (!$response || trim($response) === '') {
-            echo json_encode([
-                'success' => false,
-                'response' => "Model returned no output. Make sure the Ollama container and llama3.2:3b are running."
-            ]);
-            exit;
-        }
-
-        $decoded = json_decode($response, true);
-        if (!$decoded || !isset($decoded['response'])) {
-            echo json_encode([
-                'success' => false,
-                'response' => "Invalid JSON from Ollama. Full output:\n" . substr($response, 0, 200)
-            ]);
-            exit;
-        }
-
-        echo json_encode([
-            'success' => true,
-            'response' => $decoded['response']
-        ]);
-        exit;
-
-    } catch (Throwable $e) {
-        echo json_encode([
-            'success' => false,
-            'response' => "Server error: " . $e->getMessage()
-        ]);
+    if (empty($multiple)) {
+        echo json_encode(["success" => false, "error" => "Please provide at least one recipient."]);
         exit;
     }
+
+    $responses = [];
+
+    // ALWAYS multi-mode now
+    $lines = array_filter(array_map('trim', explode("\n", $multiple)));
+    foreach ($lines as $line) {
+        if (strpos($line, ',') === false) continue;
+        list($rname, $remail) = array_map('trim', explode(',', $line, 2));
+        $responses[] = generate_email($reason, $sender, $rname, $remail, $custom_prompt);
+    }
+
+    echo json_encode(['success' => true, 'emails' => $responses]);
+    exit;
+}
+
+// === OpenAI Email Generation ===
+function generate_email($reason, $sender, $recipient_name, $recipient_email, $custom_prompt)
+{
+    global $OPENAI_API_KEY, $OPENAI_MODEL;
+
+    $prompt =
+        "Write a short, warm, professional donor email.\n" .
+        "Sender: $sender\nRecipient: $recipient_name\nReason: $reason\n" .
+        "Write naturally without placeholders.\n";
+
+    if (!empty(trim($custom_prompt))) {
+        $prompt .= "\nAdditional user instructions:\n$custom_prompt\n";
+    }
+
+    $payload = json_encode([
+        "model" => $OPENAI_MODEL,
+        "messages" => [
+            ["role" => "system", "content" => "You are a helpful email-writing assistant."],
+            ["role" => "user", "content" => $prompt]
+        ],
+        "temperature" => 0.7
+    ]);
+
+    $ch = curl_init("https://api.openai.com/v1/chat/completions");
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_HTTPHEADER => [
+            "Authorization: Bearer $OPENAI_API_KEY",
+            "Content-Type: application/json"
+        ],
+        CURLOPT_POSTFIELDS => $payload,
+        CURLOPT_TIMEOUT => 120,
+        CURLOPT_SSL_VERIFYPEER => true
+    ]);
+
+    $response = curl_exec($ch);
+    $error    = curl_error($ch);
+    curl_close($ch);
+
+    if ($error) {
+        return [
+            'success' => false,
+            'name'    => $recipient_name,
+            'email'   => $recipient_email,
+            'response' => "OpenAI connection error: $error"
+        ];
+    }
+
+    $decoded = json_decode($response, true);
+    $generated = $decoded['choices'][0]['message']['content'] ?? "Invalid Model Output";
+
+    return [
+        'success'  => true,
+        'name'     => $recipient_name,
+        'email'    => $recipient_email,
+        'response' => $generated
+    ];
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Email Generator</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<meta charset="UTF-8">
+<title>Email Generator</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body class="p-4 bg-light">
-  <div class="container mt-4 p-4 bg-white rounded shadow">
-    <h3 class="mb-3">AI Email Generator</h3>
-    <form id="emailForm">
-      <div class="mb-3">
-        <label class="form-label">Reason for Email</label>
+<div class="container mt-4 p-4 bg-white rounded shadow">
+
+<h3 class="mb-3">AI Email Generator</h3>
+
+<form id="emailForm">
+
+    <div class="mb-3">
+        <label class="form-label">Reason</label>
         <select class="form-select" name="reason">
-          <option>Thank Donor</option>
-          <option>Solicit Donation</option>
-          <option>Event Alert</option>
+            <option>Thank Donor</option>
+            <option>Solicit Donation</option>
+            <option>Event Alert</option>
         </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Custom Prompt (optional)</label>
+        <textarea class="form-control" name="custom_prompt" rows="3"
+            placeholder="Add additional instructions: tone, details, style..."></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Recipients (one per line as 'Name, Email')</label>
+        <textarea class="form-control" name="recipients" rows="4"
+            placeholder="Jane Doe, jane@example.com&#10;John Smith, john@example.com"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Sender (Your Email)</label>
+        <input type="email" class="form-control" name="sender" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Generate Email(s)</button>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="emailModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Preview Generated Email(s)</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">Recipient Name</label>
-        <input type="text" class="form-control" name="recipient_name" placeholder="Jane Doe" required>
+      <div class="modal-body" id="emailListContainer"></div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success" id="sendAllBtn">Send All</button>
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">Recipient Email</label>
-        <input type="email" class="form-control" name="recipient_email" placeholder="jane@example.com" required>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Sender Email</label>
-        <input type="email" class="form-control" name="sender" value="yourname@gmail.com" required>
-      </div>
-
-      <button type="submit" class="btn btn-primary">Generate Email</button>
-    </form>
-
-    <!-- Modal -->
-    <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="emailModalLabel">Preview Email</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <textarea id="emailContent" class="form-control" rows="12"></textarea>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" id="sendEmailBtn">Send Email</button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
+</div>
+
+</div>
 
 <script>
 document.getElementById('emailForm').addEventListener('submit', async e => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const response = await fetch('', { method: 'POST', body: formData });
-    const data = await response.json();
 
-    // fill modal textarea
-    document.getElementById('emailContent').value = data.response || "No response from model.";
+    const formData = new FormData(e.target);
+    const res = await fetch('', { method:'POST', body: formData });
+    const data = await res.json();
+
+    const container = document.getElementById('emailListContainer');
+    container.innerHTML = '';
+
+    data.emails.forEach((item, i) => {
+        container.innerHTML += `
+        <div class="mb-4">
+            <h6>${item.name} &lt;${item.email}&gt;</h6>
+            <textarea class="form-control email-content" rows="8">${item.response}</textarea>
+            <hr />
+        </div>`;
+    });
+
     const modal = new bootstrap.Modal(document.getElementById('emailModal'));
     modal.show();
 
-    // attach send button behavior
-    document.getElementById('sendEmailBtn').onclick = async () => {
-        const editedEmail = document.getElementById('emailContent').value;
-        const payload = {
+    document.getElementById('sendAllBtn').onclick = async () => {
+        const texts = [...document.querySelectorAll('.email-content')].map(t => t.value);
+
+        let emailsToSend = data.emails.map((item, i) => ({
             sender: formData.get('sender'),
-            recipient_email: formData.get('recipient_email'),
-            body: editedEmail
-        };
+            recipient_email: item.email,
+            body: texts[i]
+        }));
+
         await fetch('send_email.php', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(payload)
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(emailsToSend)
         });
-        alert('Email sent!');
+
+        alert("Email(s) sent!");
         modal.hide();
     };
 });
 </script>
+
 </body>
 </html>

@@ -11,45 +11,51 @@ try {
         throw new Exception("Invalid JSON payload");
     }
 
-    // Normalize input to always be an array of messages
     $emails = isset($decoded[0]) ? $decoded : [$decoded];
-
     $results = [];
 
     foreach ($emails as $email) {
-        $cmd = "python send_email.py";
+
+        $cmd = "python3 send_email.py";
+
         $proc = proc_open($cmd, [
-            0 => ["pipe", "r"], // stdin
-            1 => ["pipe", "w"], // stdout
-            2 => ["pipe", "w"]  // stderr
+            0 => ["pipe", "r"],
+            1 => ["pipe", "w"],
+            2 => ["pipe", "w"]
         ], $pipes);
 
         if (!is_resource($proc)) {
-            $results[] = ["recipient" => $email['recipient_email'] ?? 'unknown', "success" => false, "error" => "Failed to start Python process"];
+            $results[] = [
+                "recipient" => $email['recipient_email'],
+                "success"   => false,
+                "output"    => "",
+                "error"     => "Failed to start python"
+            ];
             continue;
         }
 
-        // Send JSON to Python stdin
         fwrite($pipes[0], json_encode($email));
         fclose($pipes[0]);
 
         $output = stream_get_contents($pipes[1]);
-        $error = stream_get_contents($pipes[2]);
+        $error  = stream_get_contents($pipes[2]);
 
         fclose($pipes[1]);
         fclose($pipes[2]);
-        $exit_code = proc_close($proc);
+
+        $exit = proc_close($proc);
 
         $results[] = [
-            "recipient" => $email['recipient_email'] ?? 'unknown',
-            "success" => $exit_code === 0,
-            "output" => trim($output),
-            "error" => trim($error)
+            "recipient" => $email['recipient_email'],
+            "success"   => ($exit === 0),
+            "output"    => trim($output),
+            "error"     => trim($error)
         ];
     }
 
     echo json_encode(["success" => true, "results" => $results]);
+
 } catch (Throwable $e) {
-    echo json_encode(["success" => false, "error" => $e->getMessage()]);
+    echo json_encode(["success"=>false,"error"=>$e->getMessage()]);
 }
 ?>
