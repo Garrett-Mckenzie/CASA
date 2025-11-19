@@ -50,6 +50,7 @@ header('Expires: 0');
 
 <body>
     <?php require_once('header.php') ?>
+
 	<div class="container mt-4 p-4 bg-white rounded shadow">
 		<h3 class="mb-3">Report Generator</h3>
 		<hr style = "height: 1px; background-color: black;"></hr>
