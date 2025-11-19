@@ -50,19 +50,21 @@ if (isset($_SESSION['_id'])) {
               padding: 20px 0;
           }
 
-          /* This container holds the export boxes side-by-side */
-          .export-container {
-              display: flex;
-              justify-content: center;
-              align-items: flex-start;
-              flex-wrap: wrap;
-              gap: 30px;
-              padding: 20px;
-          }
+         .export-container {
+             display: flex;
+             flex-direction: row;
+             justify-content: center;
+             align-items: flex-start;
+             gap: 30px;
+             width: 100%;
+         }
+        .export-container .full-width-bar-sub {
+                    width: 700px !important; /* Force a standard card width */
+                    margin: 0 !important;    /* Remove the 'big gap' margins */
+                    flex: 0 0 auto;          /* Stop it from stretching weirdly */
+                }
 
-          /* You will also need to copy the styles for
-             .content-box-test, .icon-overlay, etc.
-             from your import page's CSS file */
+
 
     </style>
 </head>
