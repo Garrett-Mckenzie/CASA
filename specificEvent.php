@@ -63,12 +63,170 @@
 
                 $completed = ($completion>=100)? 1:0;
             ?>
+            <div style="
+                display: flex; 
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                margin: 20px auto;
+                width: 100%;
+                max-width: 900px;
+            ">
+                <p><?php echo $desc; ?></p>
+            </div>
+            <div style="
+                display: flex; 
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                margin: 20px auto;
+                width: 100%;
+                max-width: 900px;
+            ">
+                <!-- LEFT: EVENT DETAILS TABLE -->
+                <table style="border-collapse: collapse; min-width: 350px;">
+                    <tr>
+                        <th style="text-align: left; padding: 10px; border: 1px solid #ddd;">Status</th>
+                        <td style="padding: 10px; border: 1px solid #ddd;">
+                            <?php echo ($completed ? "Completed" : "Incomplete"); ?>
+                        </td>
+                    </tr>
+                    <tr style="background-color: #f2f2f2;">
+                        <th style="text-align: left; padding: 10px; border: 1px solid #ddd;">Goal Amount</th>
+                        <td style="padding: 10px; border: 1px solid #ddd;">$<?php echo $goal; ?></td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left; padding: 10px; border: 1px solid #ddd;">Total Donations</th>
+                        <td style="padding: 10px; border: 1px solid #ddd;">$<?php echo $totalRaised; ?></td>
+                    </tr>
+                    <tr style="background-color: #f2f2f2;">
+                        <th style="text-align: left; padding: 10px; border: 1px solid #ddd;">Completion</th>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><?php echo $completion; ?>%</td>
+                    </tr>
+                </table>
 
-            <p> <?php echo $desc;?></p>
-            <p> <?php if($completed == 1){echo "completed";}else{echo "incomplete";}?></p>
-            <p> Goal Amount: $<?php echo $goal;?></p>
-            <p> Current Total Donations: $<?php echo $totalRaised;?> </p>
-            <p> Completion: <?php echo $completion;?>%</p>
+                <!-- RIGHT: PIE CHART -->
+                <div style="
+                    display: flex; 
+                    justify-content: center; 
+                    align-items: center;
+                    width: 300px; 
+                    height: 300px;
+                ">
+                    <canvas id="progressChart" width="300" height="300"></canvas>
+                </div>
+
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <script>
+            // ---- PHP VALUES ----
+            const raised = <?php echo $totalRaised; ?>;
+            const goal = <?php echo $goal; ?>;
+
+            // ---- CHART DATA LOGIC ----
+            let data = [];
+            let labels = [];
+            let colors = [];
+            let percent = Math.round((raised / goal) * 100);
+
+            // Determine overflow categories
+            if (raised <= goal) {
+                // No overflow
+                data = [raised, goal - raised];
+                labels = ['Raised', 'Remaining'];
+                colors = ['#4CAF50', '#e0e0e0']; // green + gray
+            } else {
+                const overflow = raised - goal;
+
+                data = [goal, overflow];
+                labels = ['Goal Reached', 'Overflow'];
+
+                // Overflow color changes with severity
+                let overflowColor = "#FF9800";      // mild overflow = orange
+                if (percent >= 150) overflowColor = "#ff5722";   // medium overflow = deeper orange/red
+                if (percent >= 200) overflowColor = "#d32f2f";   // extreme overflow = red
+
+                colors = ['#4CAF50', overflowColor];
+            }
+
+            // ---- CHART.JS PLUGIN: CENTER TEXT ----
+            const centerText = {
+                id: 'centerText',
+                afterDraw(chart) {
+                    const { ctx, chartArea: { width, height } } = chart;
+                    ctx.save();
+                    ctx.font = 'bold 28px Arial';
+                    ctx.fillStyle = '#333';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(percent + '%', width / 2, height / 2);
+                    ctx.restore();
+                }
+            };
+
+            // ---- CHART CREATION ----
+            const ctx = document.getElementById('progressChart');
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderWidth: 1,
+                        hoverOffset: 15   // gives animation on hover (pop out)
+                    }]
+                },
+                options: {
+                    cutout: '65%',  // doughnut hole size
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                        duration: 1200
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ": " + context.raw;
+                                }
+                            }
+                        }
+                    }
+                },
+                plugins: [centerText]
+            });
+            </script>
+
+
+
+            <form action="deleteEvent.php" method="GET">
+                <input type="hidden" name="id" value=<?php echo $event['id'];?>>
+                <button 
+                    type="submit" 
+                    onclick="return confirm('Are you sure you want to delete this event? This action cannot be undone.');"
+                    onmouseover="this.style.backgroundColor='#a50f1e';"
+                    onmouseout="this.style.backgroundColor='#d11a2a';"
+                    style="
+                        background-color:#d11a2a;
+                        color:white;
+                        border:none;
+                        padding:10px 18px;
+                        border-radius:6px;
+                        cursor:pointer;
+                        font-weight:bold;
+                    "
+                >
+                    Delete
+                </button>
+            </form>
+
         </main>
     
 

@@ -95,6 +95,33 @@
                                 </tbody>
                               </table>
                         ";
+                        echo "
+                            <div style='text-align:center; margin-top: 10px; margin-bottom: 30px;'>
+                                <form action='deleteEvent.php' method='GET' 
+                                    onsubmit=\"return confirm('Are you sure you want to delete the event: ".htmlspecialchars($event_name, ENT_QUOTES)." ?');\" 
+                                    style='display:inline-block;'>
+                                    
+                                    <input type='hidden' name='id' value='".$event['id']."'>
+
+                                    <button type='submit'
+                                        style=\"
+                                            background-color: #d9534f; 
+                                            color: white; 
+                                            border: none; 
+                                            padding: 8px 14px; 
+                                            font-size: 14px; 
+                                            border-radius: 4px; 
+                                            cursor: pointer;
+                                            transition: background-color 0.3s;
+                                        \"
+                                        onmouseover=\"this.style.backgroundColor='#c9302c'\"
+                                        onmouseout=\"this.style.backgroundColor='#d9534f'\"
+                                    >
+                                        Delete Event
+                                    </button>
+                                </form>
+                            </div>
+                        ";
                     }
                 } else {
                     echo '<p class="none-scheduled">There are no events scheduled on this day</p>';
