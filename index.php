@@ -433,13 +433,10 @@
 
     <div class="content-box">
         <img src="images/blank-white-background.jpg" style="filter: contrast(50%);" />
-        <div class="small-text">Let’s have some fun!</div>
-        <div class="large-text">Event Management</div>
-<button class="circle-arrow-button">
-    <span class="button-text"><?php 
-                        require_once('database/dbEvents.php');
-                        require_once('database/dbPersons.php');
-                    ?> Sign-Ups </span>
+        <div class="small-text">Let’s raise some money!</div>
+        <div class="large-text">Fundraiser Management</div>
+<button class="circle-arrow-button" onclick="window.location.href='viewAllEvents.php'">
+    <span class="button-text">Go</span>
     <div class="circle">&gt;</div>
 </button>
     </div>
