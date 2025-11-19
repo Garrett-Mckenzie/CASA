@@ -70,7 +70,7 @@
                         }
 
                         .delete-toggle-btn {
-                            background: #c62828;
+                            background: #787777ff;
                             color: white;
                         }
 
@@ -138,8 +138,19 @@
                             background: #4CAF50;
                         }
 
+                        .delete-toggle-btn:hover {
+                            background: #5e5e5eff !important;
+                            color: white !important;
+                        }
+
+                        #confirmDeleteButton:hover {
+                            background: #8e1b1b !important;
+                            color: white !important;
+                        }
+
                         #confirmDeleteContainer {
                             text-align: center;
+                            justify-content: center;
                             margin-top: 20px;
                             display: none;
                         }
@@ -161,7 +172,7 @@
                             onkeyup="filterEvents()">
 
                         <?php if ($accessLevel >= 2): ?>
-                        <button class="event-btn delete-toggle-btn" onclick="toggleDeleteMode()">Delete Events</button>
+                        <button class="event-btn delete-toggle-btn" onclick="toggleDeleteMode()">Select Events</button>
                         <?php endif; ?>
                     </div>
 
@@ -169,7 +180,7 @@
                     <div id="confirmDeleteContainer">
                         <form method="POST" action="deleteMultipleEvents.php" onsubmit="return confirm('Delete selected events?');">
                             <input type="hidden" id="selectedEventsInput" name="selectedEvents">
-                            <button id="confirmDeleteButton">Confirm Delete Selected</button>
+                            <button id="confirmDeleteButton">Delete Selected</button>
                         </form>
                     </div>
 
@@ -234,7 +245,7 @@
                             cb.checked = false;
                         });
 
-                        confirmBox.style.display = deleteMode ? "block" : "none";
+                        confirmBox.style.display = deleteMode ? "flex" : "none";
                     }
 
                     function filterEvents() {
