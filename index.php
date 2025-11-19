@@ -481,7 +481,7 @@
         </div>
 
 
-        <div class="content-box-test" onclick="window.location.href='Search.php'">
+        <div class="content-box-test" onclick="window.location.href='Search-donor-db/index.php.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/magnifying-glass.svg" alt="Search Icon">
             </div>
