@@ -49,11 +49,11 @@
                 $today = strtotime(date("Y-m-d"));
                 
                 // Filter out expired events
-                //$upcomingEvents = array_filter($events , fn($event)=> strtotime($event["endDate"])>=$today);
-                $upcomingEvents = $events;
+                $upcomingEvents = array_filter($events , fn($event)=> strtotime($event["endDate"])>=$today);
+                $upcomingIDs = array_column($upcomingEvents, 'id');
                 $user = retrieve_person($userID);
 
-                if (sizeof($upcomingEvents) > 0): ?>
+                if (sizeof($events) > 0): ?>
                     <!-- INLINE STYLES -->
                     <style>
                         .event-controls {
@@ -233,7 +233,20 @@
                             line-height: 1;
                             margin-top: -3px; /* optical center for + sign */
                         }
+                        .past-event {
+                            background: #e6e6e6 !important;  /* light grey */
+                            color: #555 !important;          /* darker text */
+                            opacity: 0.75;
+                        }
 
+                        .past-event .event-title a {
+                            color: #444 !important;
+                        }
+
+                        .past-event:hover {
+                            transform: none; /* disable hover lift */
+                            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                        }
                     </style>
 
                     <!-- TOP CONTROLS -->
@@ -269,7 +282,7 @@
 
                     <!-- EVENT CARDS GRID -->
                     <div class="event-grid" id="eventGrid">
-                    <?php foreach ($upcomingEvents as $event): 
+                    <?php foreach ($events as $event): 
 
                         $eventID = $event['id'];
                         $title = $event['name'];
@@ -285,9 +298,9 @@
                             foreach ($donations as $d){ $total += $d["amount"]; }
                             $completion = round($total / $goal * 100, 1);
                         } else { $completion = 0; }
-
+                        $isUpcoming = in_array($eventID, $upcomingIDs);
                     ?>
-                        <div class="event-card"
+                        <div class="event-card <?= $isUpcoming ? '' : 'past-event' ?>"
                             data-title="<?= strtolower($title) ?>"
                             data-desc="<?= strtolower($desc) ?>"
                             data-date="<?= strtolower($dates) ?>">
@@ -297,6 +310,9 @@
                             <div class="event-title">
                                 <a href="specificEvent.php?id=<?= $eventID ?>" style="text-decoration:none; color:#036;">
                                     <?= htmlspecialchars($title) ?>
+                                    <?php if (!$isUpcoming): ?>
+                                        <span style="color:#777;">(past)</span>
+                                    <?php endif; ?>
                                 </a>
                             </div>
 
