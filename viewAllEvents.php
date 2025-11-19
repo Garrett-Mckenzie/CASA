@@ -53,71 +53,211 @@
                 $user = retrieve_person($userID);
 
                 if (sizeof($upcomingEvents) > 0): ?>
-                <div class="table-wrapper">
-                    <h2>Upcoming Events</h2>
-                    <table class="general">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Date</th>     
-                                <th>Time</th>
-                                <th style="width:1px">Fundraiser Goal</th>
-                                <th style="width:1px"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="standout">
-                            <?php 
-                                #require_once('database/dbPersons.php');
-                                #require_once('include/output.php');
-                                #$id_to_name_hash = [];
-                                foreach ($upcomingEvents as $event) {
-                                    $eventID = $event['id'];
-                                    $title = $event['name'];
-                                    $goalAmount = $event['goalAmount'];
-                                    $startDate = $event['startDate'];
-                                    $endDate = $event['endDate'];
-                                    $startTime = time24hto12h($event['startTime']);
-                                    $endTime = time24hto12h($event['endTime']);
-                                    $description = $event['description'];
+                    <!-- INLINE STYLES -->
+                    <style>
+                        .event-controls {
+                            text-align: center;
+                            margin: 20px 0;
+                        }
 
-                                    $donations = fetch_donations_for_event($eventID);
-                                    $totalRaised = 0;
-                                    if ($donations){
-                                        foreach ($donations as $donation){
-                                            $totalRaised += $donation["amount"];
-                                        }
-                                        $completion = round($totalRaised/$goalAmount,2)*100;
-                                        }
-                                        else{
-                                            $completion = 0;
-                                        }
+                        .event-btn {
+                            padding: 10px 16px;
+                            margin: 4px;
+                            font-size: 15px;
+                            cursor: pointer;
+                            border-radius: 8px;
+                            border: none;
+                        }
 
-                                    $completed = ($completion>=100)? 1:0;
+                        .delete-toggle-btn {
+                            background: #c62828;
+                            color: white;
+                        }
 
-                                    if ($startDate == $endDate){
-                                        $dates = $startDate;
-                                    }
-                                    else{
-                                        $dates = $startDate . " to " . $endDate;
-                                    }
-                            
-                                    echo "
-                                    <tr data-event-id='$eventID'>
+                        .event-search {
+                            padding: 10px 15px;
+                            width: 280px;
+                            font-size: 16px;
+                            border-radius: 8px;
+                            border: 1px solid #aaa;
+                        }
 
-                                        <td><a href='specificEvent.php?id=$eventID'>$title</a></td>
-                                        <td>$dates</td>
-                                        <td>$startTime - $endTime</td>
-                                        <td>$$goalAmount</td>"; //money
-                                    
-                                   
-                                       
-                                    echo "</tr>";
+                        .event-grid {
+                            display: flex;
+                            flex-wrap: wrap;
+                            justify-content: center;
+                            gap: 25px;
+                        }
 
-                                    }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
+                        .event-card {
+                            position: relative;
+                            width: 320px;
+                            background: #ffffff;
+                            border-radius: 12px;
+                            padding: 16px;
+                            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+                            transition: transform 0.15s ease;
+                        }
+
+                        .event-card:hover {
+                            transform: translateY(-4px);
+                        }
+
+                        .event-checkbox {
+                            position: absolute;
+                            top: 10px;
+                            right: 10px;
+                            transform: scale(1.4);
+                            display: none; /* hidden until delete mode */
+                        }
+
+                        .event-title {
+                            font-size: 19px;
+                            font-weight: bold;
+                            margin-bottom: 8px;
+                            color: #036;
+                        }
+
+                        .event-date {
+                            font-size: 14px;
+                            margin-bottom: 6px;
+                            color: #444;
+                        }
+
+                        .progress-bg {
+                            width: 100%;
+                            height: 10px;
+                            background: #eee;
+                            border-radius: 5px;
+                            overflow: hidden;
+                            margin-top: 8px;
+                        }
+
+                        .progress-fill {
+                            height: 100%;
+                            background: #4CAF50;
+                        }
+
+                        #confirmDeleteContainer {
+                            text-align: center;
+                            margin-top: 20px;
+                            display: none;
+                        }
+
+                        #confirmDeleteButton {
+                            background: #b71c1c;
+                            color: white;
+                            padding: 12px 20px;
+                            border: none;
+                            border-radius: 8px;
+                            font-size: 16px;
+                            cursor: pointer;
+                        }
+                    </style>
+
+                    <!-- TOP CONTROLS -->
+                    <div class="event-controls">
+                        <input type="text" placeholder="Search events…" id="eventSearch" class="event-search"
+                            onkeyup="filterEvents()">
+
+                        <?php if ($accessLevel >= 2): ?>
+                        <button class="event-btn delete-toggle-btn" onclick="toggleDeleteMode()">Delete Events</button>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- DELETE CONFIRM -->
+                    <div id="confirmDeleteContainer">
+                        <form method="POST" action="deleteMultipleEvents.php" onsubmit="return confirm('Delete selected events?');">
+                            <input type="hidden" id="selectedEventsInput" name="selectedEvents">
+                            <button id="confirmDeleteButton">Confirm Delete Selected</button>
+                        </form>
+                    </div>
+
+                    <!-- EVENT CARDS GRID -->
+                    <div class="event-grid" id="eventGrid">
+                    <?php foreach ($upcomingEvents as $event): 
+
+                        $eventID = $event['id'];
+                        $title = $event['name'];
+                        $desc = $event['description'];
+                        $goal = $event['goalAmount'];
+                        $dates = ($event['startDate'] === $event['endDate'])
+                            ? $event['startDate']
+                            : ($event['startDate'] . " to " . $event['endDate']);
+
+                        $donations = fetch_donations_for_event($eventID);
+                        $total = 0;
+                        if ($donations){
+                            foreach ($donations as $d){ $total += $d["amount"]; }
+                            $completion = round($total / $goal * 100, 1);
+                        } else { $completion = 0; }
+
+                    ?>
+                        <div class="event-card"
+                            data-title="<?= strtolower($title) ?>"
+                            data-desc="<?= strtolower($desc) ?>"
+                            data-date="<?= strtolower($dates) ?>">
+
+                            <input type="checkbox" class="event-checkbox" value="<?= $eventID ?>">
+
+                            <div class="event-title">
+                                <a href="specificEvent.php?id=<?= $eventID ?>" style="text-decoration:none; color:#036;">
+                                    <?= htmlspecialchars($title) ?>
+                                </a>
+                            </div>
+
+                            <div class="event-date"><?= $dates ?></div>
+
+                            <div><strong>Goal:</strong> $<?= $goal ?></div>
+                            <div><strong>Raised:</strong> $<?= $total ?> (<?= $completion ?>%)</div>
+
+                            <div class="progress-bg">
+                                <div class="progress-fill" style="width: <?= min($completion, 100) ?>%;"></div>
+                            </div>
+                        </div>
+
+                    <?php endforeach; ?>
+                    </div>
+
+                    <!-- INLINE JS -->
+                    <script>
+                    let deleteMode = false;
+
+                    function toggleDeleteMode() {
+                        deleteMode = !deleteMode;
+
+                        let checkboxes = document.querySelectorAll('.event-checkbox');
+                        let confirmBox = document.getElementById('confirmDeleteContainer');
+
+                        checkboxes.forEach(cb => {
+                            cb.style.display = deleteMode ? "block" : "none";
+                            cb.checked = false;
+                        });
+
+                        confirmBox.style.display = deleteMode ? "block" : "none";
+                    }
+
+                    function filterEvents() {
+                        let query = document.getElementById('eventSearch').value.toLowerCase();
+                        let cards = document.querySelectorAll('.event-card');
+
+                        cards.forEach(card => {
+                            let text = card.dataset.title + " " +
+                                    card.dataset.desc + " " +
+                                    card.dataset.date;
+
+                            card.style.display = text.includes(query) ? "block" : "none";
+                        });
+                    }
+
+                    document.getElementById("confirmDeleteContainer").addEventListener("submit", () => {
+                        let checked = [...document.querySelectorAll(".event-checkbox:checked")]
+                                    .map(cb => cb.value);
+
+                        document.getElementById("selectedEventsInput").value = JSON.stringify(checked);
+                    });
+                    </script>
+
 
                 <?php else: ?>
                 <p class="no-events standout">There are currently no events available to view.<a class="button add" href="addEvent.php">Create a New Event</a> </p>
