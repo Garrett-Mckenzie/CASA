@@ -736,13 +736,13 @@ date_default_timezone_set('America/New_York');
             <div class="nav-item">Document Management
               <div class="dropdown">
 
-                <a href="Import.php" style="text-decoration: none;">
+                <a href="import.php" style="text-decoration: none;">
                   <div class="in-nav">
                     <img src="images/plus-solid.svg">
                     <span>Import</span>
                   </div>
                 </a>
-                <a href="Export.php" style="text-decoration: none;">
+                <a href="export.php" style="text-decoration: none;">
                   <div class="in-nav">
                     <img src="images/list-solid.svg">
                     <span>Export</span>
