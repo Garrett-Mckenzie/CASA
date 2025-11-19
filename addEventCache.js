@@ -1,7 +1,8 @@
-
+var form = null;
 (function() {
-    const form = document.getElementById('new-event-form');
+    form = document.getElementById('new-event-form');
     const KEY = "AddEventData";
+    console.log("Form: ", form);
 
         try{
             const savedData = JSON.parse(localStorage.getItem(KEY));
@@ -20,18 +21,27 @@
 
     function saveData(){
         const data = {};
-        for(const element of form.elements){
-            if(element.name){
-                data[element.name] = element.value;
+        if(form == null){
+            form = document.getElementById('new-event-form');
+        }
+        if(form != null){
+            for(const element of form.elements){
+                if(element.name){
+                    data[element.name] = element.value;
+                }
+            }
+
+            try{
+                localStorage.setItem(KEY, JSON.stringify(data));
+            }
+            catch(e){
+                console.error("Error saving form data:", e);
             }
         }
+    }
 
-        try{
-            localStorage.setItem(KEY, JSON.stringify(data));
-        }
-        catch(e){
-            console.error("Error saving form data:", e);
-        }
+    function clearCache(){
+        localStorage.removeItem(KEY);
     }
 
     setInterval(saveData, 5000);

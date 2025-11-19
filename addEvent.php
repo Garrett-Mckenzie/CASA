@@ -23,79 +23,52 @@
     }
 
     function to24h($time12){
-        $timeIn = strtoupper(trim($time12));
+        $timeIn = strtoupper($time12);
         $time = DateTime::createFromFormat('g:i A', $time12);
         if (!$time){
             return false;
         }
-        return $time->format('H:i:s');
-    }
-    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['error'])){
-        if($_POST['error'] == 'bad time range'){
-            echo <<<ERROR
-            <script type="text/javascript">
-                function dateError(){
-                    const box = document.getElementById('errorBox');
-                    box.style.visibility = 'visible';
-                }
-                function closeError(objId){
-                    const box = document.getElementById(objId);
-                    box.style.visibility = 'hidden';
-                }
-                // Call the function to show the error
-                dateError();
-            </script>
-            ERROR;
-        }
+        return $time->format('H:i');
     }
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
         require_once('include/input-validation.php');
         require_once('database/dbEvents.php');
 
         $args = sanitize($_POST, null);
-
         $required = array("name","goalAmount", "startDate","endDate", "startTime", "endTime", "description");
 
         if (!wereRequiredFieldsSubmitted($args, $required)) {
-            echo 'bad form data';
-            die();
+            $invalidFields = true;
         } else {
             $startTime = to24h($args['startTime']);
             $endTime = to24h($args['endTime']);
-            $start = DateTime::createFromFormat('Y-m-d H:i', $args['startDate'] . ' ' . $startTime);
-            $end = DateTime::createFromFormat('Y-m-d H:i', $args['endDate'] . ' ' . $endTime);
+            $startDate = validateDate($args["startDate"]);
+            $endDate = validateDate($args["endDate"]);
+            $start = $startDate . ' ' . $startTime;
+            $end = $endDate . ' ' . $endTime;
             $valid = $start < $end;
-            if (!$valid) {
-                $url = "addEvent.php";
-                $data = ['error' => 'bad time range'];
-                $settings = [
-                    'http' => [
-                        'method' => 'POST',
-                        'header' => 'Content-Type: application/x-www-form-urlencoded',
-                        'content' => http_build_query($data),
-                    ],
-                ];
-                $context = stream_context_create($settings);
-                $file = file_get_contents($url, false, $context);
+            if(!$valid) {
+                $badTimeFormat = true;
             }
-
-            $startTime = $args['startTime'] = $startTime;
-            $endTime = $args['endTime'] = $endTime;
-            $startDate = $args['startDate'] = validateDate($args["startDate"]);
-            $endDate = $args['endDate'] = validateDate($args["endDate"]);
+            else{
+                $startTime = $args['startTime'] = $startTime;
+                $endTime = $args['endTime'] = $endTime;
+                $startDate = $args['startDate'] = validateDate($args["startDate"]);
+                $endDate = $args['endDate'] = validateDate($args["endDate"]);
             
     
-            if (!$startTime || !$endTime || !$endDate || !$startDate){
-                echo 'bad args';
-                die();
-            }
+                if (!$startTime || !$endTime || !$endDate || !$startDate){
+                    $invalidFields = true;
+                }
 
-            $id = create_event($args);
-            if(!$id){
-                die();
-            } else {
-                header('Location: eventSuccess.php?valid=' . $start);
-                exit();
+                $id = create_event($args);
+                if(!$id){
+                    die();
+                } else {
+                    header('Location: eventSuccess.php');
+                    exit();
+                }
             }
             
         }
@@ -119,15 +92,18 @@
     <head>
         <?php require_once('universal.inc') ?>
         <title>Rappahannock CASA | Create Event</title>
-        <script src="addEventCache.js"></script>
         <link rel="stylesheet" href="css/eventStyler.scss"></link>
         <script lang="js">
 			function dateError(){
-				const box = document.getElementById('errorBox');
+				const box = document.getElementById('timeErrorBox');
 				box.style.visibility = 'visible';
 			}
+            function missingDataError(){
+                const box = document.getElementById('missingDataBox');
+                box.style.visibility = 'visible';
+            }
 			function close(ObjID){
-				const box = document.getElementById(ObjId);
+                const box = document.getElementById(ObjID);
 				box.style.visibility = 'hidden';
 			}
 		</script>
@@ -136,14 +112,22 @@
         <?php require_once('header.php') ?>
         <h1>Create Event</h1>
         <main class="date">
-            <!-- Error Box for invalid date formatting -->
-            <div class="errorBox" id="errorBox">
+            <!-- Error Box for Invalid Time Formatting -->
+            <div class="errorBox" id="timeErrorBox">
 				<table>
 					<tr> <th></th> <th class="errorHead"><p><strong>Error</strong></p></th> <th></th> </tr>
 					<tr> <td></td> <td class="errorText"><p>Invalid Date Formatting</p></td> <td></td> </tr>
-					<tr> <td></td> <td class="bContainer" id="bContainer"><button onclick="close('errorBox')">Close</button></td> <td></td> </tr>
+					<tr> <td></td> <td class="bContainer" id="bContainer"><button>Close</button></td> <td></td> </tr>
 				</table>
 			</div>
+            <!-- Error Box for Missing Data -->
+            <div class="errorBox" id="missingDataBox">
+                <table>
+                    <tr> <th></th> <th class="errorHead"><p><strong>Error</strong></p></th> <th></th> </tr>
+                    <tr> <td></td> <td class="errorText"><p>Missing Form Data</p></td> <td></td> </tr>
+                    <tr> <td></td> <td class="bContainer" id="bContainer"><button>Close</button></td> <td></td> </tr>
+                </table>
+            </div>
 
 
             <h2>New Event Form</h2>
@@ -181,6 +165,15 @@
                     <a class="button cancel" href="index.php" style="margin-top: -.5rem">Return to Dashboard</a>
                 <?php endif ?>
 
+                <?php if (isset($badTimeFormat) && $badTimeFormat): ?>
+                    <script type="text/javascript">
+                        dateError();
+                    </script>
+                <?php elseif (isset($invalidFields) && $invalidFields): ?>
+                    <script type="text/javascript">
+                        missingDataError();
+                    </script>
+                <?php endif; ?>
                 <!-- Require at least one checkbox be checked -->
                 <script type="text/javascript">
                     $(document).ready(function(){
@@ -193,7 +186,11 @@
                             }
                         });
                     });
+                    document.getElementById('timeErrorBox').addEventListener('click', function(){ close('timeErrorBox'); });
+                    document.getElementById('missingDataBox').addEventListener('click', function(){ close('missingDataBox'); });
                 </script>
+                <!-- Add Event Cache -->
+                <script src="addEventCache.js"></script>
         </main>
     </body>
 </html>

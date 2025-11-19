@@ -15,6 +15,7 @@
 	--accent-color: #c52e81;
 	--cancel-button-background-color: #000;
 	--primary-color: #33C;
+	--background-color: #EEF;
 }
 
 			
@@ -50,7 +51,7 @@ table {
 	flex-direction: column;
 }
 
-.errorBox {
+div#timeErrorBox {
 	width: fit-content;
 	height: fit-content;
 	left: 45%;
@@ -59,6 +60,20 @@ table {
 	border-style: solid;
 	position: absolute;
 	visibility: hidden;
+	background-color: var(--background-color);
+}
+
+
+div#missingDataBox {
+	width: fit-content;
+	height: fit-content;
+	left: 45%;
+	top: 40%;
+	border-width: 2px;
+	border-style: solid;
+	position: absolute;
+	visibility: hidden;
+	background-color: var(--background-color);
 }
 .errorHead {
 	color: var(--primary-color);
