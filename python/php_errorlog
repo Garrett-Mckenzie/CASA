@@ -1,1 +1,7 @@
 [11-Nov-2025 19:25:00 UTC] PHP Parse error:  syntax error, unexpected token "}" in /home/customer/www/jenniferp216.sg-host.com/public_html/python/ImportHandler.php on line 22
+[20-Nov-2025 16:25:28 UTC] PHP Parse error:  syntax error, unexpected token "\", expecting "," or ";" in /home/customer/www/jenniferp216.sg-host.com/public_html/python/ExportHandler.php on line 69
+[20-Nov-2025 16:45:56 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function ob_end() in /home/customer/www/jenniferp216.sg-host.com/public_html/python/ExportHandler.php:82
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/python/ExportHandler.php on line 82
+[20-Nov-2025 16:49:53 UTC] PHP Parse error:  syntax error, unexpected token "echo", expecting "," or ";" in /home/customer/www/jenniferp216.sg-host.com/public_html/python/ExportHandler.php on line 72

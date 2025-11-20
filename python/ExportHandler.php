@@ -36,7 +36,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST)){
 								header("Location: ../export.php?success=0&error=no_file&post=" . urldecode(serialize($_POST))); 
 								exit; 
 				}
-				header("Location: ../export.php?success=1&file=$export_file");
+				header("Location: ../export.php?success=1&file=python/$export_file");
 				exit;
 }
 
