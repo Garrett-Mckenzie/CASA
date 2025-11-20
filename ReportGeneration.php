@@ -143,7 +143,7 @@ header('Expires: 0');
 	</div>
 <br/>
 <br/>
-        <footer class="footer" style="footer">
+<footer class="footer" style="footer">
             <!-- Left Side: Logo & Socials -->
             <div class="footer-left">
                 <img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">

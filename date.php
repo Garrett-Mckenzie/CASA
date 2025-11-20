@@ -61,9 +61,15 @@
                     foreach ($events as $event) {
                         require_once('include/output.php');
                         $event_name = $event['name'];
-                        $event_startTime = time24hto12h($event['startTime']);
+                        $startTime = time24hto12h($event['startTime']);
+                        $endTime = time24hto12h($event['endTime']);
                         $event_description = $event['description'];
                         $goal = $event["goalAmount"];
+                        
+                        //create a string thats adaptive based on start and enddate, shows dates with times
+                        $TimeSpan = ($event['startDate'] === $event['endDate'])
+                            ? $event['startDate'] .", ". $startTime ." to " . $endTime
+                            : ($event['startDate'] .", ". $startTime . " to " . $event['endDate'].", ". $endTime);
 
                         $donations = fetch_donations_for_event($event["id"]);
                         $totalRaised = 0;
@@ -87,7 +93,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td>Time</td><td>" . time24hto12h($event['startTime']) ." - ".time24hto12h($event['endTime']). "</td></tr>
+                                    <tr><td>Time Span</td><td>" . $TimeSpan. "</td></tr>
                                     <tr><td>Location</td><td>" . /*$location .*/ "</td></tr>
                                     <tr><td>Description</td><td>" . $event['description'] . "</td></tr>
                                     <tr><td>Fundraiser Goal</td><td> $" . $goal . "</td></tr>
