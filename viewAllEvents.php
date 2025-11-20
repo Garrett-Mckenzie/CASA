@@ -38,7 +38,7 @@
             require('include/time.php');
         ?>
         
-        <h1>Events</h1>
+        <h1>Fundraising Events</h1>
         <main class="general">
             <?php 
               
