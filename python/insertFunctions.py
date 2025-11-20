@@ -1,4 +1,5 @@
 import sys
+from datetime import datetime
 from importlib.metadata import distributions
 from pathlib import Path
 from credentials import HOST, USER, PASSWORD, DATABASE
@@ -6,6 +7,13 @@ import pandas as pd
 import random
 import os
 import numpy as np
+
+def isValidDate(date):
+    try:
+        test = datetime.strptime(date , "%m/%d/%Y")
+        return True
+    except Exception as e:
+        return False
 
 #To insert a donation all it needs is an amount
 def insertDonation(donationData,donation_columns,conn,cursor):
@@ -29,6 +37,19 @@ def insertDonation(donationData,donation_columns,conn,cursor):
             #makes sure the amount is present
             if insertData[insertCol.index("amount")] == "": 
                 goodInsert = 0
+            
+            #validates the date insertion
+            if "date" in insertCol:
+                idx = insertCol.index("date")
+                insertCol.pop(idx)
+                d = insertData.pop(idx)
+
+                if isValidDate(d):
+                    insertCol.append("date")
+                    insertCol.append(d)
+                else:
+                    goodInsert = 0
+                    print(f"Invalid date of {d} on row {i+1}. Must be in format dd/mm/yyyy.")
             
             #deal with donor donation relationship
             if (("first" in insertCol or "last" in insertCol or "email" in insertCol) and not ("first" in insertCol and "last" in insertCol and "email" in insertCol)):
@@ -126,6 +147,20 @@ def insertEvent(eventData,event_columns,conn,cursor):
                 insertData.append(value)
             except KeyError as e:
                 pass
+            
+        #validates the date insertion
+        if "date" in insertCol:
+            idx = insertCol.index("date")
+            insertCol.pop(idx)
+            d = insertData.pop(idx)
+
+            if isValidDate(d):
+                insertCol.append("date")
+                insertCol.append(d)
+            else:
+                goodInsert = 0
+                print(f"Invalid date of {d} on row {i+1}. Must be in format dd/mm/yyyy.")
+
 
         if insertData[insertCol.index("eventName") == ""]:
             print(f"Event on row {i+1} was not named and therefore could not be inserted")
