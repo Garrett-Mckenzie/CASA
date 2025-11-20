@@ -30,24 +30,33 @@
         $required = array("name","goalAmount", "startDate","endDate", "startTime", "endTime", "description");
 
         if (!wereRequiredFieldsSubmitted($args, $required)) {
-            echo 'bad form data';
-            die();
+            header('Location: eventFailure.php?e=1');
+            exit();
         } else {
-            $validated = validate12hTimeRangeAndConvertTo24h($args["startTime"], $args["endTime"]);
-            if (!$validated) {
-                echo 'bad time range';
-                die();
+
+            $startTime = to24h($args['startTime']);
+            $endTime = to24h($args['endTime']);
+            $startDate = validateDate($args["startDate"]);
+            $endDate = validateDate($args["endDate"]);
+
+            //check if end is later than start
+            $start = $startDate . ' ' . $startTime;
+            $end = $endDate . ' ' . $endTime;
+            $valid = $start < $end;
+            if (!$valid) {
+                header('Location: eventFailure.php?e=2');
+                exit();
             }
 
-            $startTime = $args['startTime'] = $validated[0];
-            $endTime = $args['endTime'] = $validated[1];
-            $startDate = $args['startDate'] = validateDate($args["startDate"]);
-            $endDate = $args['endDate'] = validateDate($args["endDate"]);
+            $args['startTime'] = $startTime;
+            $args['endTime'] = $endTime;
+            $args['startDate'] = $startDate;
+            $args['endDate'] = $endDate;
             
     
             if (!$startTime || !$endTime || !$endDate || !$startDate){
-                echo 'bad args';
-                die();
+                header('Location: eventFailure.php?e=3');
+                exit();
             }
 
             $id = create_event($args);
