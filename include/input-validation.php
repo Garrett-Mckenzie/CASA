@@ -130,6 +130,15 @@
         return true;
     }
 
+    function to24h($time12){
+        $timeIn = strtoupper($time12);
+        $time = DateTime::createFromFormat('g:i A', $timeIn);
+        if (!$time){
+            return false;
+        }
+        return $time->format('H:i');
+    }
+
     function validate12hTimeRangeAndConvertTo24h($start, $end) {
         $start = validate12hTimeAndConvertTo24h($start);
         $end = validate12hTimeAndConvertTo24h($end);
