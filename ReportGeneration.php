@@ -54,7 +54,7 @@ header('Expires: 0');
 	<div class="container mt-4 p-4 bg-white rounded shadow">
 		<h3 class="mb-3">Report Generator</h3>
 		<hr style = "height: 1px; background-color: black;"></hr>
-		<form id="emailForm" action="./formHandler.php" method="post">
+		<form id="emailForm" action="reportGeneration/formHandler.php" method="post">
 
 			<div class = "mb-3">
 				<label><b>Name of Report</b></label><br/>
@@ -108,6 +108,11 @@ header('Expires: 0');
 				<input type="checkbox" name="graphDesc" value="True"> Include Graph Descriptions</input><br/>	
 			</div>
 
+			<div class = "mb-3">
+				<label><b>Full Report</b></label><br/>
+				<input type="checkbox" name="checkAll" value="True"> Select All Options</input><br/>
+			</div>
+
 			<input type = "hidden" id="os" name="os" value="<?php echo$os; ?>">
 			<button type="submit" class="btn btn-primary">Generate Report</button>
 
@@ -136,6 +141,8 @@ header('Expires: 0');
 		<button type="submit" class="btn btn-primary">Submit Changes</button>
 		</form>
 	</div>
+<br/>
+<br/>
         <footer class="footer" style="footer">
             <!-- Left Side: Logo & Socials -->
             <div class="footer-left">
