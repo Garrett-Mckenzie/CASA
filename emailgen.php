@@ -4,7 +4,7 @@ ini_set('max_execution_time', 120);
 ini_set('display_errors', 0);
 
 // === GLOBAL CONFIG ===
-$OPENAI_API_KEY = "REPLACEME";
+$OPENAI_API_KEY = "ADDME";
 $OPENAI_MODEL   = "gpt-4o-mini";
 
 // === Unified JSON error handling ===
