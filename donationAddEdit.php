@@ -21,6 +21,15 @@ if (isset($_SESSION['_id'])) {
 				$accessLevel = $_SESSION['access_level'];
 				$userID = $_SESSION['_id'];
 }
+try{
+	include_once("database/dbinfo.php");
+	$con = connect();
+	$query = "SELECT name FROM dbevents";
+	$eventNames = mysqli_query($con,$query);
+}
+catch(Exception $e){
+				echo "Message. ".e->getMessage();
+}
 ?>
 
 
@@ -39,16 +48,51 @@ if (isset($_SESSION['_id'])) {
 <div class="container mt-4 p-4 bg-white rounded shadow">
 		<h3 class="mb-3">Add a New Donation</h3>
 		<hr style = "height: 1px; background-color: black;"></hr>
-		<form id="emailForm" action="NONE" method="post">
+		<form id="emailForm" action="addDonationHandler.php" method="post">
+
 			<div class = "mb-3">
-				<label><b>Name of Donor</b></label><br/>
-				<input type = "text" id="donorName" name="donorName"></input>
+				<label><b>First Name of Donor</b></label><br/>
+				<input type = "text" id="firstName" name="firstName"></input>
+			</div>
+
+			<div class = "mb-3">
+				<label><b>Last Name of Donor</b></label><br/>
+				<input type = "text" id="lastName" name="lastName"></input>
 			</div>
 
 			<div class="mb-3">	
 				<label><b>Date of Donation</b></label><br/>
-				<input type = "datetime-local" id="startDate" name="startDate"></input>
+				<input type = "datetime-local" id="date" name="date"></input>
 			</div>
+
+			<div class="mb-3">	
+				<label><b>Amount Donated</b></label><br/>
+				<input type = "number" id="amount" name="amount" step = "0.01" min="0" placeholder="Ender amount in $USD"></input>
+			</div>
+
+			<div class="mb-3">	
+				<label><b>Associated Fees</b></label><br/>
+				<input type = "number" id="fee" name="fee" step = "0.01" min="0" placeholder="Ender amount in $USD"></input>
+			</div>
+
+			<div class = "mb-3">
+				<label><b>Associated Fundraising Event</b></label><br/>
+				<select name="eventName" id="eventName">
+					<option value = "none">none</option>
+					<?php
+						foreach($eventNames as $row)
+						{
+							echo "<option value = ".$row["name"].">".$row["name"]."</option>";
+						}
+					?>
+				</select>
+			</div>
+
+			<div class = "mb-3">
+				<label><b>Reason For Donation</b></label><br/>
+				<textarea name="reason" cols="50"></textarea>
+			</div>
+
 			<button type="submit" class="btn btn-primary">Add Donation</button>
 		</form>
 </div>
