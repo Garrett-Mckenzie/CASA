@@ -48,7 +48,7 @@ catch(Exception $e){
 <div class="container mt-4 p-4 bg-white rounded shadow">
 		<h3 class="mb-3">Add a New Donation</h3>
 		<hr style = "height: 1px; background-color: black;"></hr>
-		<form id="emailForm" action="addDonationHandler.php" method="post">
+		<form id="addDonation" action="addDonationHandler.php" method="post">
 
 			<div class = "mb-3">
 				<label><b>First Name of Donor</b></label><br/>
@@ -96,6 +96,29 @@ catch(Exception $e){
 			<button type="submit" class="btn btn-primary">Add Donation</button>
 		</form>
 </div>
+<div class="container mt-4 p-4 bg-white rounded shadow">
+		<h3 class="mb-3">Find and Edit Donations</h3>
+		<hr style = "height: 1px; background-color: black;"></hr>
+		<form id="editDonation" action="editDonationHandler.php" method="post">
+
+			<div class = "mb-3">
+				<label><b>First Name of Donor</b></label><br/>
+				<input type = "text" id="firstName" name="firstName"></input>
+			</div>
+
+			<div class = "mb-3">
+				<label><b>Last Name of Donor</b></label><br/>
+				<input type = "text" id="lastName" name="lastName"></input>
+			</div>
+
+			<div class="mb-3">	
+				<label><b>Date of Donation</b></label><br/>
+				<input type = "datetime-local" id="date" name="date"></input>
+			</div>
+		<button type="submit" class="btn btn-primary">Search</button>
+</form>
+</div>
+
 <br/>
 <br/>
 
