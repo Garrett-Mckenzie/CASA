@@ -39,12 +39,16 @@ catch(Exception $e){
 	<meta charset="UTF-8">
 	<title>Add and Edit Donations</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+	<meta http-equiv="Content-Type" content="text/html">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/messages.css"></link>
+
 
 </head>
 
 <body>
 <?php require_once('header.php') ?>
-
+<h1 class="page-title">Donation Managment</h1>
 <div class="container mt-4 p-4 bg-white rounded shadow">
 		<h3 class="mb-3">Add a New Donation</h3>
 		<hr style = "height: 1px; background-color: black;"></hr>
