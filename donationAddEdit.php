@@ -21,6 +21,19 @@ if (isset($_SESSION['_id'])) {
 				$accessLevel = $_SESSION['access_level'];
 				$userID = $_SESSION['_id'];
 }
+try{
+	include_once("database/dbinfo.php");
+	$con = connect();
+	$query = "SELECT name FROM dbevents";
+	$eventNames = mysqli_query($con,$query);
+}
+catch(Exception $e){
+				echo "Message. ".e->getMessage();
+}
+
+if (isset($_SESSION)){
+	var_dump($_SESSION);
+}
 ?>
 
 
@@ -30,28 +43,103 @@ if (isset($_SESSION['_id'])) {
 	<meta charset="UTF-8">
 	<title>Add and Edit Donations</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+	<meta http-equiv="Content-Type" content="text/html">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/messages.css"></link>
+
 
 </head>
 
 <body>
 <?php require_once('header.php') ?>
-
+<h1 class="page-title">Donation Managment</h1>
 <div class="container mt-4 p-4 bg-white rounded shadow">
 		<h3 class="mb-3">Add a New Donation</h3>
 		<hr style = "height: 1px; background-color: black;"></hr>
-		<form id="emailForm" action="NONE" method="post">
+		<form id="addDonation" action="addDonationHandler.php" method="post">
+
+
 			<div class = "mb-3">
-				<label><b>Name of Donor</b></label><br/>
-				<input type = "text" id="donorName" name="donorName"></input>
+				<label><b>First Name of Donor</b></label><br/>
+				<input type = "text" id="firstName" name="firstName"></input>
+			</div>
+
+			<div class = "mb-3">
+				<label><b>Last Name of Donor</b></label><br/>
+				<input type = "text" id="lastName" name="lastName"></input>
+			</div>
+
+			<div class = "mb-3">
+				<label><b>Donor Email</b></label><br/>
+				<input type = "text" id="donorEmail" name="donorEmail"></input>
+			</div>
+
+
+			<div class="mb-3">	
+				<label><b>Date of Donation</b></label><br/>
+				<input type = "datetime-local" id="date" name="date"></input>
+			</div>
+
+			<div class="mb-3">	
+				<label><b>Amount Donated</b></label><br/>
+				<input type = "number" id="amount" name="amount" value = "0" step = "0.01" min="0" placeholder="Ender amount in $USD"></input>
+			</div>
+
+			<div class="mb-3">	
+				<label><b>Associated Fees</b></label><br/>
+				<input type = "number" id="fee" name="fee" value = "0" step = "0.01" min="0" placeholder="Ender amount in $USD"></input>
+
+			</div>
+
+			<div class = "mb-3">
+				<label><b>Associated Fundraising Event</b></label><br/>
+				<select name="eventName" id="eventName">
+					<option value = "none">none</option>
+					<?php
+						foreach($eventNames as $row)
+						{
+							echo "<option value = ".$row["name"].">".$row["name"]."</option>";
+						}
+					?>
+				</select>
+			</div>
+
+			<div class = "mb-3">
+				<label><b>Reason For Donation</b></label><br/>
+				<textarea name="reason" cols="50"></textarea>
+			</div>
+
+			<div class="mb-3">	
+				<label><b>Donation Already Thanked?</b></label><br/>
+				<input type="checkbox" id="thanked" name="thanked" value="y"></input>
+			</div>
+
+			<button type="submit" class="btn btn-primary">Add Donation</button>
+		</form>
+</div>
+<div class="container mt-4 p-4 bg-white rounded shadow">
+		<h3 class="mb-3">Find and Edit Donations</h3>
+		<hr style = "height: 1px; background-color: black;"></hr>
+		<form id="editDonation" action="editDonationHandler.php" method="post">
+
+			<div class = "mb-3">
+				<label><b>First Name of Donor</b></label><br/>
+				<input type = "text" id="firstName" name="firstName"></input>
+			</div>
+
+			<div class = "mb-3">
+				<label><b>Last Name of Donor</b></label><br/>
+				<input type = "text" id="lastName" name="lastName"></input>
 			</div>
 
 			<div class="mb-3">	
 				<label><b>Date of Donation</b></label><br/>
-				<input type = "datetime-local" id="startDate" name="startDate"></input>
+				<input type = "datetime-local" id="date" name="date"></input>
 			</div>
-			<button type="submit" class="btn btn-primary">Add Donation</button>
-		</form>
+		<button type="submit" class="btn btn-primary">Search</button>
+</form>
 </div>
+
 <br/>
 <br/>
 

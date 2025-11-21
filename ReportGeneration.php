@@ -15,10 +15,10 @@ header('Expires: 0');
 
 	$output = [];	
 	if ($os == "w"){
-		exec("dir reports /b",$output);
+		exec("dir reportGeneration/reports /b",$output);
 	}
 	else{
-		exec("ls reports",$output);
+		exec("ls reportGeneration/reports",$output);
 	}
 ?>
 <?php
@@ -45,12 +45,15 @@ header('Expires: 0');
 	<meta charset="UTF-8">
 	<title>Report Generator</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+	<meta http-equiv="Content-Type" content="text/html">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/messages.css"></link>
 
 </head>
 
 <body>
-    <?php require_once('header.php') ?>
-
+  <?php require_once('header.php') ?>
+	<h1 class="page-title">Report Generation</h1>
 	<div class="container mt-4 p-4 bg-white rounded shadow">
 		<h3 class="mb-3">Report Generator</h3>
 		<hr style = "height: 1px; background-color: black;"></hr>
@@ -119,7 +122,7 @@ header('Expires: 0');
 		</form>
 	</div>
 	<div class="container mt-4 p-4 bg-white rounded shadow">
-		<form action="./reports/delHandler.php" method="post">
+		<form action="./reportGeneration/reports/delHandler.php" method="post">
 		<table style="width:100%">
 			<tr>
 				<th>Report History</th><th>Delete Report</th>
@@ -128,7 +131,7 @@ header('Expires: 0');
 				foreach ($output as $value){
 					if (str_contains($value,".pdf")){
 						echo "<tr>";
-						echo "<td><a target='_blank' href=./reports/".$value.">".$value."</a></td>";
+						echo "<td><a target='_blank' href=./reportGeneration/reports/".$value.">".$value."</a></td>";
 						echo "<td><input type='checkbox' id =".$value." name=".$value."></input></td>";
 						echo "</tr>";
 					flush();

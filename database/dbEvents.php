@@ -416,28 +416,17 @@ function update_event($eventID, $eventDetails) {
     $connection = connect();
     $id = $eventDetails["id"];
     $name = $eventDetails["name"];
-    #$abbrevName = $eventDetails["abbrev-name"];
-    $date = $eventDetails["date"];
-    $startTime = $eventDetails["start-time"];
-    #$restricted = $eventDetails["restricted"];
-    $endTime = $eventDetails["end-time"];
-    $description = $eventDetails["description"];
-    #$completed = $eventDetails["completed"];
-    #$restricted_signup = $eventDetails["restricted_signup"];
-    $location = $eventDetails["location"];
-    //$services = $eventDetails["service"];
     
-    #$completed = $eventDetails["completed"];
-    #$query = "
-       # update dbEvents set name='$name', abbrevName='$abbrevName', date='$date', startTime='$startTime', restricted='$restricted', description='$description', locationID='$location', completed='$completed'
-       # where id='$eventID'
-    #";
-   # $query = "
-    #    update dbevents set id='$id', name='$name', date='$date', startTime='$startTime', endTime='$endTime', description='$description', capacity='$capacity', completed='$completed', event_type='$event_type', restricted_signup='$restricted_signup'
-    #    where id='$eventID'
-    #";
+    $startDate = $eventDetails["startDate"];
+    $endDate = $eventDetails["endDate"];
+    $startTime = $eventDetails["startTime"];
+    $endTime = $eventDetails["endTime"];
+    $description = $eventDetails["description"];
+    $location = $eventDetails["location"];
+    $goalAmount = $eventDetails["goalAmount"];
+
     $query = "
-        update dbevents set id='$id', name='$name', date='$date', startTime='$startTime', endTime='$endTime', description='$description', location='$location'
+        update dbevents set id='$id', name='$name', goalAmount='$goalAmount', startDate='$startDate',endDate='$endDate', startTime='$startTime', endTime='$endTime', description='$description', location='$location'
         where id='$eventID'
     ";
     $result = mysqli_query($connection, $query);

@@ -87,7 +87,7 @@
 <html>
     <head>
         <?php require_once('universal.inc') ?>
-        <title>Rappahannock CASA | Create Event</title>
+        <title>Rappahannock CASA | Create Fundraiser</title>
         <style>
         /* ---- Page Layout ---- */
         main.date {
@@ -184,7 +184,7 @@
     </head>
     <body>
         <?php require_once('header.php') ?>
-        <h1>Create Event</h1>
+        <h1>Create Fundraiser</h1>
         <main class="date">
             <p style="font-size:14px; color:red; margin-top:-8px; margin-bottom:18px; padding-left:5rem;">
                 <em>* indicates required fields</em>
@@ -216,7 +216,7 @@
                 <input type="text" id="location" name="location" placeholder="Enter location">
 
                 
-                <input type="submit" value="Create Event">
+                <input type="submit" value="Create Fundraiser">
                 
             </form>
                 <?php if ($date): ?>

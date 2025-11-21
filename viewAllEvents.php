@@ -26,7 +26,7 @@
         <?php require_once('universal.inc') ?>
         <link rel="stylesheet" href="css/messages.css"></link>
         <script src="js/messages.js"></script>
-        <title>Rappahannock CASA | Events</title>
+        <title>Rappahannock CASA | Fundraisers</title>
     </head>
     <body>
         <?php require_once('header.php') ?>
