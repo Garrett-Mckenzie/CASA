@@ -30,7 +30,7 @@ try{
 catch (Exception $e){
 	$_SESSION["addComplete"] = "f";
 	$_SESSION["reason"] = "Date: ".$date." is invalid.";
-	header("Location: donationAddEdit.php?addAttempt");
+	header("Location: donationAddEdit.php?addAttempt=true");
 }
 
 #connect
@@ -41,7 +41,7 @@ try{
 catch (Exception $e){
 	$_SESSION["addComplete"] = "f";
 	$_SESSION["reason"] = "Connection to storage failed";
-	header("Location: donationAddEdit.php?addAttempt");
+	header("Location: donationAddEdit.php?addAttempt=true");
 }
 
 #get donor id
@@ -52,7 +52,7 @@ if ($first != "" and $last != "" and $email !=""){
 	if (mysqli_num_rows($result) == 0){
 		$_SESSION["addComplete"] = "f";
 		$_SESSION["reason"] = "No donor with information of first name= ".$first.", last name= ".$last.", and email= ".$email." was found in the storage system.";
-		header("Location: donationAddEdit.php?addAttempt");
+		header("Location: donationAddEdit.php?addAttempt=true");
 	}
 	else{
 		$donorID = $result->fetch_all()[0][0]; 	
@@ -62,7 +62,7 @@ if ($first != "" and $last != "" and $email !=""){
 else if (($fist == "" and ($last != "" or $email != "")) or ($last == "" and ($first != "" or $email != "")) or ($email == "" and ($first != "" or $last != ""))){
 	$_SESSION["addComplete"] = "f";
 	$_SESSION["reason"] = "If any of first name, last name, or email are specified, then all fields must be complete.";
-	header("Location: donationAddEdit.php?addAttempt");
+	header("Location: donationAddEdit.php?addAttempt=true");
 }
 else{
 	$donorID = 999;
@@ -102,10 +102,9 @@ try{
 catch (Exception $e){
 	$_SESSION["addComplete"] = "f";
 	$_SESSION["reason"] = $e->getMessage();
-	header("Location: donationAddEdit.php?addAttempt");
+	header("Location: donationAddEdit.php?addAttempt=true");
 }
-$_SESSION["reason"] = "The new donation information has been added to the storage system!";
-header("Location: donationAddEdit.php?addAttempt");
-
+$_SESSION["reason"] = "The new donation information has been added to the storage system! Below are the details of the donation.</br>Amount: ".$amount."</br>Reason: ".$reason."</br>Date: ".$date."</br>Fees: ".$fee."</br>Thanked: ".$thanked."</br>Donor Name: ".$first." ".$last."</br>Donor Email: ".$email;
+header("Location: donationAddEdit.php?addAttempt=true");
 ?>
 

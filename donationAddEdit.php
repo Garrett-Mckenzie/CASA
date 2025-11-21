@@ -31,9 +31,6 @@ catch(Exception $e){
 				echo "Message. ".e->getMessage();
 }
 
-if (isset($_SESSION)){
-	var_dump($_SESSION);
-}
 ?>
 
 
@@ -53,6 +50,28 @@ if (isset($_SESSION)){
 <body>
 <?php require_once('header.php') ?>
 <h1 class="page-title">Donation Managment</h1>
+<?php
+
+if (isset($_GET["addAttempt"]) and isset($_SESSION["addComplete"]) and isset($_SESSION["reason"])){
+
+	$status = $_SESSION["addComplete"];
+	unset($_SESSION["addComplete"]);
+	$reason = $_SESSION["reason"];
+	unset($_SESSION["reason"]);
+
+	echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
+	if ($status == "t"){
+					echo '<h3 class="mb-3">New Donor Has Been Added!</h3>';
+					echo '<p>'.$reason.'</p>';
+	}
+	else{
+					echo '<h3 class="mb-3">There Was An Issue Adding The Donor</h3>';
+					echo '<p>'.$reason.'</p>';
+	}
+	echo '</div>';
+}
+
+?>
 <div class="container mt-4 p-4 bg-white rounded shadow">
 		<h3 class="mb-3">Add a New Donation</h3>
 		<hr style = "height: 1px; background-color: black;"></hr>
