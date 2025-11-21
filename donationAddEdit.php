@@ -30,6 +30,10 @@ try{
 catch(Exception $e){
 				echo "Message. ".e->getMessage();
 }
+
+if (isset($_SESSION)){
+	var_dump($_SESSION);
+}
 ?>
 
 
@@ -54,6 +58,7 @@ catch(Exception $e){
 		<hr style = "height: 1px; background-color: black;"></hr>
 		<form id="addDonation" action="addDonationHandler.php" method="post">
 
+
 			<div class = "mb-3">
 				<label><b>First Name of Donor</b></label><br/>
 				<input type = "text" id="firstName" name="firstName"></input>
@@ -64,6 +69,12 @@ catch(Exception $e){
 				<input type = "text" id="lastName" name="lastName"></input>
 			</div>
 
+			<div class = "mb-3">
+				<label><b>Donor Email</b></label><br/>
+				<input type = "text" id="donorEmail" name="donorEmail"></input>
+			</div>
+
+
 			<div class="mb-3">	
 				<label><b>Date of Donation</b></label><br/>
 				<input type = "datetime-local" id="date" name="date"></input>
@@ -71,12 +82,13 @@ catch(Exception $e){
 
 			<div class="mb-3">	
 				<label><b>Amount Donated</b></label><br/>
-				<input type = "number" id="amount" name="amount" step = "0.01" min="0" placeholder="Ender amount in $USD"></input>
+				<input type = "number" id="amount" name="amount" value = "0" step = "0.01" min="0" placeholder="Ender amount in $USD"></input>
 			</div>
 
 			<div class="mb-3">	
 				<label><b>Associated Fees</b></label><br/>
-				<input type = "number" id="fee" name="fee" step = "0.01" min="0" placeholder="Ender amount in $USD"></input>
+				<input type = "number" id="fee" name="fee" value = "0" step = "0.01" min="0" placeholder="Ender amount in $USD"></input>
+
 			</div>
 
 			<div class = "mb-3">
@@ -95,6 +107,11 @@ catch(Exception $e){
 			<div class = "mb-3">
 				<label><b>Reason For Donation</b></label><br/>
 				<textarea name="reason" cols="50"></textarea>
+			</div>
+
+			<div class="mb-3">	
+				<label><b>Donation Already Thanked?</b></label><br/>
+				<input type="checkbox" id="thanked" name="thanked" value="y"></input>
 			</div>
 
 			<button type="submit" class="btn btn-primary">Add Donation</button>

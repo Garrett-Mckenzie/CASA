@@ -75,3 +75,11 @@ Stack trace:
 [20-Nov-2025 23:52:45 UTC] PHP Parse error:  syntax error, unexpected variable "$con" in /home/customer/www/jenniferp216.sg-host.com/public_html/donationAddEdit.php on line 26
 [20-Nov-2025 23:52:47 UTC] PHP Parse error:  syntax error, unexpected variable "$con" in /home/customer/www/jenniferp216.sg-host.com/public_html/donationAddEdit.php on line 26
 [20-Nov-2025 23:52:49 UTC] PHP Parse error:  syntax error, unexpected variable "$con" in /home/customer/www/jenniferp216.sg-host.com/public_html/donationAddEdit.php on line 26
+[21-Nov-2025 17:20:12 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function connect() in /home/customer/www/jenniferp216.sg-host.com/public_html/addDonationHandler.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/addDonationHandler.php on line 7
+[21-Nov-2025 17:22:47 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '../database/dbinfo.php' (include_path='.:/usr/local/php82/pear') in /home/customer/www/jenniferp216.sg-host.com/public_html/editDonationHandler.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/editDonationHandler.php on line 3
