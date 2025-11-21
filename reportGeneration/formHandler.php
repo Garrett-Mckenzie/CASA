@@ -69,7 +69,7 @@ try{
 		throw new Exception("Bad output");
 	}
 	#this line is really fucking sick
-	echo '<script type="text/javascript"> window.open("reports/'.$output[0].'","_blank");window.location.href="index.php";</script>';
+	echo '<script type="text/javascript"> window.open("reports/'.$output[0].'","_blank");window.location.href="../ReportGeneration.php";</script>';
 }
 catch (Throwable $e){
 	foreach ($output as $value){

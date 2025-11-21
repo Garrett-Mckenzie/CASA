@@ -15,10 +15,10 @@ header('Expires: 0');
 
 	$output = [];	
 	if ($os == "w"){
-		exec("dir reports /b",$output);
+		exec("dir reportGeneration/reports /b",$output);
 	}
 	else{
-		exec("ls reports",$output);
+		exec("ls reportGeneration/reports",$output);
 	}
 ?>
 <?php
@@ -122,7 +122,7 @@ header('Expires: 0');
 		</form>
 	</div>
 	<div class="container mt-4 p-4 bg-white rounded shadow">
-		<form action="./reports/delHandler.php" method="post">
+		<form action="./reportGeneration/reports/delHandler.php" method="post">
 		<table style="width:100%">
 			<tr>
 				<th>Report History</th><th>Delete Report</th>
