@@ -131,7 +131,7 @@ header('Expires: 0');
 				foreach ($output as $value){
 					if (str_contains($value,".pdf")){
 						echo "<tr>";
-						echo "<td><a target='_blank' href=./reports/".$value.">".$value."</a></td>";
+						echo "<td><a target='_blank' href=./reportGeneration/reports/".$value.">".$value."</a></td>";
 						echo "<td><input type='checkbox' id =".$value." name=".$value."></input></td>";
 						echo "</tr>";
 					flush();
