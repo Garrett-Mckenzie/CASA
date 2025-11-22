@@ -61,11 +61,11 @@ if (isset($_GET["addAttempt"]) and isset($_SESSION["addComplete"]) and isset($_S
 
 	echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
 	if ($status == "t"){
-					echo '<h3 class="mb-3">New Donor Has Been Added!</h3>';
+					echo '<h3 class="mb-3">New Donation Has Been Added!</h3>';
 					echo '<p>'.$reason.'</p>';
 	}
 	else{
-					echo '<h3 class="mb-3">There Was An Issue Adding The Donor</h3>';
+					echo '<h3 class="mb-3">There Was An Issue Adding The Donation</h3>';
 					echo '<p>'.$reason.'</p>';
 	}
 	echo '</div>';
@@ -151,13 +151,74 @@ if (isset($_GET["addAttempt"]) and isset($_SESSION["addComplete"]) and isset($_S
 				<input type = "text" id="lastName" name="lastName"></input>
 			</div>
 
+			<div class = "mb-3">
+				<label><b>Email of Donor</b></label><br/>
+				<input type = "text" id="email" name="email"></input>
+			</div>
+
+
 			<div class="mb-3">	
 				<label><b>Date of Donation</b></label><br/>
 				<input type = "datetime-local" id="date" name="date"></input>
 			</div>
+
+			<div class = "mb-3">
+				<label><b>Max Donation Amount</b></label><br/>
+				<input type = "number" id="maxAmount" name="maxAmount" min="0" max="999999999" placeholder="Ender amount in $USD" value = "0" step ="0.1"></input>
+			</div>
+			<div class = "mb-3">
+				<label><b>Min Donation Amount</b></label><br/>
+				<input type = "number" id="minAmount" name="minAmount" min="0" max="999999999" placeholder="Ender amount in $USD" value = "0" step ="0.1"></input>
+
+			</div>
+
+
+		<input type = "hidden" id="goal" name="goal" value ="search">
 		<button type="submit" class="btn btn-primary">Search</button>
 </form>
 </div>
+
+<?php
+
+if (isset($_GET["searchAttempt"]) and isset($_SESSION["searchComplete"]) and isset($_SESSION["reason"])){
+
+	$status = $_SESSION["searchComplete"];
+	unset($_SESSION["searchComplete"]);
+	$reason = $_SESSION["reason"];
+	unset($_SESSION["reason"]);
+
+	echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
+	if ($status == "t"){
+					echo '<h3 class="table-heading">Search Results</h3>';
+					echo '<table id="myTable" class="casa-table">';
+					echo '<tr>';
+					echo '<th><b>amount</b></th>';
+					echo '<th><b>reason</b></th>';
+					echo '<th><b>date</b></th>';
+					echo '<th><b>fee</b></th>';
+					echo '<th><b>thanked</b></th>';
+					echo '</tr>';
+					foreach($reason as $row){
+									echo '<tr>';
+									echo '<td>'.$row[0]."</td>";
+									echo '<td>'.$row[2]."</td>";
+									echo '<td>'.$row[3]."</td>";
+									echo '<td>'.$row[4]."</td>";
+									echo '<td>'.$row[5]."</td>";
+									echo '</tr>';
+					}
+					echo "</table>";
+
+	}
+	else{
+					echo '<h3 class="mb-3">There Was An Issue Adding The Donor</h3>';
+					echo '<p>'.$reason.'</p>';
+	}
+	echo '</div>';
+}
+
+?>
+
 
 <br/>
 <br/>
