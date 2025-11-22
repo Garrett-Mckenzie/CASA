@@ -197,21 +197,31 @@ if (isset($_GET["searchAttempt"]) and isset($_SESSION["searchComplete"]) and iss
 					echo '<th><b>date</b></th>';
 					echo '<th><b>fee</b></th>';
 					echo '<th><b>thanked</b></th>';
+					echo '<th><b>first name</b></th>';
+					echo '<th><b>last name</b></th>';
+					echo '<th><b>email</b></th>';
+					echo '<th><b>zip</b></th>';
+					echo '<th><b>city</b></th>';
 					echo '</tr>';
 					foreach($reason as $row){
 									echo '<tr>';
 									echo '<td>'.$row[0]."</td>";
+									echo '<td>'.$row[1]."</td>";
 									echo '<td>'.$row[2]."</td>";
 									echo '<td>'.$row[3]."</td>";
 									echo '<td>'.$row[4]."</td>";
 									echo '<td>'.$row[5]."</td>";
+									echo '<td>'.$row[6]."</td>";
+									echo '<td>'.$row[7]."</td>";
+									echo '<td>'.$row[8]."</td>";
+									echo '<td>'.$row[9]."</td>";
 									echo '</tr>';
 					}
 					echo "</table>";
 
 	}
 	else{
-					echo '<h3 class="mb-3">There Was An Issue Adding The Donor</h3>';
+					echo '<h3 class="mb-3">There Was An Issue Searching Through Donations</h3>';
 					echo '<p>'.$reason.'</p>';
 	}
 	echo '</div>';

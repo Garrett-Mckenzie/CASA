@@ -3,7 +3,7 @@
 include_once './database/dbinfo.php';
 session_start();
 
-var_dump($_POST);
+$con = connect();
 
 #HANDLE SEARCHING DONATIONS
 if ($_POST["goal"] == "search"){
@@ -36,6 +36,7 @@ if ($_POST["goal"] == "search"){
 			$_SESSION["searchComplete"] = "f";
 			$_SESSION["reason"] = "No donor with information of first name= ".$first.", last name= ".$last.", and email= ".$email." was found in the storage system.";
 			header("Location: donationAddEdit.php?searchAttempt=true");
+			exit();
 		}
 		else{
 			$donorID = $result->fetch_all()[0][0]; 	
@@ -44,8 +45,9 @@ if ($_POST["goal"] == "search"){
 	}
 	else if (($first == "" and ($last != "" or $email != "")) or ($last == "" and ($first != "" or $email != "")) or ($email == "" and ($first != "" or $last != ""))){
 		$_SESSION["searchComplete"] = "f";
-		$_SESSION["reason"] = "If any of first name, last name, or email are specified, then all fields must be complete.";
+		$_SESSION["reason"] = "If any of first name, last name, or email are specified, then all fields of first name, last name, and email must be complete.";
 		header("Location: donationAddEdit.php?searchAttempt=true");
+		exit();
 	}
 	else{
 		$donorID = NULL;
@@ -53,45 +55,44 @@ if ($_POST["goal"] == "search"){
 
 	#build query
 
-	$query = "SELECT * FROM donations WHERE";
+	$query = "SELECT donations.amount,donations.reason,donations.date,donations.fee,donations.thanked,donors.first,donors.last,donors.email,donors.zip,donors.city FROM donations JOIN donors ON donations.donorID = donors.id WHERE";
 	$selectAll = true;
 
 	if  (isset($donorID)){
-		$query = $query." donorID='".$donorID."'";
+		$query = $query." donations.donorID='".$donorID."'";
 		$selectAll = false;
 		if (isset($date) or $max != "0" or $min != "0"){
 			$query = $query." AND";
 		}
 	}
 	if (isset($date)){
-		$query = $query." date='".$date."'";
+		$query = $query." donations.date='".$date."'";
 		$selectAll = false;
 		if ($max != "0" or $min != "0"){
 			$query = $query." AND";
 		}
 	}
 	if ($max != "0"){
-		$query = $query." amount <= ".$max;
+		$query = $query." donations.amount <= ".$max;
 		$selectAll = false;
 		if ($min != "0"){
 			$query = $query." AND";
 		}
 	}
 	if ($min != "0"){
-		$query = $query." amount >=".$min;
+		$query = $query." donations.amount >=".$min;
 		$selectAll = false;
 	}
 
 	if ($selectAll){
-		$query = "SELECT * FROM donations;";
+		$query= "SELECT donations.amount,donations.reason,donations.date,donations.fee,donations.thanked,donors.first,donors.last,donors.email,donors.zip,donors.city FROM donations JOIN donors ON donations.donorID = donors.id;";
 	}
 	else{
 		$query = $query.";";
 	}
-	echo $query;
+
 
 	try{
-		$con = connect();
 		$result = mysqli_query($con,$query);
 		if (mysqli_num_rows($result) == 0){
 			throw new Exception("!!!No Search Results Found!!!");
@@ -99,12 +100,13 @@ if ($_POST["goal"] == "search"){
 		$_SESSION["searchComplete"] = "t";
 		$_SESSION["reason"] = $result->fetch_all();
 		header("Location: donationAddEdit.php?searchAttempt=true");
+		exit();
 	}
 	catch (Exception $e){
 		$_SESSION["searchComplete"] = "f";
 		$_SESSION["reason"] = $e->getMessage();
 		header("Location: donationAddEdit.php?searchAttempt=true");
-
+		exit();
 	}
 
 }

@@ -31,6 +31,7 @@ catch (Exception $e){
 	$_SESSION["addComplete"] = "f";
 	$_SESSION["reason"] = "Date: ".$date." is invalid.";
 	header("Location: donationAddEdit.php?addAttempt=true");
+	exit();
 }
 
 #connect
@@ -42,6 +43,7 @@ catch (Exception $e){
 	$_SESSION["addComplete"] = "f";
 	$_SESSION["reason"] = "Connection to storage failed";
 	header("Location: donationAddEdit.php?addAttempt=true");
+	exit();
 }
 
 #get donor id
@@ -53,16 +55,19 @@ if ($first != "" and $last != "" and $email !=""){
 		$_SESSION["addComplete"] = "f";
 		$_SESSION["reason"] = "No donor with information of first name= ".$first.", last name= ".$last.", and email= ".$email." was found in the storage system.";
 		header("Location: donationAddEdit.php?addAttempt=true");
+		exit();
 	}
 	else{
 		$donorID = $result->fetch_all()[0][0]; 	
 	}
 
 }
-else if (($fist == "" and ($last != "" or $email != "")) or ($last == "" and ($first != "" or $email != "")) or ($email == "" and ($first != "" or $last != ""))){
+else if (($first == "" and ($last != "" or $email != "")) or ($last == "" and ($first != "" or $email != "")) or ($email == "" and ($first != "" or $last != ""))){
+
 	$_SESSION["addComplete"] = "f";
-	$_SESSION["reason"] = "If any of first name, last name, or email are specified, then all fields must be complete.";
+	$_SESSION["reason"] = "If any of first name, last name, or email are specified, then all fields of first name, last name, and email must be complete.";
 	header("Location: donationAddEdit.php?addAttempt=true");
+	exit();
 }
 else{
 	$donorID = 999;
@@ -96,15 +101,16 @@ $query = "INSERT INTO donations (amount,reason,date,fee,thanked,eventID,donorID)
 $data = [$amount,$reason,$date,$fee,$thanked,$eventID,$donorID];
 try{
 	$exec = $con->prepare($query);
-	var_dump($exec);
 	$exec->execute($data);
 }
 catch (Exception $e){
 	$_SESSION["addComplete"] = "f";
 	$_SESSION["reason"] = $e->getMessage();
 	header("Location: donationAddEdit.php?addAttempt=true");
+	exit();
 }
 $_SESSION["reason"] = "The new donation information has been added to the storage system! Below are the details of the donation.</br>Amount: ".$amount."</br>Reason: ".$reason."</br>Date: ".$date."</br>Fees: ".$fee."</br>Thanked: ".$thanked."</br>Donor Name: ".$first." ".$last."</br>Donor Email: ".$email;
 header("Location: donationAddEdit.php?addAttempt=true");
+exit();
 ?>
 
