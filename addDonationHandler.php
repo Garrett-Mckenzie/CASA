@@ -15,6 +15,7 @@ $fee = $_POST["fee"];
 $event = $_POST["eventName"];
 $reason = trim($_POST["reason"]);
 $thanked = "0";
+
 if (array_key_exists("thanked",$_POST)){
 	$thanked = "1";
 }
@@ -33,6 +34,7 @@ catch (Exception $e){
 	header("Location: donationAddEdit.php?addAttempt=true");
 	exit();
 }
+
 
 #connect
 $con = NULL;
@@ -109,6 +111,7 @@ catch (Exception $e){
 	header("Location: donationAddEdit.php?addAttempt=true");
 	exit();
 }
+
 $_SESSION["reason"] = "The new donation information has been added to the storage system! Below are the details of the donation.</br>Amount: ".$amount."</br>Reason: ".$reason."</br>Date: ".$date."</br>Fees: ".$fee."</br>Thanked: ".$thanked."</br>Donor Name: ".$first." ".$last."</br>Donor Email: ".$email;
 header("Location: donationAddEdit.php?addAttempt=true");
 exit();

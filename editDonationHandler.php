@@ -55,7 +55,7 @@ if ($_POST["goal"] == "search"){
 
 	#build query
 
-	$query = "SELECT donations.amount,donations.reason,donations.date,donations.fee,donations.thanked,donors.first,donors.last,donors.email,donors.zip,donors.city FROM donations JOIN donors ON donations.donorID = donors.id WHERE";
+	$query = "SELECT donations.amount,donations.reason,donations.date,donations.fee,donations.thanked,donors.first,donors.last,donors.email,donors.zip,donors.city,donations.id FROM donations JOIN donors ON donations.donorID = donors.id WHERE";
 	$selectAll = true;
 
 	if  (isset($donorID)){
@@ -85,7 +85,7 @@ if ($_POST["goal"] == "search"){
 	}
 
 	if ($selectAll){
-		$query= "SELECT donations.amount,donations.reason,donations.date,donations.fee,donations.thanked,donors.first,donors.last,donors.email,donors.zip,donors.city FROM donations JOIN donors ON donations.donorID = donors.id;";
+		$query= "SELECT donations.amount,donations.reason,donations.date,donations.fee,donations.thanked,donors.first,donors.last,donors.email,donors.zip,donors.city,donations.id FROM donations JOIN donors ON donations.donorID = donors.id;";
 	}
 	else{
 		$query = $query.";";
@@ -113,6 +113,7 @@ if ($_POST["goal"] == "search"){
 
 #HANDLE EDITING DONATIONS
 else{
+	echo "hello world";
 }
 
 ?>

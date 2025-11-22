@@ -22,10 +22,10 @@ if (isset($_SESSION['_id'])) {
 				$userID = $_SESSION['_id'];
 }
 try{
-	include_once("database/dbinfo.php");
-	$con = connect();
-	$query = "SELECT name FROM dbevents";
-	$eventNames = mysqli_query($con,$query);
+				include_once("database/dbinfo.php");
+				$con = connect();
+				$query = "SELECT name FROM dbevents";
+				$eventNames = mysqli_query($con,$query);
 }
 catch(Exception $e){
 				echo "Message. ".e->getMessage();
@@ -41,8 +41,8 @@ catch(Exception $e){
 	<title>Add and Edit Donations</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 	<meta http-equiv="Content-Type" content="text/html">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/messages.css"></link>
+	<link rel="stylesheet" href="css/base.css">
+	<link rel="stylesheet" href="css/messages.css"></link>
 
 
 </head>
@@ -54,21 +54,21 @@ catch(Exception $e){
 
 if (isset($_GET["addAttempt"]) and isset($_SESSION["addComplete"]) and isset($_SESSION["reason"])){
 
-	$status = $_SESSION["addComplete"];
-	unset($_SESSION["addComplete"]);
-	$reason = $_SESSION["reason"];
-	unset($_SESSION["reason"]);
+				$status = $_SESSION["addComplete"];
+				unset($_SESSION["addComplete"]);
+				$reason = $_SESSION["reason"];
+				unset($_SESSION["reason"]);
 
-	echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
-	if ($status == "t"){
-					echo '<h3 class="mb-3">New Donation Has Been Added!</h3>';
-					echo '<p>'.$reason.'</p>';
-	}
-	else{
-					echo '<h3 class="mb-3">There Was An Issue Adding The Donation</h3>';
-					echo '<p>'.$reason.'</p>';
-	}
-	echo '</div>';
+				echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
+				if ($status == "t"){
+								echo '<h3 class="mb-3">New Donation Has Been Added!</h3>';
+								echo '<p>'.$reason.'</p>';
+				}
+				else{
+								echo '<h3 class="mb-3">There Was An Issue Adding The Donation</h3>';
+								echo '<p>'.$reason.'</p>';
+				}
+				echo '</div>';
 }
 
 ?>
@@ -100,8 +100,8 @@ if (isset($_GET["addAttempt"]) and isset($_SESSION["addComplete"]) and isset($_S
 			</div>
 
 			<div class="mb-3">	
-				<label><b>Amount Donated</b></label><br/>
-				<input type = "number" id="amount" name="amount" value = "0" step = "0.01" min="0" placeholder="Ender amount in $USD"></input>
+				<label><b>Amount Donated*</b></label><br/>
+				<input type = "number" id="amount" name="amount" step = "0.01" min="0" placeholder="Ender amount in $USD" required></input>
 			</div>
 
 			<div class="mb-3">	
@@ -114,12 +114,12 @@ if (isset($_GET["addAttempt"]) and isset($_SESSION["addComplete"]) and isset($_S
 				<label><b>Associated Fundraising Event</b></label><br/>
 				<select name="eventName" id="eventName">
 					<option value = "none">none</option>
-					<?php
-						foreach($eventNames as $row)
-						{
-							echo "<option value = ".$row["name"].">".$row["name"]."</option>";
-						}
-					?>
+<?php
+foreach($eventNames as $row)
+{
+				echo "<option value = ".$row["name"].">".$row["name"]."</option>";
+}
+?>
 				</select>
 			</div>
 
@@ -182,49 +182,78 @@ if (isset($_GET["addAttempt"]) and isset($_SESSION["addComplete"]) and isset($_S
 
 if (isset($_GET["searchAttempt"]) and isset($_SESSION["searchComplete"]) and isset($_SESSION["reason"])){
 
-	$status = $_SESSION["searchComplete"];
-	unset($_SESSION["searchComplete"]);
-	$reason = $_SESSION["reason"];
-	unset($_SESSION["reason"]);
+				$status = $_SESSION["searchComplete"];
+				unset($_SESSION["searchComplete"]);
+				$reason = $_SESSION["reason"];
+				unset($_SESSION["reason"]);
 
-	echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
-	if ($status == "t"){
-					echo '<h3 class="table-heading">Search Results</h3>';
-					echo '<table id="myTable" class="casa-table">';
-					echo '<tr>';
-					echo '<th><b>amount</b></th>';
-					echo '<th><b>reason</b></th>';
-					echo '<th><b>date</b></th>';
-					echo '<th><b>fee</b></th>';
-					echo '<th><b>thanked</b></th>';
-					echo '<th><b>first name</b></th>';
-					echo '<th><b>last name</b></th>';
-					echo '<th><b>email</b></th>';
-					echo '<th><b>zip</b></th>';
-					echo '<th><b>city</b></th>';
-					echo '</tr>';
-					foreach($reason as $row){
-									echo '<tr>';
-									echo '<td>'.$row[0]."</td>";
-									echo '<td>'.$row[1]."</td>";
-									echo '<td>'.$row[2]."</td>";
-									echo '<td>'.$row[3]."</td>";
-									echo '<td>'.$row[4]."</td>";
-									echo '<td>'.$row[5]."</td>";
-									echo '<td>'.$row[6]."</td>";
-									echo '<td>'.$row[7]."</td>";
-									echo '<td>'.$row[8]."</td>";
-									echo '<td>'.$row[9]."</td>";
-									echo '</tr>';
-					}
-					echo "</table>";
+				echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
+				if ($status == "t"){
+								echo '<h3 class="table-heading">Search Results</h3>';
+								echo '<form action="./editDonationHandler.php" method="post">';
+								echo '<input type = "hidden" id="goal" name="goal" value ="edit">';
+								echo '<table id="myTable" class="casa-table">';
+								echo '<tr>';
+								echo '<th><b>amount</b></th>';
+								echo '<th><b>reason</b></th>';
+								echo '<th><b>date</b></th>';
+								echo '<th><b>fee</b></th>';
+								echo '<th><b>thanked</b></th>';
+								echo '<th><b>first name</b></th>';
+								echo '<th><b>last name</b></th>';
+								echo '<th><b>email</b></th>';
+								echo '<th><b>zip</b></th>';
+								echo '<th><b>city</b></th>';
+								echo '<th><b>edit donation</b></th>';
+								echo '</tr>';
+								foreach($reason as $row){
+												echo '<tr>';
+												echo '<td>'.$row[0]."</td>";
+												echo '<td>'.$row[1]."</td>";
+												echo '<td>'.$row[2]."</td>";
+												echo '<td>'.$row[3]."</td>";
+												echo '<td>'.$row[4]."</td>";
+												echo '<td>'.$row[5]."</td>";
+												echo '<td>'.$row[6]."</td>";
+												echo '<td>'.$row[7]."</td>";
+												echo '<td>'.$row[8]."</td>";
+												echo '<td>'.$row[9]."</td>";
+												echo '<td>';
+												echo '<button type="submit" style="background: none;border: none;">';
+												echo '<svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 
-	}
-	else{
-					echo '<h3 class="mb-3">There Was An Issue Searching Through Donations</h3>';
-					echo '<p>'.$reason.'</p>';
-	}
-	echo '</div>';
+																<title/>
+
+																<g id="Complete">
+
+																<g id="edit">
+
+																<g>
+
+																<path d="M20,16v4a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V6A2,2,0,0,1,4,4H8" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+
+																<polygon fill="none" points="12.5 15.8 22 6.2 17.8 2 8.3 11.5 8 16 12.5 15.8" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+
+																</g>
+
+																</g>
+
+																</g>
+
+																</svg>';
+												echo '</button>';
+												echo '</a>';
+												echo '</td>';
+												echo '</tr>';
+								}
+								echo "</table>";
+								echo '</form>';
+				}
+				else{
+								echo '<h3 class="mb-3">There Was An Issue Searching Through Donations</h3>';
+								echo '<p>'.$reason.'</p>';
+				}
+				echo '</div>';
 }
 
 ?>
