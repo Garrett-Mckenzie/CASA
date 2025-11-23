@@ -247,6 +247,24 @@
                             transform: none; /* disable hover lift */
                             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
                         }
+                        .edit-btn {
+                            display: none; /* hidden normally */
+                            position: absolute;
+                            top: 6px;
+                            right: 35px; /* moves left so it sits next to the checkbox */
+                        }
+
+                        .edit-icon {
+                            width: 20px;
+                            height: 20px;
+                            cursor: pointer;
+                            transition: transform 0.1s ease-in-out;
+                        }
+
+                        .edit-icon:hover {
+                            transform: scale(1.15);
+                        }
+
                     </style>
 
                     <!-- TOP CONTROLS -->
@@ -285,7 +303,7 @@
                     <?php foreach ($events as $event): 
 
                         $eventID = $event['id'];
-                        $title = $event['name'];
+                        $title = $event['name'];     
                         $desc = $event['description'];
                         $goal = $event['goalAmount'];
                         $dates = ($event['startDate'] === $event['endDate'])
@@ -306,6 +324,29 @@
                             data-date="<?= strtolower($dates) ?>">
 
                             <input type="checkbox" class="event-checkbox" value="<?= $eventID ?>">
+                            <a class="edit-btn" href="editEvent.php?id=<?= $event['id'] ?>">
+                                <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+                                <title/>
+
+                                <g id="Complete">
+
+                                <g id="edit">
+
+                                <g>
+
+                                <path d="M20,16v4a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V6A2,2,0,0,1,4,4H8" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+
+                                <polygon fill="none" points="12.5 15.8 22 6.2 17.8 2 8.3 11.5 8 16 12.5 15.8" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+
+                                </g>
+
+                                </g>
+
+                                </g>
+
+                                </svg>
+                            </a>
 
                             <div class="event-title">
                                 <a href="specificEvent.php?id=<?= $eventID ?>" style="text-decoration:none; color:#036;">
@@ -334,6 +375,7 @@
                     let deleteMode = false;
 
                     function toggleDeleteMode() {
+                        const editButtons = document.querySelectorAll(".edit-btn");
                         deleteMode = !deleteMode;
 
                         let checkboxes = document.querySelectorAll('.event-checkbox');
@@ -347,6 +389,9 @@
                         checkboxes.forEach(cb => {
                             cb.style.display = deleteMode ? "block" : "none";
                             cb.checked = false;
+                        });
+                        editButtons.forEach(btn => {
+                                btn.style.display = deleteMode ? "inline-block" : "none";
                         });
 
                         // toggle delete confirmation box
