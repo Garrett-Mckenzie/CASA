@@ -18,10 +18,13 @@ try:
     startDate = "NoStart"
     if "startDate" in args.keys():
         startDate = args["startDate"]
+        startDate = startDate[:10]
     
     endDate = "NoEnd"
     if "startDate" in args.keys():
         endDate = args["endDate"]
+        endDate = endDate[:10]
+
 
     DonationStatOverview = True
     if "DonationStatsOverview" not in args.keys():
@@ -75,6 +78,10 @@ try:
     if "checkAll" not in args.keys():
         checkAll = False
 
+    allData = True
+    if "allData" not in args.keys():
+        allData = False
+
     section = 1
 
     # ---------------------------------------------------------------
@@ -94,45 +101,127 @@ try:
     # ---------------------------------------------------------------
     # DATA QUERIES
     # ---------------------------------------------------------------
-    cur.execute("SELECT date FROM donations WHERE date IS NOT NULL")
-    donationDates = cur.fetchall()
+    if allData:
+        cur.execute("SELECT date FROM donations WHERE date IS NOT NULL")
+        donationDates = cur.fetchall()
 
-    cur.execute("SELECT * FROM donors")
-    donorRows = cur.fetchall()
+        cur.execute("SELECT * FROM donors")
+        donorRows = cur.fetchall()
 
-    cur.execute("SELECT amount FROM donations WHERE amount IS NOT NULL")
-    donationAmounts = cur.fetchall()
+        cur.execute("SELECT amount FROM donations WHERE amount IS NOT NULL")
+        donationAmounts = cur.fetchall()
 
-    cur.execute("SELECT amount, date FROM donations WHERE date IS NOT NULL")
-    amountDate = cur.fetchall()
+        cur.execute("SELECT amount, date FROM donations WHERE date IS NOT NULL")
+        amountDate = cur.fetchall()
 
-    cur.execute("SELECT donorID, MIN(STR_TO_DATE(date,'%m/%d/%Y')) AS date FROM donations WHERE date IS NOT NULL GROUP BY donorID ORDER BY date")
-    donorFirstDates = cur.fetchall()
+        cur.execute("SELECT donorID, MIN(STR_TO_DATE(date,'%m/%d/%Y')) AS date FROM donations WHERE date IS NOT NULL GROUP BY donorID ORDER BY date")
+        donorFirstDates = cur.fetchall()
 
-    cur.execute("SELECT id, name, goalAmount FROM dbevents WHERE goalAmount IS NOT NULL")
-    eventRows = cur.fetchall()
+        cur.execute("SELECT id, name, goalAmount FROM dbevents WHERE goalAmount IS NOT NULL")
+        eventRows = cur.fetchall()
 
-    cur.execute("SELECT amount, eventID FROM donations WHERE amount IS NOT NULL AND eventID IS NOT NULL")
-    donationEventRows = cur.fetchall()
+        cur.execute("SELECT amount, eventID FROM donations WHERE amount IS NOT NULL AND eventID IS NOT NULL")
+        donationEventRows = cur.fetchall()
 
-    cur.execute("""
-    SELECT d.id AS donorID, d.first, d.last, dn.amount
-    FROM donations AS dn
-    JOIN donors AS d ON dn.donorID = d.id
-    """)
-    donorAmountRows = cur.fetchall()
+        cur.execute("""
+        SELECT d.id AS donorID, d.first, d.last, dn.amount
+        FROM donations AS dn
+        JOIN donors AS d ON dn.donorID = d.id
+        """)
+        donorAmountRows = cur.fetchall()
 
-    cur.execute("""SELECT d.id AS donorID, d.state, SUM(dn.amount)
+        cur.execute("""SELECT d.id AS donorID, d.state, SUM(dn.amount)
+                FROM donations AS dn
+                JOIN donors AS d ON dn.donorID = d.id
+                GROUP BY state""")
+        donorSumByState = cur.fetchall()
+
+        cur.execute("""SELECT d.id AS donorID, d.zip, SUM(dn.amount)
+                FROM donations AS dn
+                JOIN donors AS d ON dn.donorID = d.id
+                GROUP BY zip""")
+        donorSumByZip = cur.fetchall()
+    else:
+        cur.execute("""
+            SELECT date 
+            FROM donations 
+            WHERE date IS NOT NULL
+            AND STR_TO_DATE(date,'%m/%d/%Y') BETWEEN %s AND %s
+        """, (startDate, endDate))
+        donationDates = cur.fetchall()
+
+        cur.execute("SELECT * FROM donors")
+        donorRows = cur.fetchall()
+
+        cur.execute("""
+            SELECT amount 
+            FROM donations 
+            WHERE amount IS NOT NULL
+            AND STR_TO_DATE(date,'%m/%d/%Y') BETWEEN %s AND %s
+        """, (startDate, endDate))
+        donationAmounts = cur.fetchall()
+
+        cur.execute("""
+            SELECT amount, date 
+            FROM donations 
+            WHERE date IS NOT NULL
+            AND STR_TO_DATE(date,'%m/%d/%Y') BETWEEN %s AND %s
+        """, (startDate, endDate))
+        amountDate = cur.fetchall()
+
+        cur.execute("""
+            SELECT donorID, MIN(STR_TO_DATE(date,'%m/%d/%Y')) AS date
+            FROM donations
+            WHERE date IS NOT NULL
+            AND STR_TO_DATE(date,'%m/%d/%Y') BETWEEN %s AND %s
+            GROUP BY donorID
+            ORDER BY date
+        """, (startDate, endDate))
+        donorFirstDates = cur.fetchall()
+
+        cur.execute("""
+            SELECT id, name, goalAmount
+            FROM dbevents
+            WHERE goalAmount IS NOT NULL
+            AND startDate <= %s
+            AND endDate >= %s
+        """, (endDate, startDate))
+        eventRows = cur.fetchall()
+
+        cur.execute("""
+            SELECT amount, eventID
+            FROM donations
+            WHERE amount IS NOT NULL
+            AND eventID IS NOT NULL
+            AND STR_TO_DATE(date,'%m/%d/%Y') BETWEEN %s AND %s
+        """, (startDate, endDate))
+        donationEventRows = cur.fetchall()
+
+        cur.execute("""
+            SELECT d.id AS donorID, d.first, d.last, dn.amount
             FROM donations AS dn
             JOIN donors AS d ON dn.donorID = d.id
-            GROUP BY state""")
-    donorSumByState = cur.fetchall()
+            WHERE STR_TO_DATE(dn.date,'%m/%d/%Y') BETWEEN %s AND %s
+        """, (startDate, endDate))
+        donorAmountRows = cur.fetchall()
 
-    cur.execute("""SELECT d.id AS donorID, d.zip, SUM(dn.amount)
+        cur.execute("""
+            SELECT d.state, SUM(dn.amount)
             FROM donations AS dn
             JOIN donors AS d ON dn.donorID = d.id
-            GROUP BY zip""")
-    donorSumByZip = cur.fetchall()
+            WHERE STR_TO_DATE(dn.date,'%m/%d/%Y') BETWEEN %s AND %s
+            GROUP BY d.state
+        """, (startDate, endDate))
+        donorSumByState = cur.fetchall()
+
+        cur.execute("""
+            SELECT d.zip, SUM(dn.amount)
+            FROM donations AS dn
+            JOIN donors AS d ON dn.donorID = d.id
+            WHERE STR_TO_DATE(dn.date,'%m/%d/%Y') BETWEEN %s AND %s
+            GROUP BY d.zip
+        """, (startDate, endDate))
+        donorSumByZip = cur.fetchall()
 
     conn.close()
 
