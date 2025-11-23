@@ -148,4 +148,31 @@
 			<a href="calendar.php?month=<?php echo substr($date, 0, 7) ?>" class="button cancel" style="margin-top: -.5rem">Return to Calendar</a>
         </main>
     </body>
+    <footer class="footer">
+            <!-- Left Side: Logo & Socials -->
+            <div class="footer-left">
+                <img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+
+            <!-- Right Side: Page Links -->
+            <div class="footer-right">
+                <div class="footer-section">
+                    <div class="footer-topic">Connect</div>
+                    <a href="https://www.facebook.com/RappCASA/" target="_blank">Facebook</a>
+                    <a href="https://www.instagram.com/rappahannock_casa/" target="_blank">Instagram</a>
+                    <a href="https://rappahannockcasa.com/" target="_blank">Main Website</a>
+                </div>
+                <div class="footer-section">
+                    <div class="footer-topic">Contact Us</div>
+                    <a href="mailto:rappcasa@gmail.com">rappcasa@gmail.com</a>
+                    <a href="tel:5407106199">540-710-6199</a>
+                </div>
+            </div>
+	</footer>
 </html>

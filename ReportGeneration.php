@@ -64,6 +64,14 @@ header('Expires: 0');
 				<input type = "text" id="reportName" name="reportName"></input>
 			</div>
 
+			<div class = "mb-3">
+				<label><b>Quick Report</b></label><br/>
+				<!-- grey out other options-->
+				<input type="checkbox" name="checkAll" value="True"> Select All Options</input><br/>
+				<!-- grey out date options-->
+				<input type="checkbox" name="allData" value="True"> Full Date Range</input><br/>
+			</div>
+
 			<div class="mb-3">	
 				<label><b>Starting Date For Report</b></label><br/>
 				<input type = "datetime-local" id="startDate" name="startDate"></input>
@@ -111,10 +119,6 @@ header('Expires: 0');
 				<input type="checkbox" name="graphDesc" value="True"> Include Graph Descriptions</input><br/>	
 			</div>
 
-			<div class = "mb-3">
-				<label><b>Full Report</b></label><br/>
-				<input type="checkbox" name="checkAll" value="True"> Select All Options</input><br/>
-			</div>
 
 			<input type = "hidden" id="os" name="os" value="<?php echo$os; ?>">
 			<button type="submit" class="btn btn-primary">Generate Report</button>
@@ -146,31 +150,80 @@ header('Expires: 0');
 	</div>
 <br/>
 <br/>
-<footer class="footer" style="footer">
-            <!-- Left Side: Logo & Socials -->
-            <div class="footer-left">
-                <img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
-                </div>
-            </div>
+</body>
+	<footer class="footer">
+				<!-- Left Side: Logo & Socials -->
+				<div class="footer-left">
+					<img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">
+					<div class="social-icons">
+						<a href="#"><i class="fab fa-facebook"></i></a>
+						<a href="#"><i class="fab fa-twitter"></i></a>
+						<a href="#"><i class="fab fa-instagram"></i></a>
+						<a href="#"><i class="fab fa-linkedin"></i></a>
+					</div>
+				</div>
 
-            <!-- Right Side: Page Links -->
-            <div class="footer-right">
-                <div class="footer-section">
-                    <div class="footer-topic">Connect</div>
-                    <a href="https://www.facebook.com/RappCASA/" target="_blank">Facebook</a>
-                    <a href="https://www.instagram.com/rappahannock_casa/" target="_blank">Instagram</a>
-                    <a href="https://rappahannockcasa.com/" target="_blank">Main Website</a>
-                </div>
-                <div class="footer-section">
-                    <div class="footer-topic">Contact Us</div>
-                    <a href="mailto:rappcasa@gmail.com">rappcasa@gmail.com</a>
-                    <a href="tel:5407106199">540-710-6199</a>
-                </div>
-            </div>
-        </footer>
-</body> 
+				<!-- Right Side: Page Links -->
+				<div class="footer-right">
+					<div class="footer-section">
+						<div class="footer-topic">Connect</div>
+						<a href="https://www.facebook.com/RappCASA/" target="_blank">Facebook</a>
+						<a href="https://www.instagram.com/rappahannock_casa/" target="_blank">Instagram</a>
+						<a href="https://rappahannockcasa.com/" target="_blank">Main Website</a>
+					</div>
+					<div class="footer-section">
+						<div class="footer-topic">Contact Us</div>
+						<a href="mailto:rappcasa@gmail.com">rappcasa@gmail.com</a>
+						<a href="tel:5407106199">540-710-6199</a>
+					</div>
+				</div>
+	</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const checkAll = document.querySelector('input[name="checkAll"]');
+    const fullDateRange = document.querySelector('input[name="allData"]');
+
+    const allOtherCheckboxes = document.querySelectorAll(
+        'input[type="checkbox"]:not([name="checkAll"]):not([name="allData"])'
+    );
+
+    const startDate = document.getElementById("startDate");
+    const endDate = document.getElementById("endDate");
+
+    // --- Helpers ---
+    function setDisabled(elements, disabled) {
+        elements.forEach(el => {
+            el.disabled = disabled;
+            el.style.opacity = disabled ? "0.5" : "1";
+        });
+    }
+
+    function setFieldDisabled(field, disabled) {
+        field.disabled = disabled;
+        field.style.opacity = disabled ? "0.5" : "1";
+    }
+
+    // --- When "Select All Options" toggles ---
+    checkAll.addEventListener("change", () => {
+        const disabled = checkAll.checked;
+
+        // Disable ALL other checkboxes except the date ones
+        setDisabled(allOtherCheckboxes, disabled);
+
+        // IMPORTANT: Do NOT grey out date fields
+        setFieldDisabled(startDate, fullDateRange.checked);
+        setFieldDisabled(endDate, fullDateRange.checked);
+    });
+
+    // --- When "Full Date Range" toggles ---
+    fullDateRange.addEventListener("change", () => {
+        const disabled = fullDateRange.checked;
+
+        setFieldDisabled(startDate, disabled);
+        setFieldDisabled(endDate, disabled);
+    });
+});
+</script>
+
+</html>
