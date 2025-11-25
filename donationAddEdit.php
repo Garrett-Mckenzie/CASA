@@ -190,14 +190,13 @@ if (isset($_GET["searchAttempt"]) and isset($_SESSION["searchComplete"]) and iss
 				echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
 				if ($status == "t"){
 								echo '<h3 class="table-heading">Search Results</h3>';
-								echo '<form action="./editDonationHandler.php" method="post">';
-								echo '<input type = "hidden" id="goal" name="goal" value ="edit">';
+								echo '<p>Donation info can be directly edited from this table by clicking the edit button after making any changes.</p>';
 								echo '<table id="myTable" class="casa-table">';
 								echo '<tr>';
 								echo '<th><b>amount</b></th>';
 								echo '<th><b>reason</b></th>';
 								echo '<th><b>date</b></th>';
-								echo '<th><b>fee</b></th>';
+								echo '<th><b>donation fees</b></th>';
 								echo '<th><b>thanked</b></th>';
 								echo '<th><b>first name</b></th>';
 								echo '<th><b>last name</b></th>';
@@ -208,17 +207,21 @@ if (isset($_GET["searchAttempt"]) and isset($_SESSION["searchComplete"]) and iss
 								echo '</tr>';
 								foreach($reason as $row){
 												echo '<tr>';
-												echo '<td>'.$row[0]."</td>";
-												echo '<td>'.$row[1]."</td>";
-												echo '<td>'.$row[2]."</td>";
-												echo '<td>'.$row[3]."</td>";
-												echo '<td>'.$row[4]."</td>";
-												echo '<td>'.$row[5]."</td>";
-												echo '<td>'.$row[6]."</td>";
-												echo '<td>'.$row[7]."</td>";
-												echo '<td>'.$row[8]."</td>";
-												echo '<td>'.$row[9]."</td>";
-												echo '<td>';
+												echo '<form action="./editDonationHandler.php" method="post">';
+												echo '<input type = "hidden" id="goal" name="goal" value ="edit">';
+												echo '<td><input type="number" id="amount" name="amount" min="0" max="999999" step="0.1" value="'.$row[0].'" placeholder="'.$row[0].'"></input></td>';
+												echo '<td><input type="text" id = "reason" name = "reason" value="'.$row[1].'"></input></td>';
+												echo '<td><input type="text" id="date" name="date" value="'.$row[2].'"></input></td>';
+												echo '<td><input type="number" id="fee" name="fee" min="0.00" max="999999" step="0.1" value="'.$row[3].'" placeholder="'.$row[3].'"></input></td>';
+												echo '<td><input type="number" id="amount" name="amount" min="0" max="1" step="1" value="'.$row[4].'" placeholder="'.$row[4].'"></input></td>';
+												echo '<td><input type="text" id = "reason" name = "reason" value="'.$row[5].'"></input></td>';
+												echo '<td><input type="text" id = "reason" name = "reason" value="'.$row[6].'"></input></td>';
+												echo '<td><input type="text" id = "reason" name = "reason" value="'.$row[7].'"></input></td>';
+												echo '<td><input type="text" id = "reason" name = "reason" value="'.$row[8].'"></input></td>';
+												echo '<td><input type="text" id = "reason" name = "reason" value="'.$row[9].'"></input></td>';
+												echo '<td>'; #10 is donoations.id 11 is donors.id
+												echo '<input type="hidden" id = "donorID" name = "donorID" value="'.$row[11].'"></input>';
+												echo '<input type="hidden" id = "donationID" name = "donationID" value="'.$row[10].'"></input>';
 												echo '<button type="submit" style="background: none;border: none;">';
 												echo '<svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 
@@ -244,10 +247,10 @@ if (isset($_GET["searchAttempt"]) and isset($_SESSION["searchComplete"]) and iss
 												echo '</button>';
 												echo '</a>';
 												echo '</td>';
+												echo '</form>';
 												echo '</tr>';
 								}
 								echo "</table>";
-								echo '</form>';
 				}
 				else{
 								echo '<h3 class="mb-3">There Was An Issue Searching Through Donations</h3>';
@@ -257,7 +260,6 @@ if (isset($_GET["searchAttempt"]) and isset($_SESSION["searchComplete"]) and iss
 }
 
 ?>
-
 
 <br/>
 <br/>

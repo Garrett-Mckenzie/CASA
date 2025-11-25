@@ -673,6 +673,7 @@ date_default_timezone_set('America/New_York');
     $permission_array['specificevent.php'] = 1;
     $permission_array['adddonor.php'] = 3;
 		$permission_array['donationaddedit.php']=3;
+		$permission_array["editdonationhandler.php"]=3;
 
 
 
