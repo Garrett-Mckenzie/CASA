@@ -506,422 +506,423 @@ date_default_timezone_set('America/New_York');
     /* Responsive Design */
     @media (max-width: 0px) {
       .content-box-test {
-        flex: 1 1 300px;
+	flex: 1 1 300px;
       }
     }
 
     @media (max-width: 900px) {
       .footer {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
       }
 
       .footer-right {
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-        margin-top: 20px;
+	flex-direction: column;
+	align-items: center;
+	gap: 30px;
+	margin-top: 20px;
       }
     }
   </style>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      document.querySelectorAll(".nav-item").forEach(item => {
-        item.addEventListener("click", function (event) {
-          event.stopPropagation();
-          document.querySelectorAll(".nav-item").forEach(nav => {
-            if (nav !== item) {
-              nav.classList.remove("active");
-              nav.querySelector(".dropdown").style.display = "none";
-            }
-          });
-          this.classList.toggle("active");
-          let dropdown = this.querySelector(".dropdown");
-          if (dropdown) {
-            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-          }
-        });
-      });
-      document.addEventListener("click", function () {
-        document.querySelectorAll(".nav-item").forEach(nav => {
-          nav.classList.remove("active");
-          nav.querySelector(".dropdown").style.display = "none";
-        });
-      });
-    });
-  </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+	document.querySelectorAll(".nav-item").forEach(item => {
+	item.addEventListener("click", function (event) {
+		event.stopPropagation();
+		document.querySelectorAll(".nav-item").forEach(nav => {
+		if (nav !== item) {
+			nav.classList.remove("active");
+			nav.querySelector(".dropdown").style.display = "none";
+		}
+		});
+		this.classList.toggle("active");
+		let dropdown = this.querySelector(".dropdown");
+		if (dropdown) {
+			dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+		}
+	});
+});
+document.addEventListener("click", function () {
+	document.querySelectorAll(".nav-item").forEach(nav => {
+	nav.classList.remove("active");
+	nav.querySelector(".dropdown").style.display = "none";
+});
+});
+});
+</script>
 </head>
 
 <header>
-  <?php
-  //Log-in security
-  //If they aren't logged in, display our log-in form.
-  $showing_login = false;
-  if (!isset($_SESSION['logged_in'])):
-    ?>
+<?php
+//Log-in security
+//If they aren't logged in, display our log-in form.
+$showing_login = false;
+if (!isset($_SESSION['logged_in'])):
+?>
     <div class="navbar">
       <div class="left-section">
-        <div class="logo-container">
-          <a href="index.php"><img src="images/RAPPAHANNOCK_v_RedBlue2.png" style="filter: brightness(1000%)" alt="Logo"></a>
-        </div>
-        <div class="nav-links">
-          <div class="nav-item"><span class="font-change">Volunteer Management System</span>
-          </div>
-        </div>
+	<div class="logo-container">
+	  <a href="index.php"><img src="images/RAPPAHANNOCK_v_RedBlue2.png" style="filter: brightness(1000%)" alt="Logo"></a>
+	</div>
+	<div class="nav-links">
+	  <div class="nav-item"><span class="font-change">Volunteer Management System</span>
+	  </div>
+	</div>
       </div>
 
       <div class="right-section">
-        <div class="date-box"><?php echo date('l, F j, Y'); ?></div>
+	<div class="date-box"><?php echo date('l, F j, Y'); ?></div>
       </div>
     </div>
-  <?php
-  elseif ($_SESSION['logged_in']):
+<?php
+	elseif ($_SESSION['logged_in']):
 
-    /* * Set our permission array.
-     * anything a guest can do, a volunteer and manager can also do
-     * anything a volunteer can do, a manager can do.
-     *
-     * If a page is not specified in the permission array, anyone logged into the system
-     * can view it. If someone logged into the system attempts to access a page above their
-     * permission level, they will be sent back to the home page.
-     */
-    //pages guests are allowed to view
-    // LOWERCASE
-    $permission_array['index.php'] = 0;
-    $permission_array['about.php'] = 0;
-    $permission_array['apply.php'] = 0;
-    $permission_array['logout.php'] = 0;
-    $permission_array['volunteerregister.php'] = 0;
-    $permission_array['leaderboard.php'] = 0;
-    // $permission_array['findanimal.php'] = 0; //TODO DELETE
-    //pages volunteers can view
-    $permission_array['help.php'] = 1;
-    $permission_array['dashboard.php'] = 1;
-    $permission_array['calendar.php'] = 1;
-    $permission_array['eventsearch.php'] = 1;
-    $permission_array['changepassword.php'] = 1;
-    $permission_array['editprofile.php'] = 1;
-    $permission_array['inbox.php'] = 1;
-    $permission_array['date.php'] = 1;
-    $permission_array['event.php'] = 1;
-    $permission_array['viewprofile.php'] = 1;
-    $permission_array['viewnotification.php'] = 1;
-    $permission_array['volunteerreport.php'] = 1;
+		/* * Set our permission array.
+		 * anything a guest can do, a volunteer and manager can also do
+		 * anything a volunteer can do, a manager can do.
+		 *
+		 * If a page is not specified in the permission array, anyone logged into the system
+		 * can view it. If someone logged into the system attempts to access a page above their
+		 * permission level, they will be sent back to the home page.
+		 */
+		//pages guests are allowed to view
+		// LOWERCASE
+		$permission_array['index.php'] = 0;
+$permission_array['about.php'] = 0;
+$permission_array['apply.php'] = 0;
+$permission_array['logout.php'] = 0;
+$permission_array['volunteerregister.php'] = 0;
+$permission_array['leaderboard.php'] = 0;
+// $permission_array['findanimal.php'] = 0; //TODO DELETE
+//pages volunteers can view
+$permission_array['help.php'] = 1;
+$permission_array['dashboard.php'] = 1;
+$permission_array['calendar.php'] = 1;
+$permission_array['eventsearch.php'] = 1;
+$permission_array['changepassword.php'] = 1;
+$permission_array['editprofile.php'] = 1;
+$permission_array['inbox.php'] = 1;
+$permission_array['date.php'] = 1;
+$permission_array['event.php'] = 1;
+$permission_array['viewprofile.php'] = 1;
+$permission_array['viewnotification.php'] = 1;
+$permission_array['volunteerreport.php'] = 1;
 
-    $permission_array['viewcheckinout.php'] = 1;
-    $permission_array['viewresources.php'] = 1;
-    $permission_array['milestonepoints.php'] = 1;
-    $permission_array['selectvotm.php'] = 1;
-    //pages only managers can view
-    $permission_array['viewallevents.php'] = 0;
-    $permission_array['personedit.php'] = 0; // changed to 0 so that applicants can apply
-    $permission_array['viewschedule.php'] = 2;
-    $permission_array['addweek.php'] = 2;
-    $permission_array['log.php'] = 2;
-    $permission_array['reports.php'] = 2;
-    $permission_array['eventedit.php'] = 2;
-    $permission_array['addevent.php'] = 2;
-    $permission_array['editevent.php'] = 2;
-    // $permission_array['roster.php'] = 2; //TODO DELETE
-    $permission_array['report.php'] = 2;
-    $permission_array['reportspage.php'] = 2;
-    $permission_array['resetpassword.php'] = 2;
-    // $permission_array['addappointment.php'] = 2; //TODO DELETE
-    // $permission_array['addanimal.php'] = 2; //TODO DELETE
-    // $permission_array['addservice.php'] = 2; //TODO DELETE
-    // $permission_array['addlocation.php'] = 2; //TODO DELETE
-    // $permission_array['viewvece.php'] = 2; //TODO DELETE
-    // $permission_array['viewlocation.php'] = 2; //TODO DELETE
-    // $permission_array['viewarchived.php'] = 2; //TODO DELETE
-    // $permission_array['animal.php'] = 2; //TODO DELETE
-    // $permission_array['editanimal.php'] = 2; //TODO DELETE
-    $permission_array['eventsuccess.php'] = 2;
-    $permission_array['viewsignuplist.php'] = 2;
-    $permission_array['vieweventsignups.php'] = 2;
-    $permission_array['viewalleventsignups.php'] = 2;
-    $permission_array['resources.php'] = 2;
-    $permission_array['uploadresources.php'] = 2;
-    $permission_array['deleteresources.php'] = 2;
+$permission_array['viewcheckinout.php'] = 1;
+$permission_array['viewresources.php'] = 1;
+$permission_array['milestonepoints.php'] = 1;
+$permission_array['selectvotm.php'] = 1;
+//pages only managers can view
+$permission_array['viewallevents.php'] = 0;
+$permission_array['personedit.php'] = 0; // changed to 0 so that applicants can apply
+$permission_array['viewschedule.php'] = 2;
+$permission_array['addweek.php'] = 2;
+$permission_array['log.php'] = 2;
+$permission_array['reports.php'] = 2;
+$permission_array['eventedit.php'] = 2;
+$permission_array['addevent.php'] = 2;
+$permission_array['editevent.php'] = 2;
+// $permission_array['roster.php'] = 2; //TODO DELETE
+$permission_array['report.php'] = 2;
+$permission_array['reportspage.php'] = 2;
+$permission_array['resetpassword.php'] = 2;
+// $permission_array['addappointment.php'] = 2; //TODO DELETE
+// $permission_array['addanimal.php'] = 2; //TODO DELETE
+// $permission_array['addservice.php'] = 2; //TODO DELETE
+// $permission_array['addlocation.php'] = 2; //TODO DELETE
+// $permission_array['viewvece.php'] = 2; //TODO DELETE
+// $permission_array['viewlocation.php'] = 2; //TODO DELETE
+// $permission_array['viewarchived.php'] = 2; //TODO DELETE
+// $permission_array['animal.php'] = 2; //TODO DELETE
+// $permission_array['editanimal.php'] = 2; //TODO DELETE
+$permission_array['eventsuccess.php'] = 2;
+$permission_array['viewsignuplist.php'] = 2;
+$permission_array['vieweventsignups.php'] = 2;
+$permission_array['viewalleventsignups.php'] = 2;
+$permission_array['resources.php'] = 2;
+$permission_array['uploadresources.php'] = 2;
+$permission_array['deleteresources.php'] = 2;
 
-    $permission_array['managemembers.php'] = 2;
+$permission_array['managemembers.php'] = 2;
 
-    $permission_array['volunteermanagement.php'] = 2;
+$permission_array['volunteermanagement.php'] = 2;
 
-    $permission_array['eventmanagement.php'] = 2;
+$permission_array['eventmanagement.php'] = 2;
 
-    $permission_array['deletediscussion.php'] = 2;
-    $permission_array['clockoutbulk.php'] = 2;
-    $permission_array['clockOut.php'] = 2;
-    $permission_array['edithours.php'] = 2;
-    $permission_array['eventlist.php'] = 1;
-    $permission_array['eventsignup.php'] = 1;
-    $permission_array['eventfailure.php'] = 1;
-    $permission_array['signupsuccess.php'] = 1;
-    $permission_array['edittimes.php'] = 1;
-    $permission_array['adminviewingevents.php'] = 2;
-    $permission_array['signuppending.php'] = 1;
-    $permission_array['requestfailed.php'] = 1;
-    $permission_array['settimes.php'] = 1;
-    $permission_array['eventfailurebaddeparturetime.php'] = 1;
-    $permission_array['import.php'] = 3;
-    $permission_array['export.php'] = 3;
-    $permission_array['emailgen.php'] = 3;
-    $permission_array['Search.php'] = 3;
-    $permission_array['ReportGeneration.php'] = 3;
-    $permission_array['specificevent.php'] = 1;
-    $permission_array['adddonor.php'] = 3;
-		$permission_array['donationaddedit.php']=3;
-		$permission_array["editdonationhandler.php"]=3;
-
-
-
-    // LOWERCASE
+$permission_array['deletediscussion.php'] = 2;
+$permission_array['clockoutbulk.php'] = 2;
+$permission_array['clockOut.php'] = 2;
+$permission_array['edithours.php'] = 2;
+$permission_array['eventlist.php'] = 1;
+$permission_array['eventsignup.php'] = 1;
+$permission_array['eventfailure.php'] = 1;
+$permission_array['signupsuccess.php'] = 1;
+$permission_array['edittimes.php'] = 1;
+$permission_array['adminviewingevents.php'] = 2;
+$permission_array['signuppending.php'] = 1;
+$permission_array['requestfailed.php'] = 1;
+$permission_array['settimes.php'] = 1;
+$permission_array['eventfailurebaddeparturetime.php'] = 1;
+$permission_array['import.php'] = 3;
+$permission_array['export.php'] = 3;
+$permission_array['emailgen.php'] = 3;
+$permission_array['Search.php'] = 3;
+$permission_array['ReportGeneration.php'] = 3;
+$permission_array['specificevent.php'] = 1;
+$permission_array['adddonor.php'] = 3;
+$permission_array['donationaddedit.php']=3;
+$permission_array["editdonationhandler.php"]=3;
+$permission_array["reportgeneration.php"]=3;
 
 
-    //Check if they're at a valid page for their access level.
-    $current_page = strtolower(substr($_SERVER['PHP_SELF'], strrpos($_SERVER['PHP_SELF'], '/') + 1));
-    $current_page = substr($current_page, strpos($current_page, "/"));
 
-    if ($permission_array[$current_page] > $_SESSION['access_level']) {
-      //in this case, the user doesn't have permission to view this page.
-      //we redirect them to the index page.
-      echo "<script type=\"text/javascript\">window.location = \"index.php\";</script>";
-      //note: if javascript is disabled for a user's browser, it would still show the page.
-      //so we die().
-      die();
-    }
-    //This line gives us the path to the html pages in question, useful if the server isn't installed @ root.
-    $path = strrev(substr(strrev($_SERVER['SCRIPT_NAME']), strpos(strrev($_SERVER['SCRIPT_NAME']), '/')));
-    $venues = array("portland" => "RMH Portland");
+// LOWERCASE
 
-    //they're logged in and session variables are set.
-    //
-    // SUPER ADMIN ONLY HEADER
-    if ($_SESSION['access_level'] >= 2):
-      ?>
+
+//Check if they're at a valid page for their access level.
+$current_page = strtolower(substr($_SERVER['PHP_SELF'], strrpos($_SERVER['PHP_SELF'], '/') + 1));
+$current_page = substr($current_page, strpos($current_page, "/"));
+
+if ($permission_array[$current_page] > $_SESSION['access_level']) {
+	//in this case, the user doesn't have permission to view this page.
+	//we redirect them to the index page.
+	echo "<script type=\"text/javascript\">window.location = \"index.php\";</script>";
+	//note: if javascript is disabled for a user's browser, it would still show the page.
+	//so we die().
+	die();
+}
+//This line gives us the path to the html pages in question, useful if the server isn't installed @ root.
+$path = strrev(substr(strrev($_SERVER['SCRIPT_NAME']), strpos(strrev($_SERVER['SCRIPT_NAME']), '/')));
+$venues = array("portland" => "RMH Portland");
+
+//they're logged in and session variables are set.
+//
+// SUPER ADMIN ONLY HEADER
+if ($_SESSION['access_level'] >= 2):
+?>
       <div class="navbar">
-        <div class="left-section">
-          <div class="logo-container">
-            <a href="index.php"><img src="images/RAPPAHANNOCK_v_RedBlue2.png" style="filter: brightness(1000%)" alt="Logo"></a>
-          </div>
-          <div class="nav-links">
-            <div class="nav-item">Search
-              <div class="dropdown">
-                <a href="/Search-donor-db/index.php" style="text-decoration: none;">
-                  <div class="in-nav">
-                    <img src="images/add-person.svg">
-                    <span style="font-size:24px;">Search</span>
-                  </div>
-                </a>
-              </div>
-            </div>
-            <div class="nav-item">Generation
-              <div class="dropdown">
+	<div class="left-section">
+	  <div class="logo-container">
+	    <a href="index.php"><img src="images/RAPPAHANNOCK_v_RedBlue2.png" style="filter: brightness(1000%)" alt="Logo"></a>
+	  </div>
+	  <div class="nav-links">
+	    <div class="nav-item">Search
+	      <div class="dropdown">
+		<a href="/Search-donor-db/index.php" style="text-decoration: none;">
+		  <div class="in-nav">
+		    <img src="images/add-person.svg">
+		    <span style="font-size:24px;">Search</span>
+		  </div>
+		</a>
+	      </div>
+	    </div>
+	    <div class="nav-item">Generation
+	      <div class="dropdown">
 
-                <a href="emailgen.php" style="text-decoration: none;">
-                  <div class="in-nav">
-                    <img src="images/add-person.svg">
-                    <span style="font-size:24px;">Generate Email</span>
-                  </div>
-                </a>
-                <a href="ReportGeneration.php" style="text-decoration: none;">
-                  <div class="in-nav">
-                    <img src="images/add-person.svg">
-                    <span style="font-size:24px;">Generate Report</span>
-                  </div>
-                </a>
+		<a href="emailgen.php" style="text-decoration: none;">
+		  <div class="in-nav">
+		    <img src="images/add-person.svg">
+		    <span style="font-size:24px;">Generate Email</span>
+		  </div>
+		</a>
+		<a href="ReportGeneration.php" style="text-decoration: none;">
+		  <div class="in-nav">
+		    <img src="images/add-person.svg">
+		    <span style="font-size:24px;">Generate Report</span>
+		  </div>
+		</a>
 
-              </div>
-            </div>
-            <div class="nav-item">Document Management
-              <div class="dropdown">
+	      </div>
+	    </div>
+	    <div class="nav-item">Document Management
+	      <div class="dropdown">
 
-                <a href="import.php" style="text-decoration: none;">
-                  <div class="in-nav">
-                    <img src="images/plus-solid.svg">
-                    <span>Import</span>
-                  </div>
-                </a>
-                <a href="export.php" style="text-decoration: none;">
-                  <div class="in-nav">
-                    <img src="images/list-solid.svg">
-                    <span>Export</span>
-                  </div>
-                </a>
+		<a href="import.php" style="text-decoration: none;">
+		  <div class="in-nav">
+		    <img src="images/plus-solid.svg">
+		    <span>Import</span>
+		  </div>
+		</a>
+		<a href="export.php" style="text-decoration: none;">
+		  <div class="in-nav">
+		    <img src="images/list-solid.svg">
+		    <span>Export</span>
+		  </div>
+		</a>
 
 
-              </div>
-            </div>
+	      </div>
+	    </div>
 
-          </div>
-        </div>
+	  </div>
+	</div>
 
-        <div class="right-section">
-          <a href="calendar.php">
-            <div class="icon-butt">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="#00447b" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 4C3 3.44772 3.44772 3 4 3H6V2C6 1.44772 6.44772 1 7 1C7.55228 1 8 1.44772 8 2V3H16V2C16 1.44772 16.4477 1 17 1C17.5523 1 18 1.44772 18 2V3H20C20.5523 3 21 3.44772 21 4V21C21 21.5523 20.5523 22 20 22H4C3.44772 22 3 21.5523 3 21V4ZM5 5V20H19V5H5ZM7 10H9V12H7V10ZM11 10H13V12H11V10ZM15 10H17V12H15V10ZM7 14H9V16H7V14ZM11 14H13V16H11V14ZM15 14H17V16H15V14Z"/>
-              </svg>
-            </div>
-          </a>
-          <div class="date-box"></div>
-          <div class="nav-links">
-            <div class="nav-item" style="outline:none;">
-              <div class="icon">
-                <img src="images/usaicon.png" alt="User Icon">
-                <div class="dropdown">
-                  <a href="index.php" style="text-decoration: none;">
-                    <div>Reload Page</div>
-                  </a>
-                  <a href="logout.php" style="text-decoration: none;">
-                    <div>Log Out</div>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+	<div class="right-section">
+	  <a href="calendar.php">
+	    <div class="icon-butt">
+	      <svg width="30" height="30" viewBox="0 0 24 24" fill="#00447b" xmlns="http://www.w3.org/2000/svg">
+		<path d="M3 4C3 3.44772 3.44772 3 4 3H6V2C6 1.44772 6.44772 1 7 1C7.55228 1 8 1.44772 8 2V3H16V2C16 1.44772 16.4477 1 17 1C17.5523 1 18 1.44772 18 2V3H20C20.5523 3 21 3.44772 21 4V21C21 21.5523 20.5523 22 20 22H4C3.44772 22 3 21.5523 3 21V4ZM5 5V20H19V5H5ZM7 10H9V12H7V10ZM11 10H13V12H11V10ZM15 10H17V12H15V10ZM7 14H9V16H7V14ZM11 14H13V16H11V14ZM15 14H17V16H15V14Z"/>
+	      </svg>
+	    </div>
+	  </a>
+	  <div class="date-box"></div>
+	  <div class="nav-links">
+	    <div class="nav-item" style="outline:none;">
+	      <div class="icon">
+		<img src="images/usaicon.png" alt="User Icon">
+		<div class="dropdown">
+		  <a href="index.php" style="text-decoration: none;">
+		    <div>Reload Page</div>
+		  </a>
+		  <a href="logout.php" style="text-decoration: none;">
+		    <div>Log Out</div>
+		  </a>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
       </div>
-    <?php
-    endif;
+<?php
+	endif;
 
-    // VOLUNTEER ONLY HEADER
-    if ($_SESSION['access_level'] <= 1):
-      ?>
+// VOLUNTEER ONLY HEADER
+if ($_SESSION['access_level'] <= 1):
+?>
       <div class="navbar">
-        <div class="left-section">
-          <div class="logo-container">
-            <a href="index.php"><img src="images/RAPPAHANNOCK_v_RedBlue2.png" style="filter: brightness(1000%)" alt="Logo"></a>
-          </div>
-          <div class="nav-links">
-            <div class="nav-item">Events
-              <div class="dropdown">
+	<div class="left-section">
+	  <div class="logo-container">
+	    <a href="index.php"><img src="images/RAPPAHANNOCK_v_RedBlue2.png" style="filter: brightness(1000%)" alt="Logo"></a>
+	  </div>
+	  <div class="nav-links">
+	    <div class="nav-item">Events
+	      <div class="dropdown">
 
-                <div class="in-nav">
-                  <img src="images/list-solid.svg">
-                  <span>My Upcoming</span>
-                </div>
-                </a>
-                <a href="viewAllEvents.php" style="text-decoration: none;">
-                  <div class="in-nav">
-                    <img src="images/new-event.svg">
-                    <span>Sign-Up</span>
-                  </div>
-                </a>
-                <a href="editHours.php" style="text-decoration: none;">
-                  <div class="in-nav">
-                    <img src="images/clock-regular.svg">
-                    <span>Edit Hours</span>
-                  </div>
-                </a>
-              </div>
-            </div>
+		<div class="in-nav">
+		  <img src="images/list-solid.svg">
+		  <span>My Upcoming</span>
+		</div>
+		</a>
+		<a href="viewAllEvents.php" style="text-decoration: none;">
+		  <div class="in-nav">
+		    <img src="images/new-event.svg">
+		    <span>Sign-Up</span>
+		  </div>
+		</a>
+		<a href="editHours.php" style="text-decoration: none;">
+		  <div class="in-nav">
+		    <img src="images/clock-regular.svg">
+		    <span>Edit Hours</span>
+		  </div>
+		</a>
+	      </div>
+	    </div>
 
-          </div>
-        </div>
+	  </div>
+	</div>
 
-        <div class="right-section">
-          <a href="calendar.php">
-            <div class="icon-butt">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="#00447b" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 4C3 3.44772 3.44772 3 4 3H6V2C6 1.44772 6.44772 1 7 1C7.55228 1 8 1.44772 8 2V3H16V2C16 1.44772 16.4477 1 17 1C17.5523 1 18 1.44772 18 2V3H20C20.5523 3 21 3.44772 21 4V21C21 21.5523 20.5523 22 20 22H4C3.44772 22 3 21.5523 3 21V4ZM5 5V20H19V5H5ZM7 10H9V12H7V10ZM11 10H13V12H11V10ZM15 10H17V12H15V10ZM7 14H9V16H7V14ZM11 14H13V16H11V14ZM15 14H17V16H15V14Z"/>
-              </svg>
-            </div>
-          </a>
-          <div class="date-box"></div>
-          <div class="nav-links">
-            <div class="nav-item" style="outline:none;">
-              <div class="icon">
-                <img src="images/usaicon.png" alt="User Icon">
-                <div class="dropdown">
-                  <a href="viewProfile.php" style="text-decoration: none;">
-                    <div>View Profile</div>
-                  </a>
-                  <a href="editProfile.php" style="text-decoration: none;">
-                    <div>Edit Profile</div>
-                  </a>
-                  <a href="volunteerReport.php" style="text-decoration: none;">
-                    <div>View Hours</div>
-                  </a>
-                  <a href="inbox.php" style="text-decoration: none;">
-                    <div>Notifications</div>
-                  </a>
-                  <a href="changePassword.php" style="text-decoration: none;">
-                    <div>Change Password</div>
-                  </a>
-                  <a href="logout.php" style="text-decoration: none;">
-                    <div>Log Out</div>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+	<div class="right-section">
+	  <a href="calendar.php">
+	    <div class="icon-butt">
+	      <svg width="30" height="30" viewBox="0 0 24 24" fill="#00447b" xmlns="http://www.w3.org/2000/svg">
+		<path d="M3 4C3 3.44772 3.44772 3 4 3H6V2C6 1.44772 6.44772 1 7 1C7.55228 1 8 1.44772 8 2V3H16V2C16 1.44772 16.4477 1 17 1C17.5523 1 18 1.44772 18 2V3H20C20.5523 3 21 3.44772 21 4V21C21 21.5523 20.5523 22 20 22H4C3.44772 22 3 21.5523 3 21V4ZM5 5V20H19V5H5ZM7 10H9V12H7V10ZM11 10H13V12H11V10ZM15 10H17V12H15V10ZM7 14H9V16H7V14ZM11 14H13V16H11V14ZM15 14H17V16H15V14Z"/>
+	      </svg>
+	    </div>
+	  </a>
+	  <div class="date-box"></div>
+	  <div class="nav-links">
+	    <div class="nav-item" style="outline:none;">
+	      <div class="icon">
+		<img src="images/usaicon.png" alt="User Icon">
+		<div class="dropdown">
+		  <a href="viewProfile.php" style="text-decoration: none;">
+		    <div>View Profile</div>
+		  </a>
+		  <a href="editProfile.php" style="text-decoration: none;">
+		    <div>Edit Profile</div>
+		  </a>
+		  <a href="volunteerReport.php" style="text-decoration: none;">
+		    <div>View Hours</div>
+		  </a>
+		  <a href="inbox.php" style="text-decoration: none;">
+		    <div>Notifications</div>
+		  </a>
+		  <a href="changePassword.php" style="text-decoration: none;">
+		    <div>Change Password</div>
+		  </a>
+		  <a href="logout.php" style="text-decoration: none;">
+		    <div>Log Out</div>
+		  </a>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
       </div>
-    <?php
-    endif;
-  endif;
-  ?>
-  <script>
-    function updateDateAndCheckBoxes() {
-      const now = new Date();
-      const width = window.innerWidth;
+<?php
+	endif;
+endif;
+?>
+<script>
+function updateDateAndCheckBoxes() {
+	const now = new Date();
+	const width = window.innerWidth;
 
-      // Format the date based on width
-      let formatted = "";
-      if (width > 1650) {
-        formatted = "Today is " + now.toLocaleDateString("en-US", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric"
-        });
-      } else if (width >= 1450) {
-        formatted = now.toLocaleDateString("en-US", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric"
-        });
-      } else {
-        formatted = now.toLocaleDateString("en-US"); // e.g., 04/17/2025
-      }
+	// Format the date based on width
+	let formatted = "";
+	if (width > 1650) {
+		formatted = "Today is " + now.toLocaleDateString("en-US", {
+		weekday: "long",
+			year: "numeric",
+			month: "long",
+			day: "numeric"
+	});
+	} else if (width >= 1450) {
+		formatted = now.toLocaleDateString("en-US", {
+		weekday: "long",
+			year: "numeric",
+			month: "long",
+			day: "numeric"
+	});
+	} else {
+		formatted = now.toLocaleDateString("en-US"); // e.g., 04/17/2025
+	}
 
-      // Update right-section date boxes
-      document.querySelectorAll(".right-section .date-box").forEach(el => {
-        if (width < 1130) {
-          el.style.display = "none";
-        } else {
-          el.style.display = "";
-          el.textContent = formatted;
-        }
-      });
+	// Update right-section date boxes
+	document.querySelectorAll(".right-section .date-box").forEach(el => {
+	if (width < 1130) {
+		el.style.display = "none";
+	} else {
+		el.style.display = "";
+		el.textContent = formatted;
+	}
+	});
 
-      // Update left-section date boxes (Check In / Out or icon)
-      document.querySelectorAll(".left-section .date-box").forEach(el => {
-        if (width < 750) {
-          el.style.display = "none";
-        } else {
-          el.style.display = "";
-          el.textContent = width < 1130 ? "🔁" : "Check In/Out";
-        }
-      });
+	// Update left-section date boxes (Check In / Out or icon)
+	document.querySelectorAll(".left-section .date-box").forEach(el => {
+	if (width < 750) {
+		el.style.display = "none";
+	} else {
+		el.style.display = "";
+		el.textContent = width < 1130 ? "🔁" : "Check In/Out";
+	}
+	});
 
-      document.querySelectorAll(".icon-butt").forEach(el => {
-        if (width < 800) {
-          el.style.display = "none";
-        } else {
-          el.style.display = "";
-        }
-      });
+	document.querySelectorAll(".icon-butt").forEach(el => {
+	if (width < 800) {
+		el.style.display = "none";
+	} else {
+		el.style.display = "";
+	}
+	});
 
 
-    }
+}
 
-    // Run on load and resize
-    window.addEventListener("resize", updateDateAndCheckBoxes);
-    window.addEventListener("load", updateDateAndCheckBoxes);
-  </script>
+// Run on load and resize
+window.addEventListener("resize", updateDateAndCheckBoxes);
+window.addEventListener("load", updateDateAndCheckBoxes);
+</script>
 </header>
