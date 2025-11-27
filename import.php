@@ -18,13 +18,13 @@ if (isset($_SESSION['_id'])) {
 ?>
 <!DOCTYPE html>
 <html>
-		<head>
-				<meta http-equiv="Content-Type" content="text/html">
-				<link rel="stylesheet" href="css/base.css">
-				<link rel="stylesheet" href="css/messages.css"></link>
-				<script src="js/messages.js"></script>
-				<title>Rappahannock CASA | Import</title>
-
+			<head>
+					<meta charset="UTF-8">
+					<title>Add and Edit Donations</title>
+					<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+					<meta http-equiv="Content-Type" content="text/html">
+					<link rel="stylesheet" href="css/base.css">
+					<link rel="stylesheet" href="css/messages.css"></link>
 				<style>
 										html, body {
 												height: 100%;
@@ -74,47 +74,40 @@ if ($status == 0){
 				$message = "There was a problem importing the file no information has been put into the storage system.";
 }
 else if ($status == 1){
-				$message = "Import attempt has been made! The only information/files that have not been imported are mentioned below.";
+				$message = "Import attempt has been made! The only information/files that have not been imported are mentioned below in the import report.";
 }
 
 if ($status == 1){
-				echo "<div><b>".$message."</b></div>";
+				echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
+				echo '<h3 class="mb-3">Import Report</h3>';
+				echo "<b>".$message."</b>";
 				$message = "";
 				if (isset($_SESSION["importStatus"])){
 								foreach ($_SESSION["importStatus"] as $st){
 												$message = $message.$st."<br/>";
 								}
-								echo "<div>".$message."</div>";
+								echo $message;
 				}
 				else{
-								echo "<div>Could not retrieve import report</div>";
+								echo 'Could not retrieve import report';
 				}
+				echo "</div>";
 }
 ?>
-								<main>
-									<div class="container mt-4 p-4 bg-white rounded shadow">
-										<div class = "mb-3">
-												<form
-														action="python/ImportHandler.php"
-														method="post"
-														enctype="multipart/form-data"
-														onsubmit="return validateFiles();"
-												>
-														<input
-																type="file"
-																name="files[]"
-																multiple
-																onchange="displayImport(event)"
-																class="file-input"
-																style="margin-top: 10px;"
-														>
-														<ul id="fileDisplay" class="display"></ul>	
-														</br>
-														<button type="submit"><b>Submit Files</b></button>
-												</form>
-									</div>
-								</div>
-								</main>
+	<div class="container mt-4 p-4 bg-white rounded shadow">
+		<h3 class="mb-3">Select Files To Import</h3>
+		<div class = "mb-3">
+				<form action="python/ImportHandler.php" method="post" enctype="multipart/form-data" onsubmit="return validateFiles();">
+						<input type="file" name="files[]" multiple onchange="displayImport(event)" class="file-input" style="margin-top: 10px;">
+						<ul id="fileDisplay" class="display"></ul>	
+						</br>
+						<input type="submit" class='file-input'></input>
+				</form>
+			</div>
+		</div>
+</body>
+</br>
+</br>
 				<footer class="footer" style="footer">
 						<!-- Left Side: Logo & Socials -->
 						<div class="footer-left">
