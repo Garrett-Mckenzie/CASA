@@ -74,7 +74,7 @@ if ($status == 0){
 				$message = "There was a problem importing the file no information has been put into the storage system.";
 }
 else if ($status == 1){
-				$message = "Import attempt has been made! The only information/files that have not been imported are mentioned below in the import report.";
+				$message = "Import attempt has been made! The only information/files that have not been imported are mentioned below in the import report.</br>";
 }
 
 if ($status == 1){
