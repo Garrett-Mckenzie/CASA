@@ -12,8 +12,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['files'])){
 																exec("python -u \"$python_script\" -i \"$temp\" 2>&1", $output, $return_var);
 																session_start();
 																$_SESSION["importStatus"] = $output;
-																var_dump($output);
-																echo "python -u \"$python_script\" -i \"$temp\" 2>&1";
 																if($return_var === 0){
 																				header("Location: ../import.php?success=1&file=$name");
 																				
