@@ -16,19 +16,19 @@ $loggedIn = false;
 $accessLevel = 0;
 $userID = null;
 if (isset($_SESSION['_id'])) {
-				$loggedIn = true;
-				// 0 = not logged in, 1 = standard user, 2 = manager (Admin), 3 super admin (TBI)
-				$accessLevel = $_SESSION['access_level'];
-				$userID = $_SESSION['_id'];
+	$loggedIn = true;
+	// 0 = not logged in, 1 = standard user, 2 = manager (Admin), 3 super admin (TBI)
+	$accessLevel = $_SESSION['access_level'];
+	$userID = $_SESSION['_id'];
 }
 try{
-				include_once("database/dbinfo.php");
-				$con = connect();
-				$query = "SELECT name FROM dbevents";
-				$eventNames = mysqli_query($con,$query);
+	include_once("database/dbinfo.php");
+	$con = connect();
+	$query = "SELECT name FROM dbevents";
+	$eventNames = mysqli_query($con,$query);
 }
 catch(Exception $e){
-				echo "Message. ".e->getMessage();
+	echo "Message. ".e->getMessage();
 }
 
 ?>
@@ -54,23 +54,22 @@ catch(Exception $e){
 
 if (isset($_GET["addAttempt"]) and isset($_SESSION["addComplete"]) and isset($_SESSION["reason"])){
 
-				$status = $_SESSION["addComplete"];
-				unset($_SESSION["addComplete"]);
-				$reason = $_SESSION["reason"];
-				unset($_SESSION["reason"]);
+	$status = $_SESSION["addComplete"];
+	unset($_SESSION["addComplete"]);
+	$reason = $_SESSION["reason"];
+	unset($_SESSION["reason"]);
 
-				echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
-				if ($status == "t"){
-								echo '<h3 class="mb-3">New Donation Has Been Added!</h3>';
-								echo '<p>'.$reason.'</p>';
-				}
-				else{
-								echo '<h3 class="mb-3">There Was An Issue Adding The Donation</h3>';
-								echo '<p>'.$reason.'</p>';
-				}
-				echo '</div>';
+	echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
+	if ($status == "t"){
+		echo '<h3 class="mb-3">New Donation Has Been Added!</h3>';
+		echo '<p>'.$reason.'</p>';
+	}
+	else{
+		echo '<h3 class="mb-3">There Was An Issue Adding The Donation</h3>';
+		echo '<p>'.$reason.'</p>';
+	}
+	echo '</div>';
 }
-
 ?>
 <div class="container mt-4 p-4 bg-white rounded shadow">
 		<h3 class="mb-3">Add a New Donation</h3>
@@ -117,7 +116,7 @@ if (isset($_GET["addAttempt"]) and isset($_SESSION["addComplete"]) and isset($_S
 <?php
 foreach($eventNames as $row)
 {
-				echo "<option value = ".$row["name"].">".$row["name"]."</option>";
+	echo "<option value = ".$row["name"].">".$row["name"]."</option>";
 }
 ?>
 				</select>
@@ -182,82 +181,99 @@ foreach($eventNames as $row)
 
 if (isset($_GET["searchAttempt"]) and isset($_SESSION["searchComplete"]) and isset($_SESSION["reason"])){
 
-				$status = $_SESSION["searchComplete"];
-				unset($_SESSION["searchComplete"]);
-				$reason = $_SESSION["reason"];
-				unset($_SESSION["reason"]);
+	$status = $_SESSION["searchComplete"];
+	unset($_SESSION["searchComplete"]);
+	$reason = $_SESSION["reason"];
+	unset($_SESSION["reason"]);
 
-				echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
-				if ($status == "t"){
-								echo '<h3 class="table-heading">Search Results</h3>';
-								echo '<p>Donation info can be directly edited from this table by clicking the edit button after making any changes.</p>';
-								echo '<table id="myTable" class="casa-table">';
-								echo '<tr>';
-								echo '<th><b>amount</b></th>';
-								echo '<th><b>reason</b></th>';
-								echo '<th><b>date (mm-dd-yyyy)</b></th>';
-								echo '<th><b>donation fees</b></th>';
-								echo '<th><b>thanked</b></th>';
-								echo '<th><b>first name</b></th>';
-								echo '<th><b>last name</b></th>';
-								echo '<th><b>email</b></th>';
-								echo '<th><b>donor zip</b></th>';
-								echo '<th><b>donor city</b></th>';
-								echo '<th><b>edit donation</b></th>';
-								echo '</tr>';
-								foreach($reason as $row){
-												echo '<tr>';
-												echo '<form action="./editDonationHandler.php" method="post">';
-												echo '<input type = "hidden" id="goal" name="goal" value ="edit">';
-												echo '<td><input type = "number" id="amount" name="amount" min="0" max="999999" step="0.1" value="'.$row[0].'" placeholder="'.$row[0].'"></input></td>';
-												echo '<td><input type="text" id = "reason" name = "reason" value="'.$row[1].'"></input></td>';
-												echo '<td><input type="text" id="date" name="date" value="'.$row[2].'"></input></td>';
-												echo '<td><input type="number" id="fee" name="fee" min="0.00" max="999999" step="0.1" value="'.$row[3].'" placeholder="'.$row[3].'"></input></td>';
-												echo '<td><input type="number" id="thanked" name="thanked" min="0" max="1" step="1" value="'.$row[4].'" placeholder="'.$row[4].'"></input></td>';
-												echo '<td><input type="text" id = "first" name = "first" value="'.$row[5].'"></input></td>';
-												echo '<td><input type="text" id = "last" name = "last" value="'.$row[6].'"></input></td>';
-												echo '<td><input type="text" id = "email" name = "email" value="'.$row[7].'"></input></td>';
-												echo '<td>'.$row[8].'</td>';
-												echo '<td>'.$row[9].'</td>';
-												echo '<td>';
-												echo '<input type="hidden" id = "donorID" name = "donorID" value="'.$row[11].'"></input>';
-												echo '<input type="hidden" id = "donationID" name = "donationID" value="'.$row[10].'"></input>';
-												echo '<button type="submit" style="background: none;border: none;">';
-												echo '<svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+	echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
+	if ($status == "t"){
+		echo '<h3 class="table-heading">Search Results</h3>';
+		echo '<p>Donation info can be directly edited from this table by clicking the edit button after making any changes.</p>';
+		echo '<table id="myTable" class="casa-table">';
+		echo '<tr>';
+		echo '<th><b>amount</b></th>';
+		echo '<th><b>reason</b></th>';
+		echo '<th><b>date (mm-dd-yyyy)</b></th>';
+		echo '<th><b>donation fees</b></th>';
+		echo '<th><b>thanked</b></th>';
+		echo '<th><b>first name</b></th>';
+		echo '<th><b>last name</b></th>';
+		echo '<th><b>email</b></th>';
+		echo '<th><b>donor zip</b></th>';
+		echo '<th><b>donor city</b></th>';
+		echo '<th><b>edit donation</b></th>';
+		echo '</tr>';
+		foreach($reason as $row){
+			echo '<tr>';
+			echo '<form action="./editDonationHandler.php" method="post">';
+			echo '<input type = "hidden" id="goal" name="goal" value ="edit">';
+			echo '<td><input type = "number" id="amount" name="amount" min="0" max="999999" step="0.1" value="'.$row[0].'" placeholder="'.$row[0].'"></input></td>';
+			echo '<td><input type="text" id = "reason" name = "reason" value="'.$row[1].'"></input></td>';
+			echo '<td><input type="text" id="date" name="date" value="'.$row[2].'"></input></td>';
+			echo '<td><input type="number" id="fee" name="fee" min="0.00" max="999999" step="0.1" value="'.$row[3].'" placeholder="'.$row[3].'"></input></td>';
+			echo '<td><input type="number" id="thanked" name="thanked" min="0" max="1" step="1" value="'.$row[4].'" placeholder="'.$row[4].'"></input></td>';
+			echo '<td><input type="text" id = "first" name = "first" value="'.$row[5].'"></input></td>';
+			echo '<td><input type="text" id = "last" name = "last" value="'.$row[6].'"></input></td>';
+			echo '<td><input type="text" id = "email" name = "email" value="'.$row[7].'"></input></td>';
+			echo '<td>'.$row[8].'</td>';
+			echo '<td>'.$row[9].'</td>';
+			echo '<td>';
+			echo '<input type="hidden" id = "donorID" name = "donorID" value="'.$row[11].'"></input>';
+			echo '<input type="hidden" id = "donationID" name = "donationID" value="'.$row[10].'"></input>';
+			echo '<button type="submit" style="background: none;border: none;">';
+			echo '<svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 
-																<title/>
+				<title/>
 
-																<g id="Complete">
+				<g id="Complete">
 
-																<g id="edit">
+				<g id="edit">
 
-																<g>
+				<g>
 
-																<path d="M20,16v4a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V6A2,2,0,0,1,4,4H8" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+				<path d="M20,16v4a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V6A2,2,0,0,1,4,4H8" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
 
-																<polygon fill="none" points="12.5 15.8 22 6.2 17.8 2 8.3 11.5 8 16 12.5 15.8" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+				<polygon fill="none" points="12.5 15.8 22 6.2 17.8 2 8.3 11.5 8 16 12.5 15.8" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
 
-																</g>
+				</g>
 
-																</g>
+				</g>
 
-																</g>
+				</g>
 
-																</svg>';
-												echo '</button>';
-												echo '</a>';
-												echo '</td>';
-												echo '</form>';
-												echo '</tr>';
-								}
-								echo "</table>";
-				}
-				else{
-								echo '<h3 class="mb-3">There Was An Issue Searching Through Donations</h3>';
-								echo '<p>'.$reason.'</p>';
-				}
-				echo '</div>';
+				</svg>';
+echo '</button>';
+echo '</a>';
+echo '</td>';
+echo '</form>';
+echo '</tr>';
+		}
+		echo "</table>";
+	}
+	else{
+		echo '<h3 class="mb-3">There Was An Issue Searching Through Donations</h3>';
+		echo '<p>'.$reason.'</p>';
+	}
+	echo '</div>';
 }
+
+if (isset($_GET["editAttempt"]) and isset($_SESSION["editComplete"])){
+	$status = $_SESSION["editComplete"];
+	unset($_SESSION["editComplete"]);
+	$reason = $_SESSION["reason"];
+	unset($_SESSION["reason"]);
+	echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
+	if ($status == "t"){
+		echo '<h3 class="mb-3">Your Changes Have Been Saved!</h3>';
+		echo '<p>'.$reason.'</p>';
+	}
+	else{
+		echo '<h3 class="mb-3">There Was An Issue Adding The Donation</h3>';
+		echo '<p>'.$reason.'</p>';
+	}
+	echo '</div>';
+} 
 
 ?>
 

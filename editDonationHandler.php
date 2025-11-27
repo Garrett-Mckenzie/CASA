@@ -128,7 +128,7 @@ else if  (isset($_POST["goal"]) and $_POST["goal"] == "edit"){
 
 				$result = mysqli_query($con,$query);
 				if (mysqli_num_rows($result) == 0){
-								$_SESSION["searchComplete"] = "f";
+								$_SESSION["editComplete"] = "f";
 								$_SESSION["reason"] = "Donor with info ".$first.", ".$lower.", and ".$email."was not found in our system. You may need to add them first.";
 								header("Location: donationAddEdit.php?editAttempt=true");
 								exit();
@@ -141,28 +141,28 @@ else if  (isset($_POST["goal"]) and $_POST["goal"] == "edit"){
 				$date = $_POST["date"];
 				if ($date != ""){
 								try{
-									$datetime = DateTime::createFromFormat('m#d#Y',$date);
-									if (!$datetime){
-													throw Exception("bad format");
-									}
-									$day = (string)$datetime->format('d');
-									$month = (string)$datetime->format('m');
-									$year = (string)$datetime->format('y');
-									$date = $month."/".$day."/".$year;
+												$datetime = DateTime::createFromFormat('m#d#Y',$date);
+												if (!$datetime){
+																throw Exception("bad format");
+												}
+												$day = (string)$datetime->format('d');
+												$month = (string)$datetime->format('m');
+												$year = (string)$datetime->format('y');
+												$date = $month."/".$day."/".$year;
 								}
 								catch (Exception $e){
-												$_SESSION["searchComplete"] = "f";
+												$_SESSION["editComplete"] = "f";
 												$_SESSION["reason"] = "Date of ".$date."is invalid.";
 												header("Location: donationAddEdit.php?editAttempt=true");
 												exit();
 								}
 				}
-				
+
 				#edit
 				#note that there is not logic here, everytime there is an edit
 				#that information gets put into the database as long as there are no
 				#flaws in the edit request.
-				
+
 				$id = $_POST["donationID"];
 				$reason = $_POST["reason"];
 				$fee = $_POST["fee"];
@@ -171,7 +171,20 @@ else if  (isset($_POST["goal"]) and $_POST["goal"] == "edit"){
 
 				$query = "UPDATE donations SET amount = '".$amount."', reason = '".$reason."', date = '".$date."', fee = '".$fee."', thanked = '".$thanked."', donorID = '".$donorID."' WHERE id = '".$id."';";
 				echo $query;
+				try{
+								mysqli_query($con,$query);
+				}
+				catch (Exception $e){
+								$_SESSION["editComplete"] = "f";
+								$_SESSION["reason"] = "Date of ".$date."is invalid.";
+								header("Location: donationAddEdit.php?editAttempt=true");
+								exit();
 
+				}
+				$_SESSION["editComplete"] = "t";
+				$_SESSION["reason"] = "The donation now reflects the below information:</br>Amount: ".$amount."</br>Reason: ".$reason."</br>Fee: ".$fee."</br>Thanked: ".$thanked."</br>Amount: ".$amount."</br>Donor Name: ".$first." ".$last."</br>Donor Email: ".$email;
+				header("Location: donationAddEdit.php?editAttempt=true");
+				exit();
 }
 else{
 				header("Location: ./index.php");
