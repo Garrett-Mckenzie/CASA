@@ -113,12 +113,68 @@ if (isset($_POST["goal"]) and $_POST["goal"] == "search"){
 #HANDLE EDITING DONATIONS
 else if  (isset($_POST["goal"]) and $_POST["goal"] == "edit"){
 				session_start();
+				include_once './database/dbinfo.php';
+				$con = connect();
 
-				$donorID = $_POST["donorID"];
-				$donationID = $_POST["donationID"];
+				var_dump($_POST);
+
+				#handle donor
+				$first = $_POST["first"];
+				$last = $_POST["last"];
+				$email = $_POST["email"];
+				$donorID = "";
+
+				$query = "SELECT id,first,last,email FROM donors WHERE LOWER(first) = '".strtolower($first)."' AND LOWER(last) = '".strtolower($last)."' AND LOWER(email) = '".strtolower($email)."';";
+
+				$result = mysqli_query($con,$query);
+				if (mysqli_num_rows($result) == 0){
+								$_SESSION["searchComplete"] = "f";
+								$_SESSION["reason"] = "Donor with info ".$first.", ".$lower.", and ".$email."was not found in our system. You may need to add them first.";
+								header("Location: donationAddEdit.php?editAttempt=true");
+								exit();
 				}
+				else{
+								$donorID = $result->fetch_all()[0][0][0];
+				}
+
+				#handle date
+				$date = $_POST["date"];
+				if ($date != ""){
+								try{
+									$datetime = DateTime::createFromFormat('m#d#Y',$date);
+									if (!$datetime){
+													throw Exception("bad format");
+									}
+									$day = (string)$datetime->format('d');
+									$month = (string)$datetime->format('m');
+									$year = (string)$datetime->format('y');
+									$date = $month."/".$day."/".$year;
+								}
+								catch (Exception $e){
+												$_SESSION["searchComplete"] = "f";
+												$_SESSION["reason"] = "Date of ".$date."is invalid.";
+												header("Location: donationAddEdit.php?editAttempt=true");
+												exit();
+								}
+				}
+				
+				#edit
+				#note that there is not logic here, everytime there is an edit
+				#that information gets put into the database as long as there are no
+				#flaws in the edit request.
+				
+				$id = $_POST["donationID"];
+				$reason = $_POST["reason"];
+				$fee = $_POST["fee"];
+				$thanked = $_POST["thanked"];
+				$amount = $_POST["amount"];
+
+				$query = "UPDATE donations SET amount = '".$amount."', reason = '".$reason."', date = '".$date."', fee = '".$fee."', thanked = '".$thanked."', donorID = '".$donorID."' WHERE id = '".$id."';";
+				echo $query;
+
+}
 else{
-	header("Location: ./index.php");
+				header("Location: ./index.php");
 }
 ?>
 
