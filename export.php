@@ -88,12 +88,14 @@ if (isset($_SESSION['_id'])) {
         }
 
         if ($status != -1){
-            echo "<div>".$message." </div>";
+								echo "<div style='text-align:center'>";
+								echo $message;
+								echo " </div>";
         }
         ?>
 
         <div class="export-container">
-
+					<div style="display:flex;">
             <div class="full-width-bar-sub">
                 <form
                     class="content-box-test"
@@ -131,7 +133,7 @@ if (isset($_SESSION['_id'])) {
                     <button type="submit" class="arrow-button">→</button>
                 </form>
             </div>
-
+					</div>
         </div> </main>
 <footer class="footer" style="margin-top: 100px;">
 	<!-- Left Side: Logo & Socials -->
