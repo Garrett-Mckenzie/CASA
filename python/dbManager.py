@@ -63,7 +63,6 @@ def import_excel():
         conn = connect()
         cursor = conn.cursor(buffered=True)
 
-
         #load up data
         file_path = sys.argv[2]
         data = pd.read_excel(file_path)
@@ -115,7 +114,7 @@ def import_excel():
                             
     except Exception as e:
         print(e)
-        raise e
+        return 1
 
 # Main
 def main():
