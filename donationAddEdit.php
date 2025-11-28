@@ -70,9 +70,26 @@ if (isset($_GET["addAttempt"]) and isset($_SESSION["addComplete"]) and isset($_S
 	}
 	echo '</div>';
 }
+if (isset($_GET["editAttempt"]) and isset($_SESSION["editComplete"])){
+	$status = $_SESSION["editComplete"];
+	unset($_SESSION["editComplete"]);
+	$reason = $_SESSION["reason"];
+	unset($_SESSION["reason"]);
+	echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
+	if ($status == "t"){
+		echo '<h3 class="mb-3">Your Changes Have Been Saved!</h3>';
+		echo '<p>'.$reason.'</p>';
+	}
+	else{
+		echo '<h3 class="mb-3">There Was An Issue Editing The Donation</h3>';
+		echo '<p>'.$reason.'</p>';
+	}
+	echo '</div>';
+} 
 ?>
 <div class="container mt-4 p-4 bg-white rounded shadow">
 		<h3 class="mb-3">Add a New Donation</h3>
+		<p>Note that if first name, last name, and email fields are left unfilled, then the donation is filed to the 'anonymous' donor.</p>
 		<hr style = "height: 1px; background-color: black;"></hr>
 		<form id="addDonation" action="addDonationHandler.php" method="post">
 
@@ -257,24 +274,6 @@ echo '</tr>';
 	}
 	echo '</div>';
 }
-
-if (isset($_GET["editAttempt"]) and isset($_SESSION["editComplete"])){
-	$status = $_SESSION["editComplete"];
-	unset($_SESSION["editComplete"]);
-	$reason = $_SESSION["reason"];
-	unset($_SESSION["reason"]);
-	echo '<div class="container mt-4 p-4 bg-white rounded shadow">';
-	if ($status == "t"){
-		echo '<h3 class="mb-3">Your Changes Have Been Saved!</h3>';
-		echo '<p>'.$reason.'</p>';
-	}
-	else{
-		echo '<h3 class="mb-3">There Was An Issue Adding The Donation</h3>';
-		echo '<p>'.$reason.'</p>';
-	}
-	echo '</div>';
-} 
-
 ?>
 
 <br/>

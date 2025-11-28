@@ -116,8 +116,6 @@ else if  (isset($_POST["goal"]) and $_POST["goal"] == "edit"){
 				include_once './database/dbinfo.php';
 				$con = connect();
 
-				var_dump($_POST);
-
 				#handle donor
 				$first = $_POST["first"];
 				$last = $_POST["last"];
@@ -170,7 +168,6 @@ else if  (isset($_POST["goal"]) and $_POST["goal"] == "edit"){
 				$amount = $_POST["amount"];
 
 				$query = "UPDATE donations SET amount = '".$amount."', reason = '".$reason."', date = '".$date."', fee = '".$fee."', thanked = '".$thanked."', donorID = '".$donorID."' WHERE id = '".$id."';";
-				echo $query;
 				try{
 								mysqli_query($con,$query);
 				}

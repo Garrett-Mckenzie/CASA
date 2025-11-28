@@ -2,7 +2,6 @@
 
 include_once 'database/dbinfo.php';
 
-var_dump($_POST);
 session_start();
 
 //Read in donation info
