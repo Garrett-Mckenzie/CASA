@@ -192,7 +192,7 @@ if (isset($_GET["searchAttempt"]) and isset($_SESSION["searchComplete"]) and iss
 		echo '<p>Donation info can be directly edited from this table by clicking the edit button after making any changes.</p>';
 		echo '<table id="myTable" class="casa-table">';
 		echo '<tr>';
-		echo '<th><b>amount</b></th>';
+		echo '<th><b>donation amount</b></th>';
 		echo '<th><b>reason</b></th>';
 		echo '<th><b>date (mm-dd-yyyy)</b></th>';
 		echo '<th><b>donation fees</b></th>';
