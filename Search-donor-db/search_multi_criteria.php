@@ -120,7 +120,7 @@ if (empty($query_types)) {
 
     if (in_array('Thanked_donors', $query_types)) {
         $search_query_parts[] = "Thanked Donors"
-        $subquery = "SELECT DISTINCT donorID FROM donationse.id WHERE e.thanked = 1";
+        $subquery = "SELECT DISTINCT d.id FROM donors d JOIN associations don ON d.id = don.donorID JOIN events e ON don.eventID = e.id WHERE e.thanked = 1";
         $where_clauses[] = "d.id IN ({$subquery})";
     } 
     
