@@ -16,7 +16,7 @@ try {
 
     foreach ($emails as $email) {
 
-        $cmd = "python3 send_email.py";
+        $cmd = "python send_email.py";
 
         $proc = proc_open($cmd, [
             0 => ["pipe", "r"],

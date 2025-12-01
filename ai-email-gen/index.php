@@ -4,7 +4,8 @@ ini_set('max_execution_time', 120);
 ini_set('display_errors', 0);
 
 // === GLOBAL CONFIG ===
-$OPENAI_API_KEY = getenv("OPENAI_API_KEY");
+$env = parse_ini_file(__DIR__.'/.api_env');
+$OPENAI_API_KEY = $env['OPENAI_API_KEY'];
 $OPENAI_MODEL   = "gpt-4o-mini";
 
 // === Unified JSON error handling ===
