@@ -278,15 +278,7 @@ if ($con) {
                         <input type="checkbox" name="query_type" value="donor_zip" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
                         <span class="ml-2 text-sm font-medium text-gray-700">Donor zip</span>
                     </label>
-                    
-                    <!-- makes Donors donations date range checkbox -->
-                    <!--
-                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
-                        <input type="checkbox" name="query_type" value="donor_donations_date_range" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
-                        <span class="ml-2 text-sm font-medium text-gray-700">Donor Donations (Date Range)</span>
-                    </label>
-                    -->
-                    <!-- makes Donors by donations date range in checkbox -->
+                    <!-- makes Donor donations date range checkbox -->
                     <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
                         <input type="checkbox" name="query_type" value="donors_by_donation_range_in" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
                         <span class="ml-2 text-sm font-medium text-gray-700">Donors *IN* Date Range</span>
