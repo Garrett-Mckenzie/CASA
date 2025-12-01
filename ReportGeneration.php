@@ -74,12 +74,12 @@ header('Expires: 0');
 
 			<div class="mb-3">	
 				<label><b>Starting Date For Report</b></label><br/>
-				<input type = "datetime-local" id="startDate" name="startDate"></input>
+				<input type = "date" id="startDate" name="startDate"></input>
 			</div>
 
 			<div class="mb-3">
 				<label><b>Ending Date For Report</b></label><br/>
-				<input type = "datetime-local" id="endDate" name="endDate"></input>
+				<input type = "date" id="endDate" name="endDate"></input>
 			</div>
 
 			<div class="mb-3">
