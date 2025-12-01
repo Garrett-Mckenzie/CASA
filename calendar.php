@@ -49,6 +49,22 @@
         $calendarEndEpoch = strtotime($calendarEnd);
         $weeks = 6;
     }
+
+    //helper function for event colors args(hue, saturation, lightness)
+    function hslToRgb($h, $s, $l) {
+    $c = (1 - abs(2 * $l - 1)) * $s;
+    $x = $c * (1 - abs(fmod($h / 60, 2) - 1));
+    $m = $l - $c / 2;
+    [$r, $g, $b] = match (true) {
+        $h < 60  => [$c, $x, 0],
+        $h < 120 => [$x, $c, 0],
+        $h < 180 => [0, $c, $x],
+        $h < 240 => [0, $x, $c],
+        $h < 300 => [$x, 0, $c],
+        default  => [$c, 0, $x],
+    };
+    return [($r + $m) * 255, ($g + $m) * 255, ($b + $m) * 255];
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -93,7 +109,7 @@
         <main class="calendar-view">
             <h1 class='calendar-header' style="background: #00447b; height: 75px;">
                 <img id="previous-month-button" src="images/arrow-back.png" data-month="<?php echo date("Y-m", $previousMonth); ?>">
-                <span id="calendar-heading-month" style="font-weight: 700; font-size: 36px;">Appointments - <?php echo date('F Y', $month); ?></span>
+                <span id="calendar-heading-month" style="font-weight: 700; font-size: 36px;">Fundraisers - <?php echo date('F Y', $month); ?></span>
                 <img id="next-month-button" src="images/arrow-forward.png" data-month="<?php echo date("Y-m", $nextMonth); ?>">
             </h1>
             <!-- <input type="date" id="month-jumper" value="<?php echo date('Y-m-d', $month); ?>" min="2023-01-01"> -->
@@ -125,7 +141,13 @@
                         $start = date('Y-m-d', $calendarStart);
                         $end = date('Y-m-d', $calendarEndEpoch);
                         require_once('database/dbEvents.php');
-                        $events = fetch_events_in_date_range($start, $end);
+
+                        //get all events
+                        $events = fetch_all_events();
+                        //style points: give each event a color, auto generated based on id
+                        $events = array_map(fn($e) => $e + ['color' => sprintf('#%02x%02x%02x', ...hslToRgb(($e['id'] * 137) % 360, 0.6, 0.5))],$events);
+
+
                         for ($week = 0; $week < $weeks; $week++) {
                             echo '
                                 <tr class="calendar-week">
@@ -141,29 +163,17 @@
                                     $extraAttributes .= ' data-month="' . date('Y-m', $date) . '"';
                                 }
                                 $eventsStr = '';
-                                $e = date('Y-m-d', $date);
+                                $e = strtotime(date('Y-m-d', $date));
 
-                                if (isset($events[$e])) {
-                                    $dayEvents = $events[$e];
-                                    foreach ($dayEvents as $info) {
+                                $dayEvents = array_filter($events , fn($event)=> strtotime($event["startDate"])<=$e && strtotime($event["endDate"])>=$e);
+                                foreach ($dayEvents as $info) {
 
-                                        $backgroundCol = '#00447b'; // default color
-
-                                        if (is_archived($info['id'])) { // archived event
-                                            if ($_SESSION['access_level'] < 2) {
-                                                continue; // users cannot see archived events
-                                            }
-                                            $backgroundCol = '#aaaaaa'; //TODO
-
-                                        } elseif (check_if_signed_up($info['id'], $_SESSION['_id'])) {// user is signed-up for event
-                                            $backgroundCol = '#4CAF50';
-
-                                        }
-                                        
-                                        $eventsStr .= '<a class="calendar-event" style="background-color: ' . $backgroundCol . '" href="event.php?id=' . $info['id'] . '&user_id=' . $_SESSION['_id'] . '">' . htmlspecialchars_decode($info['name']) . '</a>';
-
-                                    }
+                                    $backgroundCol = $info['color']; // default color
+                                    
+                                    $eventsStr .= '<a class="calendar-event" style="background-color: ' . $backgroundCol . '" href="specificEvent.php?id=' . $info['id'] . '&user_id=' . $_SESSION['_id'] . '">' . htmlspecialchars_decode($info['name']) . '</a>';
+                                    
                                 }
+                                
                                 echo '<td class="calendar-day' . $extraClasses . '" ' . $extraAttributes . ' data-date="' . date('Y-m-d', $date) . '">
                                     <div class="calendar-day-wrapper">
                                         <p class="calendar-day-number">' . date('j', $date) . '</p>
@@ -181,28 +191,7 @@
             </div>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">            
             
-            <?php
-            //archive = grey
-            //restricted = red
-            //signed up for = green
-            //blue = unrestricted
-            ?>
-            <center>
-            <p></p>
-            <i class="fa-solid fa-circle" style="color: #00447b"> </i>
-                <span style="font-size: 25px;">
-                    Open Event
-                </span>
-            <i class="fa-solid fa-circle" style="color: #4CAF50"> </i>
-                <span style="font-size: 25px;">
-                    Signed-Up
-                </span>
-            <i class="fa-solid fa-circle" style="color: #aaaaaa"> </i>
-                <span style="font-size: 25px;">
-                    Archived Event
-                </span>
-            </center>
-                            <p></p>
+           
         
 <div style="display: flex; justify-content: center; align-items: center;">
 <div style="margin-top: 1.5rem;">

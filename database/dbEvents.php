@@ -202,7 +202,8 @@ function retrieve_event($id) {
     $result_row = mysqli_fetch_assoc($result);
     // var_dump($result_row);
     $theEvent = make_an_event($result_row);
-//    mysqli_close($con);
+
+    mysqli_close($con);
     return $theEvent;
 }
 
@@ -216,6 +217,7 @@ function retrieve_event2($id) {
     }
     $result_row = mysqli_fetch_assoc($result);
 //    var_dump($result_row);
+    mysqli_close($con);
     return $result_row;
 }
 
@@ -313,7 +315,7 @@ function fetch_events_in_date_range($start_date, $end_date) {
     $start_date = mysqli_real_escape_string($connection, $start_date);
     $end_date = mysqli_real_escape_string($connection, $end_date);
     $query = "select * from dbevents
-              where date >= '$start_date' and date <= '$end_date'
+              where startDate >= '$start_date' and endDate <= '$end_date'
               order by startTime asc";
     $result = mysqli_query($connection, $query);
     if (!$result) {
@@ -492,7 +494,7 @@ function fetch_events_in_date_range_as_array($start_date, $end_date) {
     $start_date = mysqli_real_escape_string($connection, $start_date);
     $end_date = mysqli_real_escape_string($connection, $end_date);
     $query = "select * from dbevents
-              where date >= '$start_date' and date <= '$end_date'
+              where startDate >= '$start_date' and endDate <= '$end_date'
               order by date, startTime asc";
     $result = mysqli_query($connection, $query);
     if (!$result) {
@@ -507,7 +509,7 @@ function fetch_events_in_date_range_as_array($start_date, $end_date) {
 function fetch_all_events() {
     $connection = connect();
     $query = "select * from dbevents
-              order by date, startTime asc";
+              order by startDate, startTime asc";
     $result = mysqli_query($connection, $query);
     if (!$result) {
         mysqli_close($connection);

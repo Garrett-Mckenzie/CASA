@@ -112,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <!-- Logo Placeholder (Now the same width as inputs and centered) -->
       <div class="w-full flex justify-center mb-6">
-	<img src="images/RAPPAHANNOCK_v_RedBlue.png"
+	<img src="images/RAPPAHANNOCK_v_RedBlue2.png"
 	     alt="Logo"
 	     class="w-full max-w-xs">
       </div>

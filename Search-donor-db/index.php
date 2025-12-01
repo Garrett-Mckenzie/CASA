@@ -1,3 +1,22 @@
+<?php
+require_once '../database/dbinfo.php';
+
+session_start();
+$con = connect();
+
+if ($con) {
+    $sql = "SELECT DISTINCT `location` FROM `dbevents` WHERE `location` IS NOT NULL AND `location` != '' ORDER BY `location` ASC";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+        $locations = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $locations[] = $row['location'];
+        }
+        mysqli_free_result($result);
+    }
+    mysqli_close($con);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

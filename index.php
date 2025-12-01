@@ -285,7 +285,7 @@
         /* Footer */
         .footer {
             width: 100%;
-            background: #7b0000ff;
+            background: #00447b;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -410,39 +410,22 @@
     </script>
 <!--END TEST-->
 </head>
-
+<link rel="icon" type="image/x-icon" href="images/RAPPAHANNOCK_v_RedBlue2.png">
 <!-- ONLY SUPER ADMIN WILL SEE THIS -->
 <?php if ($_SESSION['access_level'] >= 2): ?>
 <body>
 <?php require 'header.php';?>
 
-    <!-- Dummy content to enable scrolling -->
-    <div style="margin-top: 0px; padding: 30px 20px;">
-        <h2><b>Welcome <?php echo $person->get_name() ?>!</b> Let's get started.</h2>
-    </div>
-
-            <?php if (isset($_GET['pcSuccess'])): ?>
-                <div class="happy-toast">Password changed successfully!</div>
-            <?php elseif (isset($_GET['deleteService'])): ?>
-                <div class="happy-toast">Service successfully removed!</div>
-            <?php elseif (isset($_GET['serviceAdded'])): ?>
-                <div class="happy-toast">Service successfully added!</div>
-            <?php elseif (isset($_GET['animalRemoved'])): ?>
-                <div class="happy-toast">Animal successfully removed!</div>
-            <?php elseif (isset($_GET['locationAdded'])): ?>
-                <div class="happy-toast">Location successfully added!</div>
-            <?php elseif (isset($_GET['deleteLocation'])): ?>
-                <div class="happy-toast">Location successfully removed!</div>
-            <?php elseif (isset($_GET['registerSuccess'])): ?>
-                <div class="happy-toast">Volunteer registered successfully!</div>
-            <?php endif ?>
-
-    <div class="full-width-bar">
-    <div class="content-box">
-        <img src="images/blank-white-background.jpg" style="filter: contrast(50%);"/>
-        <div class="small-text">Look at the data.</div>
-        <div class="large-text">Generate Report</div>
-<button class="circle-arrow-button" onclick="window.location.href='reportGeneration/index.php'">
+		<!-- Dummy content to enable scrolling -->
+		<div style="margin-top: 0px; padding: 30px 20px;">
+				<h2><b>Welcome <?php echo $person->get_name() ?>!</b> Let's get started.</h2>
+		</div>
+		<div class="full-width-bar">
+		<div class="content-box">
+				<img src="images/blank-white-background.jpg"/>
+				<div class="small-text">Analyze the data!</div>
+				<div class="large-text">Generate Report</div>
+<button class="circle-arrow-button" onclick="window.location.href='ReportGeneration.php'">
     <span class="button-text">Go</span>
     <div class="circle">&gt;</div>
 </button>
@@ -469,7 +452,7 @@
         <h2><b>Admin Dashboard</h2>
     </div>
     <div class="full-width-bar-sub">
-        <div class="content-box-test" onclick="window.location.href='python/import.html'">
+        <div class="content-box-test" onclick="window.location.href='import.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
             </div>
@@ -479,7 +462,7 @@
         </div>
 
 
-        <div class="content-box-test" onclick="window.location.href='python/export.html'">
+        <div class="content-box-test" onclick="window.location.href='export.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
             </div>
@@ -488,7 +471,7 @@
             <button class="arrow-button">→</button>
         </div>
 
-    <div class="content-box-test" onclick="window.location.href='ai-email-gen/index.php'">
+        <div class="content-box-test" onclick="window.location.href='emailgen.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
             </div>
@@ -496,14 +479,14 @@
             <div class="large-text-sub">Generate Emails</div>
             <button class="arrow-button">→</button>
         </div>
-    </div>
 
-    <div class="content-box-test" onclick="window.location.href='Search-donor-db/index.php'">
+
+        <div class="content-box-test" onclick="window.location.href='Search.php'">
             <div class="icon-overlay">
-                <img style="border-radius: 5px;" src="images/file-regular.svg" alt="Document Icon">
+                <img style="border-radius: 5px;" src="images/magnifying-glass.svg" alt="Search Icon">
             </div>
             <img class="background-image" src="images/blank-white-background.jpg" />
-            <div class="large-text-sub">Search donors</div>
+            <div class="large-text-sub">Search</div>
             <button class="arrow-button">→</button>
             
         </div>
@@ -646,7 +629,7 @@
         <h2><b>Your Dashboard</h2>
     </div>
     <div class="full-width-bar-sub">
-        <div class="content-box-test" onclick="window.location.href='python/import.html'">
+        <div class="content-box-test" onclick="window.location.href='import.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/view-calendar.svg" alt="Calendar Icon">
             </div>
