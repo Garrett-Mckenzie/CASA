@@ -37,7 +37,6 @@ try {
         fwrite($pipes[0], json_encode($email));
         fclose($pipes[0]);
 
-        // Capture Python stdout/stderr
         $output = stream_get_contents($pipes[1]);
         $error  = stream_get_contents($pipes[2]);
 
