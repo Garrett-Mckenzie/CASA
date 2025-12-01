@@ -1,181 +1,254 @@
-<?php
-    // Make session information accessible, allowing us to associate
-    // data with the logged-in user.
-    session_cache_expire(30);
-    session_start();
+<?php 
+session_cache_expire(30);
+session_start();
 
-    ini_set("display_errors",1);
-    error_reporting(E_ALL);
+ini_set("display_errors",1);
+error_reporting(E_ALL);
 
-    $loggedIn = false;
-    $accessLevel = 0;
-    $userID = null;
-    if (isset($_SESSION['_id'])) {
-        $loggedIn = true;
-        // 0 = not logged in, 1 = standard user, 2 = manager (Admin), 3 super admin (TBI)
-        $accessLevel = $_SESSION['access_level'];
-        $userID = $_SESSION['_id'];
-    } 
-    // Require admin privileges
-    if ($accessLevel < 2) {
-        header('Location: login.php');
-        echo 'bad access level';
-        die();
+// Session / Access control
+$loggedIn = false;
+$accessLevel = 0;
+$userID = null;
+require_once('include/input-validation.php');
+require_once('database/dbEvents.php');
+
+if (isset($_SESSION['_id'])) {
+    $loggedIn = true;
+    $accessLevel = $_SESSION['access_level'];
+    $userID = $_SESSION['_id'];
+}
+if ($accessLevel < 2) {
+    header('Location: login.php');
+    die("bad access level");
+}
+
+// ----------------------------------------------------
+//  LOAD EVENT (GET)
+// ----------------------------------------------------
+if (!isset($_GET['id'])) {
+    die("Missing event ID");
+}
+
+$eventID = intval($_GET['id']);
+$event = fetch_event_by_id($eventID);
+
+if (!$event) {
+    die("Event not found");
+}
+
+// Prefill fields
+$name        = $event["name"];
+$goalAmount  = $event["goalAmount"];
+$startDate   = $event["startDate"];
+$endDate     = $event["endDate"];
+$startTime   = time24hto12h($event["startTime"]);   // convert "14:00" → "2:00 PM"
+$endTime     = time24hto12h($event["endTime"]);
+$description = $event["description"];
+$location    = $event["location"];
+
+// ----------------------------------------------------
+//  UPDATE EVENT (POST)
+// ----------------------------------------------------
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $args = sanitize($_POST, null);
+    $required = array("name","goalAmount", "startDate","endDate", "startTime", "endTime", "description");
+
+    if (!wereRequiredFieldsSubmitted($args, $required)) {
+        header("Location: eventFailure.php?e=1&edit=1&id=".$eventID);
+        exit();
     }
-    require_once('include/input-validation.php');
-    require_once('database/dbEvents.php');
-    $errors = '';
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $args = sanitize($_POST, null);
-        $required = array(
-            "id", "name", "date", "start-time", "description");
 
-        if (!wereRequiredFieldsSubmitted($args, $required)) {
-            echo 'bad form data';
-            die();
-        } else {
-            require_once('database/dbPersons.php');
-            $id = $args['id'];
-            $validated = validate12hTimeRangeAndConvertTo24h($args["start-time"], $args["end-time"]);
-            if (!$validated) {
-                $errors .= '<p>The provided time range was invalid.</p>';
-            }
-            $startTime = $args['start-time'] = $validated[0];
-            $endTime = $args['end-time'] = $validated[1];
-            $date = $args['date'] = validateDate($args["date"]);
-            $capacity = intval($args["capacity"]);
-            
-            if (!$startTime || !$date > 11){
-                $errors .= '<p>Your request was missing arguments.</p>';
-            }
-            if (!$errors) {
-                $success = update_event($id, $args);
-                if (!$success){
-                    echo "Oopsy!";
-                    die();
-                }
-                header('Location: specificEvent.php?id=' . $id . '&editSuccess');
-            }
-        }
-    }
-    if (!isset($_GET['id'])) {
-        // uhoh
-        die();
-    }
-    $args = sanitize($_GET);
-    $id = $args['id'];
-    $event = fetch_event_by_id($id);
-    if (!$event) {
-        echo "Event does not exist";
-        die();
-    }
-    require_once('include/output.php');
+    $startTime24 = to24h($args['startTime']);
+    $endTime24   = to24h($args['endTime']);
+    $startDate   = validateDate($args["startDate"]);
+    $endDate     = validateDate($args["endDate"]);
 
-    // get animal data from database for form
-    // Connect to database
-    include_once('database/dbinfo.php'); 
-    $con=connect();  
-    /*$sql = "SELECT * FROM `dbLocations`";
-    $all_locations = mysqli_query($con,$sql);
-    $sql = "SELECT * FROM `dbServices`";
-    $all_services = mysqli_query($con,$sql);
+    // Validate date ordering
+    $start = $startDate . ' ' . $startTime24;
+    $end   = $endDate . ' ' . $endTime24;
 
-    // get current selected services for event
-    $current_services = get_services($id);
-    */
+    if ($start >= $end) {
+        header('Location: eventFailure.php?e=2&edit=1&id='.$eventID);
+        exit();
+    }
+
+    if (!$startTime24 || !$endTime24 || !$endDate || !$startDate) {
+        header('Location: eventFailure.php?e=3&edit=1&id='.$eventID);
+        exit();
+    }
+
+    // Attach final processed values
+    $args['startTime'] = $startTime24;
+    $args['endTime']   = $endTime24;
+    $args['startDate'] = $startDate;
+    $args['endDate']   = $endDate;
+    $args['id']        = $eventID;
+
+    $success = update_event($eventID,$args);
+
+    if (!$success) {
+        die("Update failed.");
+    } else {
+        header('Location: eventSuccess.php?edit=1');
+        exit();
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html>
-    <head>
-        <?php require_once('universal.inc') ?>
-        <title>Rappahannock CASA | Edit Event</title>
-    </head>
-    <body>
-        <?php require_once('header.php') ?>
-        <h1>Edit Event</h1>
-        <main class="date">
-        <?php if ($errors): ?>
-            <div class="error-toast"><?php echo $errors ?></div>
-        <?php endif ?>
-            <h2>Event Details</h2>
-            <form id="new-event-form" method="post">
-                <label for="name">Event Name </label>
-                <input type="hidden" name="id" value="<?php echo $id ?>"/> 
-                <input type="text" id="name" name="name" value="<?php echo $event['name'] ?>" required placeholder="Enter name"> 
-                <!--
-                <label for="name">Abbreviated Name</label>
-                <input type="text" id="abbrev-name" name="abbrev-name" value="<//?php echo $event['abbrevName'] ?>" maxlength="11"  required placeholder="Enter name that will appear on calendar">
-                --->
-                <label for="name">Date </label>
-                <input type="date" id="date" name="date" value="<?php echo $event['date'] ?>" min="<?php echo date('Y-m-d'); ?>" required>
-                <label for="name">Start Time </label>
-                <input type="text" id="start-time" name="start-time" value="<?php echo time24hto12h($event['startTime']) ?>" pattern="([1-9]|10|11|12):[0-5][0-9] ?([aApP][mM])" required placeholder="Enter start time. Ex. 12:00 PM">
-                <label for="name">End Time </label>
-                <input type="text" id="end-time" name="end-time" value="<?php echo time24hto12h($event['endTime']) ?>" pattern="([1-9]|10|11|12):[0-5][0-9] ?([aApP][mM])" required placeholder="Enter end time. Ex. 12:00 PM">
-                <label for="name">Description </label>
-                <input type="text" id="description" name="description" value="<?php echo $event['description'] ?>" required placeholder="Enter description">
-                <label for="name">Location </label>
-                <input type="text" id="location" name="location" value="<?php echo $event['location'] ?>" placeholder="Enter location">
-                <label for="name">Capacity </label>
-                <input type="number" id="capacity" name="capacity" value="<?php echo $event['capacity'] ?>" placeholder="Enter capacity (e.g. 1-99)">
-                <!--<fieldset>
-                    <label for="name">* Service </label>
-                    </?php 
-                        // fetch data from the $all_services variable
-                        // and individually display as an option
-                        echo '<ul>';
-                        while ($service = mysqli_fetch_array(
-                                $all_services, MYSQLI_ASSOC)):; 
-                            $shouldCheck = false;
-                            foreach($current_services as $current_serv) {
-                                if ($service['id'] == $current_serv['id']) {
-                                    $shouldCheck = true;
-                                }
-                            }
-                            if ($shouldCheck) {
-                                echo '<li><input class="checkboxes" type="checkbox" name="service[]" value="' . $service['id'] . '" checked required/> ' . $service['name'];
-                            } else {
-                                echo '<li><input class="checkboxes" type="checkbox" name="service[]" value="' . $service['id'] . '" required/> ' . $service['name'];
-                            }
-                        endwhile;
-                    ?>
-                </fieldset> --->
-                <!--<label for="name">Location </label>
-                <select for="name" id="location" name="location" required>
-                    </?php 
-                        // fetch data from the $all_locations variable
-                        // and individually display as an option
-                        while ($location = mysqli_fetch_array(
-                                $all_locations, MYSQLI_ASSOC)):; 
-                    
-                            if ($event['locationID'] == $location['id']) {
-                                echo '<option selected value="' . $location['id']. '">';
-                            } else {
-                                echo '<option value="' . $location['id']. '">';
-                            }
-                            echo $location['name'];
-                            echo '</option>';
-                        
-                        endwhile; 
-                        // terminate while loop
-                    ?>
-                </select>---><p></p>
-                <input type="submit" value="Update Event">
-                <a class="button cancel" href="specificEvent.php?id=<?php echo htmlspecialchars($_GET['id']) ?>" style="margin-top: .5rem">Cancel</a>
-            </form>
+<head>
+    <?php require_once('universal.inc') ?>
+    <title>Edit Event</title>
 
-            <script type="text/javascript">
-                    $(document).ready(function(){
-                        var checkboxes = $('.checkboxes');
-                        checkboxes.change(function(){
-                            if($('.checkboxes:checked').length>0) {
-                                checkboxes.removeAttr('required');
-                            } else {
-                                checkboxes.attr('required', 'required');
-                            }
-                        });
-                    });
-            </script>
-        </main>
-    </body>
+    <style>
+        main.date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+        }
+        #edit-event-form {
+            width: 100%;
+            max-width: 920px;
+            background: #ffffff;
+            padding: 35px 32px;
+            border-radius: 14px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        main.date h2 {
+            margin-bottom: 18px;
+            color: #024b79;
+            font-size: 26px;
+        }
+        #edit-event-form label {
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+        #edit-event-form input[type="text"],
+        #edit-event-form input[type="date"],
+        #edit-event-form textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1px solid #bbb;
+            font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        #edit-event-form textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+        #edit-event-form input:focus,
+        #edit-event-form textarea:focus {
+            border-color: #2a6fb0;
+            box-shadow: 0 0 4px rgba(42, 111, 176, 0.4);
+            outline: none;
+        }
+        #edit-event-form input[type="submit"] {
+            margin-top: 12px;
+            padding: 14px;
+            background: #2a6fb0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+        #edit-event-form input[type="submit"]:hover {
+            background: #1e5d94;
+        }
+        #edit-event-form input[type="submit"]:active {
+            transform: scale(0.97);
+        }
+        .button.cancel {
+            margin-top: 25px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+<?php require_once('header.php'); ?>
+
+<h1>Edit Event</h1>
+
+<main class="date">
+
+    <p style="font-size:14px; color:red; margin-top:-8px; margin-bottom:18px; padding-left:5rem;">
+        <em>* indicates required fields</em>
+    </p>
+
+    <form id="edit-event-form" method="POST">
+
+        <label>* Fundraiser Name</label>
+        <input type="text" name="name" required value="<?php echo htmlspecialchars($name); ?>">
+
+        <label>* Fundraiser Goal</label>
+        <input type="text" name="goalAmount" required value="<?php echo htmlspecialchars($goalAmount); ?>">
+
+        <label>* Start Date</label>
+        <input type="date" name="startDate" required value="<?php echo $startDate; ?>">
+
+        <label>* End Date</label>
+        <input type="date" name="endDate" required value="<?php echo $endDate; ?>">
+
+        <label>* Start Time</label>
+        <input type="text" name="startTime" required 
+               pattern="([1-9]|10|11|12):[0-5][0-9] ?([aApP][mM])"
+               value="<?php echo $startTime; ?>">
+
+        <label>* End Time</label>
+        <input type="text" name="endTime" required 
+               pattern="([1-9]|10|11|12):[0-5][0-9] ?([aApP][mM])"
+               value="<?php echo $endTime; ?>">
+
+        <label>* Description</label>
+        <textarea name="description" required><?php echo htmlspecialchars($description); ?></textarea>
+
+        <label>Location</label>
+        <input type="text" name="location" value="<?php echo htmlspecialchars($location); ?>">
+
+        <input type="submit" value="Save Changes">
+    </form>
+
+    <a class="button cancel" href="viewEvent.php?id=<?php echo $eventID; ?>">Return to Event</a>
+
+</main>
+</body>
+    <footer class="footer">
+            <!-- Left Side: Logo & Socials -->
+            <div class="footer-left">
+                <img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+
+            <!-- Right Side: Page Links -->
+            <div class="footer-right">
+                <div class="footer-section">
+                    <div class="footer-topic">Connect</div>
+                    <a href="https://www.facebook.com/RappCASA/" target="_blank">Facebook</a>
+                    <a href="https://www.instagram.com/rappahannock_casa/" target="_blank">Instagram</a>
+                    <a href="https://rappahannockcasa.com/" target="_blank">Main Website</a>
+                </div>
+                <div class="footer-section">
+                    <div class="footer-topic">Contact Us</div>
+                    <a href="mailto:rappcasa@gmail.com">rappcasa@gmail.com</a>
+                    <a href="tel:5407106199">540-710-6199</a>
+                </div>
+            </div>
+	</footer>
 </html>

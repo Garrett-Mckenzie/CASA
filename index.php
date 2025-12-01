@@ -432,14 +432,11 @@
     </div>
 
     <div class="content-box">
-        <img src="images/blank-white-background.jpg" style="filter: contrast(50%);" />
-        <div class="small-text">Let’s have some fun!</div>
-        <div class="large-text">Event Management</div>
-<button class="circle-arrow-button">
-    <span class="button-text"><?php 
-                        require_once('database/dbEvents.php');
-                        require_once('database/dbPersons.php');
-                    ?> Sign-Ups </span>
+        <img src="images/blank-white-background.jpg"/>
+        <div class="small-text">Let’s raise some money!</div>
+        <div class="large-text">Fundraiser Management</div>
+<button class="circle-arrow-button" onclick="window.location.href='viewAllEvents.php'">
+    <span class="button-text">Go</span>
     <div class="circle">&gt;</div>
 </button>
     </div>
@@ -480,8 +477,18 @@
             <button class="arrow-button">→</button>
         </div>
 
+				<div class="content-box-test" onclick="window.location.href='donationAddEdit.php'">
+            <div class="icon-overlay">
+                <img style="border-radius: 5px;" src="images/clipboard-regular.svg" alt="Report Icon">
+            </div>
+            <img class="background-image" src="images/blank-white-background.jpg" />
+            <div class="large-text-sub">Add and Edit Donations</div>
+            <button class="arrow-button">→</button>
+        </div>
 
-        <div class="content-box-test" onclick="window.location.href='Search.php'">
+
+
+        <div class="content-box-test" onclick="window.location.href='Search-donor-db/index.php'">
             <div class="icon-overlay">
                 <img style="border-radius: 5px;" src="images/magnifying-glass.svg" alt="Search Icon">
             </div>

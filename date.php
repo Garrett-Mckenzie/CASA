@@ -61,9 +61,15 @@
                     foreach ($events as $event) {
                         require_once('include/output.php');
                         $event_name = $event['name'];
-                        $event_startTime = time24hto12h($event['startTime']);
+                        $startTime = time24hto12h($event['startTime']);
+                        $endTime = time24hto12h($event['endTime']);
                         $event_description = $event['description'];
                         $goal = $event["goalAmount"];
+                        
+                        //create a string thats adaptive based on start and enddate, shows dates with times
+                        $TimeSpan = ($event['startDate'] === $event['endDate'])
+                            ? $event['startDate'] .", ". $startTime ." to " . $endTime
+                            : ($event['startDate'] .", ". $startTime . " to " . $event['endDate'].", ". $endTime);
 
                         $donations = fetch_donations_for_event($event["id"]);
                         $totalRaised = 0;
@@ -87,13 +93,40 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td>Time</td><td>" . time24hto12h($event['startTime']) ." - ".time24hto12h($event['endTime']). "</td></tr>
+                                    <tr><td>Time Span</td><td>" . $TimeSpan. "</td></tr>
                                     <tr><td>Location</td><td>" . /*$location .*/ "</td></tr>
                                     <tr><td>Description</td><td>" . $event['description'] . "</td></tr>
                                     <tr><td>Fundraiser Goal</td><td> $" . $goal . "</td></tr>
                                     <tr><td>Total Amount Raised</td><td> $" . $totalRaised . "</td></tr>
                                 </tbody>
                               </table>
+                        ";
+                        echo "
+                            <div style='text-align:center; margin-top: 10px; margin-bottom: 30px;'>
+                                <form action='deleteEvent.php' method='GET' 
+                                    onsubmit=\"return confirm('Are you sure you want to delete the event: ".htmlspecialchars($event_name, ENT_QUOTES)." ?');\" 
+                                    style='display:inline-block;'>
+                                    
+                                    <input type='hidden' name='id' value='".$event['id']."'>
+
+                                    <button type='submit'
+                                        style=\"
+                                            background-color: #d9534f; 
+                                            color: white; 
+                                            border: none; 
+                                            padding: 8px 14px; 
+                                            font-size: 14px; 
+                                            border-radius: 4px; 
+                                            cursor: pointer;
+                                            transition: background-color 0.3s;
+                                        \"
+                                        onmouseover=\"this.style.backgroundColor='#c9302c'\"
+                                        onmouseout=\"this.style.backgroundColor='#d9534f'\"
+                                    >
+                                        Delete Event
+                                    </button>
+                                </form>
+                            </div>
                         ";
                     }
                 } else {
@@ -115,4 +148,31 @@
 			<a href="calendar.php?month=<?php echo substr($date, 0, 7) ?>" class="button cancel" style="margin-top: -.5rem">Return to Calendar</a>
         </main>
     </body>
+    <footer class="footer">
+            <!-- Left Side: Logo & Socials -->
+            <div class="footer-left">
+                <img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+
+            <!-- Right Side: Page Links -->
+            <div class="footer-right">
+                <div class="footer-section">
+                    <div class="footer-topic">Connect</div>
+                    <a href="https://www.facebook.com/RappCASA/" target="_blank">Facebook</a>
+                    <a href="https://www.instagram.com/rappahannock_casa/" target="_blank">Instagram</a>
+                    <a href="https://rappahannockcasa.com/" target="_blank">Main Website</a>
+                </div>
+                <div class="footer-section">
+                    <div class="footer-topic">Contact Us</div>
+                    <a href="mailto:rappcasa@gmail.com">rappcasa@gmail.com</a>
+                    <a href="tel:5407106199">540-710-6199</a>
+                </div>
+            </div>
+	</footer>
 </html>

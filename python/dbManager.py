@@ -6,7 +6,6 @@ from pathlib import Path
 from credentials import HOST, USER, PASSWORD, DATABASE
 import pandas as pd
 import random
-import os
 import numpy as np
 from insertFunctions import *
 import mysql.connector
@@ -44,19 +43,18 @@ def export_excel():
             data.append(list(row))
         df = pd.DataFrame(data,columns = cols) 
         try:
-            #this will need to change on a linux os worrying about it later
-            if SYSTEM == 'posix':
-                os.system('del exports\\Export.xlsx')
-            else:
-                os.system("rm exports/Export.xlsx")
+            os.system("rm exports/Export.xlsx")
         except Exception as e:
             print(e)
             pass
         df.to_excel('exports/Export.xlsx', index=False)
+        return 0
 
     except Exception as e:
+        print(e)
         raise e
-        
+
+    
 """
 need to work on this part here
 """
@@ -64,7 +62,6 @@ def import_excel():
     try:
         conn = connect()
         cursor = conn.cursor(buffered=True)
-
 
         #load up data
         file_path = sys.argv[2]
@@ -112,10 +109,12 @@ def import_excel():
             insertEvent(eventData,event_columns,conn,cursor)
             conn = connect()
             cursor = conn.cursor(buffered=True)
+
+        return 0
                             
     except Exception as e:
         print(e)
-        raise e
+        return 1
 
 # Main
 def main():

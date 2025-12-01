@@ -18,10 +18,13 @@ try:
     startDate = "NoStart"
     if "startDate" in args.keys():
         startDate = args["startDate"]
+        startDate = startDate[:10]
     
     endDate = "NoEnd"
     if "startDate" in args.keys():
         endDate = args["endDate"]
+        endDate = endDate[:10]
+
 
     DonationStatOverview = True
     if "DonationStatsOverview" not in args.keys():
@@ -70,6 +73,14 @@ try:
     graphDesc = True
     if "graphDesc" not in args.keys():
         graphDesc = False
+    
+    checkAll = True
+    if "checkAll" not in args.keys():
+        checkAll = False
+
+    allData = True
+    if "allData" not in args.keys():
+        allData = False
 
     section = 1
 
@@ -90,52 +101,134 @@ try:
     # ---------------------------------------------------------------
     # DATA QUERIES
     # ---------------------------------------------------------------
-    cur.execute("SELECT date FROM donations WHERE date IS NOT NULL")
-    donationDates = cur.fetchall()
+    if allData:
+        cur.execute("SELECT date FROM donations WHERE date IS NOT NULL")
+        donationDates = cur.fetchall()
 
-    cur.execute("SELECT * FROM donors")
-    donorRows = cur.fetchall()
+        cur.execute("SELECT * FROM donors")
+        donorRows = cur.fetchall()
 
-    cur.execute("SELECT amount FROM donations WHERE amount IS NOT NULL")
-    donationAmounts = cur.fetchall()
+        cur.execute("SELECT amount FROM donations WHERE amount IS NOT NULL")
+        donationAmounts = cur.fetchall()
 
-    cur.execute("SELECT amount, date FROM donations WHERE date IS NOT NULL")
-    amountDate = cur.fetchall()
+        cur.execute("SELECT amount, date FROM donations WHERE date IS NOT NULL")
+        amountDate = cur.fetchall()
 
-    cur.execute("SELECT donorID, MIN(STR_TO_DATE(date,'%m/%d/%Y')) AS date FROM donations WHERE date IS NOT NULL GROUP BY donorID ORDER BY date")
-    donorFirstDates = cur.fetchall()
+        cur.execute("SELECT donorID, MIN(STR_TO_DATE(date,'%m/%d/%Y')) AS date FROM donations WHERE date IS NOT NULL GROUP BY donorID ORDER BY date")
+        donorFirstDates = cur.fetchall()
 
-    cur.execute("SELECT id, name, goalAmount FROM dbevents WHERE goalAmount IS NOT NULL")
-    eventRows = cur.fetchall()
+        cur.execute("SELECT id, name, goalAmount FROM dbevents WHERE goalAmount IS NOT NULL")
+        eventRows = cur.fetchall()
 
-    cur.execute("SELECT amount, eventID FROM donations WHERE amount IS NOT NULL AND eventID IS NOT NULL")
-    donationEventRows = cur.fetchall()
+        cur.execute("SELECT amount, eventID FROM donations WHERE amount IS NOT NULL AND eventID IS NOT NULL")
+        donationEventRows = cur.fetchall()
 
-    cur.execute("""
-    SELECT d.id AS donorID, d.first, d.last, dn.amount
-    FROM donations AS dn
-    JOIN donors AS d ON dn.donorID = d.id
-    """)
-    donorAmountRows = cur.fetchall()
+        cur.execute("""
+        SELECT d.id AS donorID, d.first, d.last, dn.amount
+        FROM donations AS dn
+        JOIN donors AS d ON dn.donorID = d.id
+        """)
+        donorAmountRows = cur.fetchall()
 
-    cur.execute("""SELECT d.id AS donorID, d.state, SUM(dn.amount)
+        cur.execute("""SELECT d.id AS donorID, d.state, SUM(dn.amount)
+                FROM donations AS dn
+                JOIN donors AS d ON dn.donorID = d.id
+                GROUP BY state""")
+        donorSumByState = cur.fetchall()
+
+        cur.execute("""SELECT d.id AS donorID, d.zip, SUM(dn.amount)
+                FROM donations AS dn
+                JOIN donors AS d ON dn.donorID = d.id
+                GROUP BY zip""")
+        donorSumByZip = cur.fetchall()
+    else:
+        cur.execute("""
+            SELECT date 
+            FROM donations 
+            WHERE date IS NOT NULL
+            AND STR_TO_DATE(date,'%m/%d/%Y') BETWEEN %s AND %s
+        """, (startDate, endDate))
+        donationDates = cur.fetchall()
+
+        cur.execute("SELECT * FROM donors")
+        donorRows = cur.fetchall()
+
+        cur.execute("""
+            SELECT amount 
+            FROM donations 
+            WHERE amount IS NOT NULL
+            AND STR_TO_DATE(date,'%m/%d/%Y') BETWEEN %s AND %s
+        """, (startDate, endDate))
+        donationAmounts = cur.fetchall()
+
+        cur.execute("""
+            SELECT amount, date 
+            FROM donations 
+            WHERE date IS NOT NULL
+            AND STR_TO_DATE(date,'%m/%d/%Y') BETWEEN %s AND %s
+        """, (startDate, endDate))
+        amountDate = cur.fetchall()
+
+        cur.execute("""
+            SELECT donorID, MIN(STR_TO_DATE(date,'%m/%d/%Y')) AS date
+            FROM donations
+            WHERE date IS NOT NULL
+            AND STR_TO_DATE(date,'%m/%d/%Y') BETWEEN %s AND %s
+            GROUP BY donorID
+            ORDER BY date
+        """, (startDate, endDate))
+        donorFirstDates = cur.fetchall()
+
+        cur.execute("""
+            SELECT id, name, goalAmount
+            FROM dbevents
+            WHERE goalAmount IS NOT NULL
+            AND startDate <= %s
+            AND endDate >= %s
+        """, (endDate, startDate))
+        eventRows = cur.fetchall()
+
+        cur.execute("""
+            SELECT amount, eventID
+            FROM donations
+            WHERE amount IS NOT NULL
+            AND eventID IS NOT NULL
+            AND STR_TO_DATE(date,'%m/%d/%Y') BETWEEN %s AND %s
+        """, (startDate, endDate))
+        donationEventRows = cur.fetchall()
+
+        cur.execute("""
+            SELECT d.id AS donorID, d.first, d.last, dn.amount
             FROM donations AS dn
             JOIN donors AS d ON dn.donorID = d.id
-            GROUP BY state""")
-    donorSumByState = cur.fetchall()
+            WHERE STR_TO_DATE(dn.date,'%m/%d/%Y') BETWEEN %s AND %s
+        """, (startDate, endDate))
+        donorAmountRows = cur.fetchall()
 
-    cur.execute("""SELECT d.id AS donorID, d.zip, SUM(dn.amount)
+        cur.execute("""
+            SELECT d.state, SUM(dn.amount)
             FROM donations AS dn
             JOIN donors AS d ON dn.donorID = d.id
-            GROUP BY zip""")
-    donorSumByZip = cur.fetchall()
+            WHERE STR_TO_DATE(dn.date,'%m/%d/%Y') BETWEEN %s AND %s
+            GROUP BY d.state
+        """, (startDate, endDate))
+        donorSumByState = cur.fetchall()
+
+        cur.execute("""
+            SELECT d.zip, SUM(dn.amount)
+            FROM donations AS dn
+            JOIN donors AS d ON dn.donorID = d.id
+            WHERE STR_TO_DATE(dn.date,'%m/%d/%Y') BETWEEN %s AND %s
+            GROUP BY d.zip
+        """, (startDate, endDate))
+        donorSumByZip = cur.fetchall()
 
     conn.close()
 
     # ---------------------------------------------------------------
     # SECTION: Overview Stats
     # ---------------------------------------------------------------
-    if DonationStatOverview:
+    if DonationStatOverview or checkAll:
         pdf.insertSubheading(f"{section}. Overview of CASA Donations")
 
         totals = numDonationsOverTime(donationDates)
@@ -163,7 +256,8 @@ try:
     # SECTION: Growth & Trends
     # ---------------------------------------------------------------
 
-    if (GrowthAndTrends):
+    if (GrowthAndTrends) or checkAll:
+
         pdf.insertSubheading(f"{section}. Growth & Trends")
         yGrowth = donationGrowth(donationDates, "y")
         qGrowth = donationGrowth(donationDates, "q")
@@ -178,7 +272,7 @@ try:
 
         fig_line = chartNumDonations(donationDates, "y", "line", 1)
         pdf.insertGraph(4, 3, 2)
-        if graphDesc:
+        if graphDesc or checkAll:
             pdf.insertParagraph(
                 "The two graphs above display the frequency of donations over two month periods."
                 "On the y-axis is the number of donations and on the x-axis is the 2 month time frame in consideration."
@@ -189,22 +283,25 @@ try:
     # ---------------------------------------------------------------
     # SECTION: Fundraiser Performance
     # ---------------------------------------------------------------
-    if IncludeGraph or IncludeTable:
+    if IncludeGraph or IncludeTable or checkAll:
+
         pdf.insertSubheading(f"{section}. Fundraiser Performance")
 
         completionRate = totalCompletion(eventRows, donationEventRows)
         pdf.insertParagraph(f"Overall, {completionRate}% of CASA fundraisers have achieved or exceeded their fundraising goals.")
 
         fig_fund = chartFundraiserGoals(eventRows, donationEventRows)
-        if IncludeGraph:
+        if IncludeGraph or checkAll:
             pdf.insertGraph(4, 3, 3)
-            if graphDesc:
+            if graphDesc or checkAll:
+
                 pdf.insertParagraph(
                     "This figure compares target fundraising amounts to the actual amount raised for each event within the timeframe of the report."
                     "The y-axis denotes the total amount of money raised for that event while the x-axis denotes the name of the event in question."
                 )
 
-        if IncludeTable:
+        if IncludeTable or checkAll:
+
             completionDF = goalAchievementRate(eventRows, donationEventRows)
             pdf.insertTable(
                 [["Event Name", "Completion (%)"]] +
@@ -217,8 +314,7 @@ try:
     # SECTION: Donor Insights
     # ---------------------------------------------------------------
     
-    if NumTopDonors > 0 or IncludeNewDonors:
-
+    if NumTopDonors > 0 or IncludeNewDonors or checkAll:
         pdf.insertSubheading(f"{section}. Donor Insights")
 
         top = topDonors(donorAmountRows, top_n=NumTopDonors) 
@@ -230,7 +326,8 @@ try:
             [175, 100]
         )
 
-        if IncludeNewDonors:
+        if IncludeNewDonors or checkAll:
+
             newDonors = donorAcqRate(donorFirstDates)
             pdf.insertParagraphs([
                 f"New donors in the past month: {newDonors[0]}",
@@ -242,24 +339,28 @@ try:
     # ---------------------------------------------------------------
     # SECTION: Visual Analytics
     # ---------------------------------------------------------------
-    if (IncludePareto or IncludeFunnel or IncludeDonationsByState or IncludeDonationsByZip):
+    if (IncludePareto or IncludeFunnel or IncludeDonationsByState or IncludeDonationsByZip or checkAll):
         
         pdf.insertSubheading(f"{section}. Visual Analytics")
 
-        if IncludePareto:
+        if IncludePareto or checkAll:
+
             fig_pareto = chartParetoTopDonors(donorAmountRows,NumTopDonors)
             pdf.insertGraph(4, 3, 4)
-            if graphDesc:
+            if graphDesc or checkAll:
+
                 pdf.insertParagraph(
                     "This figure displays information about CASA's top donors as well as what % of total dollars donated to CASA the collection of top donors represents."
                     "The x-axis is the name of each respective donor while the left-hand y-axis is the amount of money a specific donor gave."
                     "The right-hand y-axis tells what % of total money donated to CASA is made up of the donations from donors up to and including the donor along the x-axis that is in line with that point on that Pareto chart."
                 )
         
-        if IncludeFunnel:
+        if IncludeFunnel or checkAll:
+
             fig_funnel = chartDonorFunnel(donorAmountRows)
             pdf.insertGraph(4, 3, 5)
-            if graphDesc:
+            if graphDesc or checkAll:
+
                 pdf.insertParagraph(
                     "This graph displays donors grouped by the frequency of their donations."
                     "On the y-axis is what group is being represented."
@@ -267,20 +368,24 @@ try:
                     "Finally, the x-axis displays the number of donors falling into each respective group."
                 )
 
-        if IncludeDonationsByState:
+        if IncludeDonationsByState or checkAll:
+
             fig_geo = plotGeoDistributionBar(donorSumByState)
             pdf.insertGraph(4, 3, 6)
-            if graphDesc:
+            if graphDesc or checkAll:
+
                 pdf.insertParagraph(
                     "This graph represents the total amount of money donated by the 10 states with the most cummulative donations."
                     "On the y-axis is the amount of money donated by a certain state."
                     "On the x-axis is the state being refrenced."
                 )
         
-        if IncludeDonationsByZip:
+        if IncludeDonationsByZip or checkAll:
+
             fig_geo = plotGeoDistributionBar(donorSumByZip,"zipcode")
             pdf.insertGraph(4, 3, 7)
-            if graphDesc:
+            if graphDesc or checkAll:
+
                 pdf.insertParagraph(
                     "This graph represents the total amount of money donated by the 10 zipcodes with the most cummulative donations."
                     "On the y-axis is the amount of money donated by a certain zip."
@@ -292,7 +397,8 @@ try:
     # ---------------------------------------------------------------
     # SECTION: Summary
     # ---------------------------------------------------------------
-    if IncludeSummarySection:
+    if IncludeSummarySection or checkAll:
+
         """
         totals = numDonationsOverTime(donationDates)
         pdf.insertParagraphs([
