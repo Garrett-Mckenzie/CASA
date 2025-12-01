@@ -25,45 +25,36 @@ if (isset($_POST["goal"]) and $_POST["goal"] == "search"){
 				else{
 								$date = NULL;
 				}
-
-				#get donor
-				$donorID = NULL;
-				if ($first != "" and $last != "" and $email !=""){
-								$query = "SELECT id FROM donors WHERE LOWER(first)='".strtolower($first)."' AND LOWER(last)='".strtolower($last)."' AND LOWER(email)='".strtolower($email)."';";	
-								$result = mysqli_query($con,$query);
-								if (mysqli_num_rows($result) == 0){
-												$_SESSION["searchComplete"] = "f";
-												$_SESSION["reason"] = "No donor with information of first name= ".$first.", last name= ".$last.", and email= ".$email." was found in the storage system.";
-												header("Location: donationAddEdit.php?searchAttempt=true");
-												exit();
-								}
-								else{
-												$donorID = $result->fetch_all()[0][0];	
-								}
-
-				}
-				else if (($first == "" and ($last != "" or $email != "")) or ($last == "" and ($first != "" or $email != "")) or ($email == "" and ($first != "" or $last != ""))){
-								$_SESSION["searchComplete"] = "f";
-								$_SESSION["reason"] = "If any of first name, last name, or email are specified, then all fields of first name, last name, and email must be complete.";
-								header("Location: donationAddEdit.php?searchAttempt=true");
-								exit();
-				}
-				else{
-								$donorID = NULL;
-				}
-
+				
 				#build query
-
 				$query = "SELECT donations.amount,donations.reason,donations.date,donations.fee,donations.thanked,donors.first,donors.last,donors.email,donors.zip,donors.city,donations.id,donors.id FROM donations JOIN donors ON donations.donorID = donors.id WHERE";
 				$selectAll = true;
 
-				if	(isset($donorID)){
-								$query = $query." donations.donorID='".$donorID."'";
+				if  ($first != ""){
+								$query = $query." LOWER(donors.first)='".strtolower($first)."'";
+								$selectAll = false;
+								if (isset($date) or $max != "0" or $min != "0" or $last != "" or $email != ""){
+												$query = $query." AND";
+								}
+				}
+
+				if ($last != ""){
+								$query = $query." LOWER(donors.last)='".strtolower($last)."'";
+								$selectAll = false;
+								if (isset($date) or $max != "0" or $min != "0" or $email != ""){
+												$query = $query." AND";
+								}
+				}
+
+				if ($email != ""){
+								$query = $query." LOWER(donors.email)='".strtolower($email)."'";
 								$selectAll = false;
 								if (isset($date) or $max != "0" or $min != "0"){
 												$query = $query." AND";
 								}
+
 				}
+
 				if (isset($date)){
 								$query = $query." donations.date='".$date."'";
 								$selectAll = false;
@@ -145,12 +136,16 @@ else if  (isset($_POST["goal"]) and $_POST["goal"] == "edit"){
 												}
 												$day = (string)$datetime->format('d');
 												$month = (string)$datetime->format('m');
-												$year = (string)$datetime->format('y');
+												$year = (string)$datetime->format('Y');
+												$numYear = (int)$year;
+												if ($numYear < 1900){
+																throw new Exception("bad format");
+												}
 												$date = $month."/".$day."/".$year;
 								}
 								catch (Exception $e){
 												$_SESSION["editComplete"] = "f";
-												$_SESSION["reason"] = "Date of ".$date."is invalid.";
+												$_SESSION["reason"] = "Date of ".$date." is invalid.";
 												header("Location: donationAddEdit.php?editAttempt=true");
 												exit();
 								}
@@ -179,7 +174,7 @@ else if  (isset($_POST["goal"]) and $_POST["goal"] == "edit"){
 
 				}
 				$_SESSION["editComplete"] = "t";
-				$_SESSION["reason"] = "The donation now reflects the below information:</br>Amount: ".$amount."</br>Reason: ".$reason."</br>Fee: ".$fee."</br>Thanked: ".$thanked."</br>Amount: ".$amount."</br>Donor Name: ".$first." ".$last."</br>Donor Email: ".$email;
+				$_SESSION["reason"] = "The donation now reflects the below information:</br>Amount: ".$amount."</br>Reason: ".$reason."</br>Fee: ".$fee."</br>Thanked: ".$thanked."</br>Amount: ".$amount."</br>Donor Name: ".$first." ".$last."</br>Donor Email: ".$email."</br>Date: ".$date;
 				header("Location: donationAddEdit.php?editAttempt=true");
 				exit();
 }
