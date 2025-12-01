@@ -119,10 +119,15 @@
                             params.append('end_date_not_in', formData.get('end_date_not_in'));
                             displayQuery += `Donations NOT IN Range | `;
                             break;
+                        case 'Thanked_donors':
+                            // Only set 'All Donors' if this is the ONLY selected query
+                            displayQuery += 'Thanked Donors';
+                            break;
                         case 'all_donors':
                             // Only set 'All Donors' if this is the ONLY selected query
                             if (selectedQueries.length === 1) displayQuery = 'All Donors';
                             break;
+                        
                     }
                 });
                 
@@ -279,6 +284,11 @@
                         <input type="checkbox" name="query_type" value="donors_by_donation_range_not_in" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
                         <span class="ml-2 text-sm font-medium text-gray-700">Donors *NOT IN* Date Range</span>
                     </label>
+                    <!-- makes Thankd Donors checkbox -->
+                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
+                        <input type="checkbox" name="query_type" value="Thanked_donors" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
+                        <span class="ml-2 text-sm font-medium text-gray-700">Thanked donors</span>
+                    </label>
 
                 </div>
             </div>
@@ -329,6 +339,9 @@
                     <input type="date" id="start-date-not-in" name="start_date_not_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
                     <label for="end-date-not-in" class="block text-sm font-semibold text-gray-700 mb-2 mt-4">End Date (YYYY-MM-DD)</label>
                     <input type="date" id="end-date-not-in" name="end_date_not_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                </div>
+                <div class="query-input-container hidden" data-query-type="thanked_donors">
+                    <p class="text-sm text-gray-500 p-2 border border-gray-200 rounded-lg bg-gray-50">All thanked donors</p>
                 </div>
                     <!-- No inputs needed for 'all_donors' -->
                 <div class="query-input-container hidden" data-query-type="all_donors">

@@ -117,6 +117,12 @@ if (empty($query_types)) {
             
         }
     } 
+
+    if (in_array('Thanked_donors', $query_types)) {
+        $search_query_parts[] = "Thanked Donors"
+        $subquery = "SELECT DISTINCT donorID FROM donationse.id WHERE e.thanked = 1";
+        $where_clauses[] = "d.id IN ({$subquery})";
+    } 
     
     if (in_array('donor_zip', $query_types) && isset($_GET['zip_query'])) {
         $zip_query = trim($_GET['zip_query']);
@@ -128,52 +134,6 @@ if (empty($query_types)) {
             $where_clauses[] = "d.zip = '$safe_zip'";
         }
     }
-    /*
-    // New: Handle 'donor_donations_date_range' criteria 
-    if (in_array('donor_donations_date_range', $query_types) 
-        && isset($_GET['donor_name_donations'], $_GET['start_date_donations'], $_GET['end_date_donations'])) {
-            
-        $name_query = trim($_GET['donor_name_donations']);
-        $start_date = trim($_GET['start_date_donations']);
-        $end_date = trim($_GET['end_date_donations']);
-
-        if (strlen($name_query) > 0 && strlen($start_date) > 0 && strlen($end_date) > 0) {
-            $search_query_parts[] = "Donations for {$name_query} between {$start_date} and {$end_date}";
-
-            // Split name query for searching
-            $search_terms = preg_split('/\s+/', $name_query, -1, PREG_SPLIT_NO_EMPTY);
-            $name_sub_clauses = [];
-            foreach ($search_terms as $term) {
-                $safe_term = mysqli_real_escape_string($con, $term);
-                $name_sub_clauses[] = "(d.first LIKE '%$safe_term%' OR d.last LIKE '%$safe_term%')";
-            }
-
-            // Important: We need to JOIN with donations and COUNT them
-            $safe_start_date = mysqli_real_escape_string($con, $start_date);
-            $safe_end_date = mysqli_real_escape_string($con, $end_date);
-            
-            // Build the main query for this specific mode
-            $sql = "SELECT d.id, d.first, d.last, d.email, d.city, d.state, COUNT(t.id) AS donation_count 
-                    FROM donors d 
-                    LEFT JOIN donations t ON d.id = t.donorID
-                    AND STR_TO_DATE(t.date, '%m/%d/%Y') BETWEEN STR_TO_DATE('$safe_start_date', '%Y-%m-%d') AND STR_TO_DATE('$safe_end_date', '%Y-%m-%d')";
-
-            // Add the name filter to the WHERE clause
-            if (!empty($name_sub_clauses)) {
-                $where_clauses[] = "(" . implode(" OR ", $name_sub_clauses) . ")";
-            }
-
-            // Need to GROUP BY for the COUNT to work correctly
-            $sql .= " GROUP BY d.id, d.first, d.last, d.email, d.city, d.state";
-            
-            // Note: Since this query type requires grouping/counting, 
-            // the logic below for combining WHERE clauses and ordering needs adjustment.
-            // We'll proceed with combining the clauses for now, which may require
-            // a HAVING clause if we want to filter by COUNT > 0, but for now 
-            // we'll keep it simple to just get the count for the matched names.
-
-        }
-    */
 
     // New: Handle 'donors_by_donation_range_in' criteria 
     
@@ -182,25 +142,24 @@ if (empty($query_types)) {
         
         $start_date = trim($_GET['start_date_in']);
         $end_date = trim($_GET['end_date_in']);
-        
+
         if (strlen($start_date) > 0 && strlen($end_date) > 0) {
             $search_query_parts[] = "Donors with Donations Between {$start_date} and {$end_date}";
             
             $safe_start_date = mysqli_real_escape_string($con, $start_date);
             $safe_end_date = mysqli_real_escape_string($con, $end_date);
 
-            // Select donors that have AT LEAST ONE donation in the range
-            $sql = "SELECT d.id, d.first, d.last, d.email, d.city, d.state, COUNT(t.id) AS donation_count 
-                    FROM donors d 
-                    JOIN donations t ON d.id = t.donorID
-                    WHERE STR_TO_DATE(t.date, '%m/%d/%Y') BETWEEN STR_TO_DATE('$safe_start_date', '%Y-%m-%d') AND STR_TO_DATE('$safe_end_date', '%Y-%m-%d')
-                    GROUP BY d.id, d.first, d.last, d.email, d.city, d.state";
-            
-            // No need for WHERE clauses beyond the one in the JOIN/WHERE above
-            // This query is self-contained and returns the donor list.
-            
-        }
-        
+            // Subquery to find DISTINCT donor IDs that have a donation in the range
+            $subquery = "SELECT DISTINCT donorID FROM donations 
+                         WHERE STR_TO_DATE(date, '%m/%d/%Y') BETWEEN STR_TO_DATE('$safe_start_date', '%Y-%m-%d') AND STR_TO_DATE('$safe_end_date', '%Y-%m-%d')";
+
+            // Add the condition to the WHERE clauses of the main query
+            // This allows it to combine with other criteria like 'donor_name'
+            $where_clauses[] = "d.id IN ({$subquery})";
+
+            // Note: The main SQL will remain the base SELECT and the donation_count 
+            // will default to 0, but this is acceptable for a donor list search.
+        } 
     // New: Handle 'donors_by_donation_range_not_in' criteria
     } 
     
@@ -222,9 +181,6 @@ if (empty($query_types)) {
 
             // Select donors whose ID is NOT in the subquery result
             $where_clauses[] = "d.id NOT IN ({$subquery})";
-
-            // Use the base SQL, but with the NOT IN clause
-            $sql = "SELECT {$base_select_fields}, 0 AS donation_count FROM {$base_from_table}";
         }
     
     }

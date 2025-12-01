@@ -824,19 +824,19 @@ INSERT IGNORE INTO `donations` (`date`, `amount`, `reason`, `eventID`, `donorID`
 ('12/01/2024', 50.00, '2024 Giving Tues.', NULL, 272, 0.00, 0),
 
 -- Donor ID 273: Dr. Jacinta Topps
-('12/01/2024', 200.00, '2024 Giving Tues. Board member', NULL, 273, 0.00, 0),
+('12/01/2024', 200.00, '2024 Giving Tues. Board member', NULL, 273, 0.00, 1),
 
 -- Donor ID 275: Daniel and Karen Durham
-('06/05/2025', 100.00, 'In memory of Bobby Anderson', NULL, 275, 0.00, 0),
+('06/05/2025', 100.00, 'In memory of Bobby Anderson', NULL, 275, 0.00, 1),
 
 -- Donor ID 278: Robert and Maxine Moore
-('06/09/2025', 50.00, 'In memory of Bobby Anderson', NULL, 278, 0.00, 0),
+('06/09/2025', 50.00, 'In memory of Bobby Anderson', NULL, 278, 0.00, 1),
 
 -- Donor ID 281: Jack & Patsy Rowley
-('06/11/2025', 100.00, 'In memory of Bobby Anderson', NULL, 281, 0.00, 0),
+('06/11/2025', 100.00, 'In memory of Bobby Anderson', NULL, 281, 0.00, 1),
 
 -- Donor ID 284: Michael & Marietta D'Ostilio
-('06/27/2025', 50.00, 'In memory of Bobby Anderson', NULL, 284, 0.00, 0);
+('06/27/2025', 50.00, 'In memory of Bobby Anderson', NULL, 284, 0.00, 1);
 
 
 SET FOREIGN_KEY_CHECKS = 1;
