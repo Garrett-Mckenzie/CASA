@@ -38,7 +38,7 @@ if (isset($_POST["goal"]) and $_POST["goal"] == "search"){
 												exit();
 								}
 								else{
-												$donorID = $result->fetch_all()[0][0]; 	
+												$donorID = $result->fetch_all()[0][0];	
 								}
 
 				}
@@ -57,7 +57,7 @@ if (isset($_POST["goal"]) and $_POST["goal"] == "search"){
 				$query = "SELECT donations.amount,donations.reason,donations.date,donations.fee,donations.thanked,donors.first,donors.last,donors.email,donors.zip,donors.city,donations.id,donors.id FROM donations JOIN donors ON donations.donorID = donors.id WHERE";
 				$selectAll = true;
 
-				if  (isset($donorID)){
+				if	(isset($donorID)){
 								$query = $query." donations.donorID='".$donorID."'";
 								$selectAll = false;
 								if (isset($date) or $max != "0" or $min != "0"){
@@ -141,7 +141,7 @@ else if  (isset($_POST["goal"]) and $_POST["goal"] == "edit"){
 								try{
 												$datetime = DateTime::createFromFormat('m#d#Y',$date);
 												if (!$datetime){
-																throw Exception("bad format");
+																throw new Exception("bad format");
 												}
 												$day = (string)$datetime->format('d');
 												$month = (string)$datetime->format('m');

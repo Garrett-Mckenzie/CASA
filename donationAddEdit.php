@@ -28,7 +28,7 @@ try{
 	$eventNames = mysqli_query($con,$query);
 }
 catch(Exception $e){
-	echo "Message. ".e->getMessage();
+	echo "Message. ".$e->getMessage();
 }
 
 ?>
@@ -112,7 +112,7 @@ if (isset($_GET["editAttempt"]) and isset($_SESSION["editComplete"])){
 
 			<div class="mb-3">	
 				<label><b>Date of Donation</b></label><br/>
-				<input type = "datetime-local" id="date" name="date"></input>
+				<input type = "date" id="date" name="date"></input>
 			</div>
 
 			<div class="mb-3">	
@@ -175,7 +175,7 @@ foreach($eventNames as $row)
 
 			<div class="mb-3">	
 				<label><b>Date of Donation</b></label><br/>
-				<input type = "datetime-local" id="date" name="date"></input>
+				<input type = "date" id="date" name="date"></input>
 			</div>
 
 			<div class = "mb-3">
@@ -279,7 +279,7 @@ echo '</tr>';
 <br/>
 <br/>
 
-<footer class="footer" style="footer">
+<footer class="footer">
 			<!-- Left Side: Logo & Socials -->
 			<div class="footer-left">
 		<img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">
