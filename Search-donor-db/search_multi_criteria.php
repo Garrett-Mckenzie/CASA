@@ -186,7 +186,7 @@ if (empty($query_types)) {
     }
     
     // 2. Combine all separate criteria (e.g., Name AND Zip AND Date) with 'AND'
-    if (!empty($where_clauses) && !empty($query_types)) {
+    if (!empty($where_clauses)) {
         $sql .= " WHERE " . implode(" AND ", $where_clauses);
     }
     

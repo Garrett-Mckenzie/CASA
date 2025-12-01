@@ -138,15 +138,10 @@ if ($con) {
                             params.append('end_date_not_in', formData.get('end_date_not_in'));
                             displayQuery += `Donations NOT IN Range | `;
                             break;
-                        case 'Thanked_donors':
-                            // Only set 'All Donors' if this is the ONLY selected query
-                            displayQuery += 'Thanked Donors';
-                            break;
                         case 'all_donors':
                             // Only set 'All Donors' if this is the ONLY selected query
                             if (selectedQueries.length === 1) displayQuery = 'All Donors';
                             break;
-                        
                     }
                 });
                 
@@ -182,7 +177,7 @@ if ($con) {
                     console.error("Fetch error:", error);
                     // Display a user-friendly error message
                     resultsContent.innerHTML = `<p class="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
-                        🚨 An error occurred while fetching data for **${displayQuery}**. Check the console for details. Error: ${error.message}
+                        An error occurred while fetching data for **${displayQuery}**. Check the console for details. Error: ${error.message}
                         <br>
                         ***NOTE: This might be because the required PHP backend file (${endpoint}) does not exist or doesn't handle multiple criteria.***
                     </p>`;
@@ -225,8 +220,6 @@ if ($con) {
                         // Determine the secondary detail to display
                         const detail = item.email || item.name || `${item.city || 'N/A'}, ${item.state || 'N/A'}` || 'Details N/A';
                         // Add donation count if available
-                        //$sql = "SELECT DISTINCT d.id FROM donors d JOIN donations don ON d.id = don.donorID";
-
                         const count = item.donation_count ? ` | Donations: ${item.donation_count}` : '';
 
                         // Append a result card to the HTML
@@ -309,7 +302,7 @@ if ($con) {
                         <span class="ml-2 text-sm font-medium text-gray-700">Thanked donors</span>
                     </label>
 
-                </div>
+                    </div>
             </div>
 
             <div class="space-y-4" id="dynamic-inputs">
@@ -367,7 +360,6 @@ if ($con) {
                     <p class="text-sm text-gray-500 p-2 border border-gray-200 rounded-lg bg-gray-50">This returns a list of **ALL** donors because no specific criteria were selected. Click "Execute Query".</p>
                 </div>
                 
-
                 </div>
             
             <div class="pt-2">
