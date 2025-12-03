@@ -4,8 +4,8 @@ ini_set('max_execution_time', 120);
 ini_set('display_errors', 0);
 
 // === GLOBAL CONFIG ===
-$env = parse_ini_file(__DIR__.'/.api_env');
-$OPENAI_API_KEY = $env['OPENAI_API_KEY'];
+$env = parse_ini_file(__DIR__ . '/.api_env');
+$OPENAI_API_KEY = $env['OPENAI_API_KEY'] ?? '';
 $OPENAI_MODEL   = "gpt-4o-mini";
 
 // === Unified JSON error handling ===
@@ -20,6 +20,63 @@ set_exception_handler(function ($e) {
 	exit;
 });
 
+require_once __DIR__ . '/database/dbinfo.php';
+
+// =====================================================
+// AJAX: get donors who donated to an event AND not thanked
+// =====================================================
+if (isset($_GET['action']) && $_GET['action'] === 'unthanked_donors') {
+	header('Content-Type: application/json');
+
+	$eventId = isset($_GET['event_id']) ? intval($_GET['event_id']) : 0;
+	if ($eventId <= 0) {
+		echo json_encode(['success' => false, 'error' => 'Invalid event ID']);
+		exit;
+	}
+
+	$con = connect();
+	if (!$con) {
+		echo json_encode(['success' => false, 'error' => 'Database connection failed']);
+		exit;
+	}
+	$lines = array_filter(array_map('trim', explode("\n", $multiple)));
+	foreach ($lines as $line) {
+		if (strpos($line, ',') === false) continue;
+		list($rname, $remail) = array_map('trim', explode(',', $line, 2));
+		$responses[] = generate_email($reason, $sender, $rname, $remail, $custom_prompt);
+	}
+
+	$sql = "
+	SELECT DISTINCT d.id, d.first, d.last, d.email
+	FROM donations don
+	JOIN donors d ON don.donorID = d.id
+	WHERE don.eventID = $eventIdEsc
+	  AND don.thanked = 0
+	ORDER BY d.last, d.first
+    ";
+
+	$result = mysqli_query($con, $sql);
+	if (!$result) {
+		$err = mysqli_error($con);
+		mysqli_close($con);
+		echo json_encode(['success' => false, 'error' => "SQL error: $err"]);
+		exit;
+	}
+
+	$donors = [];
+	while ($row = mysqli_fetch_assoc($result)) {
+		$donors[] = $row;
+	}
+	mysqli_free_result($result);
+	mysqli_close($con);
+
+	echo json_encode(['success' => true, 'donors' => $donors]);
+	exit;
+}
+
+// =====================================================
+// POST: generate emails via OpenAI
+// =====================================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	header('Content-Type: application/json');
 
@@ -35,7 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	$responses = [];
 
-
 	$lines = array_filter(array_map('trim', explode("\n", $multiple)));
 	foreach ($lines as $line) {
 		if (strpos($line, ',') === false) continue;
@@ -47,7 +103,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	exit;
 }
 
-// === OpenAI Email Generation ===
+// =====================================================
+// Helper: call OpenAI
+// =====================================================
 function generate_email($reason, $sender, $recipient_name, $recipient_email, $custom_prompt)
 {
 	global $OPENAI_API_KEY, $OPENAI_MODEL;
@@ -96,7 +154,7 @@ function generate_email($reason, $sender, $recipient_name, $recipient_email, $cu
 		];
 	}
 
-	$decoded = json_decode($response, true);
+	$decoded   = json_decode($response, true);
 	$generated = $decoded['choices'][0]['message']['content'] ?? "Invalid Model Output";
 
 	return [
@@ -106,8 +164,28 @@ function generate_email($reason, $sender, $recipient_name, $recipient_email, $cu
 		'response' => $generated
 	];
 }
-?>
 
+// =====================================================
+// Load events for dropdown on initial page load
+// =====================================================
+$events = [];
+try {
+	$con = connect();
+	if ($con) {
+		$sql = "SELECT id, name, startDate, endDate FROM dbevents ORDER BY startDate DESC";
+		$result = mysqli_query($con, $sql);
+		if ($result) {
+			while ($row = mysqli_fetch_assoc($result)) {
+				$events[] = $row;
+			}
+			mysqli_free_result($result);
+		}
+		mysqli_close($con);
+	}
+} catch (Throwable $e) {
+	// Silent for HTML; JSON handlers will catch fatal issues
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -124,9 +202,38 @@ function generate_email($reason, $sender, $recipient_name, $recipient_email, $cu
 
 <form id="emailForm">
 
+    <!-- Event + Unthanked Donors UI -->
     <div class="mb-3">
-	<label class="form-label">Reason</label>
-	<select class="form-select" name="reason">
+	<label class="form-label" for="eventSelect">Select Event (optional)</label>
+	<select class="form-select" id="eventSelect">
+	    <option value="">-- Choose an event --</option>
+	    <?php foreach ($events as $ev): ?>
+		<option value="<?= htmlspecialchars($ev['id']) ?>">
+		    <?= htmlspecialchars($ev['name']) ?>
+		    <?php if (!empty($ev['startDate'])): ?>
+			(<?= htmlspecialchars($ev['startDate']) ?>
+			<?php if (!empty($ev['endDate']) && $ev['endDate'] !== $ev['startDate']): ?>
+			    – <?= htmlspecialchars($ev['endDate']) ?>
+			<?php endif; ?>
+			)
+		    <?php endif; ?>
+		</option>
+	    <?php endforeach; ?>
+	</select>
+	<div class="form-text">
+	    Pick an event to load donors who donated to it and have <strong>not yet been thanked</strong>.
+	    Click a donor to add them to the Recipients list below.
+	</div>
+    </div>
+
+    <div class="mb-3">
+	<label class="form-label">Unthanked Donors for Selected Event</label>
+	<ul id="donorList" class="list-group"></ul>
+    </div>
+
+    <div class="mb-3">
+	<label class="form-label" for="reasonSelect">Reason</label>
+	<select class="form-select" name="reason" id="reasonSelect">
 	    <option>Thank Donor</option>
 	    <option>Solicit Donation</option>
 	    <option>Event Alert</option>
@@ -134,20 +241,20 @@ function generate_email($reason, $sender, $recipient_name, $recipient_email, $cu
     </div>
 
     <div class="mb-3">
-	<label class="form-label">Custom Prompt (optional)</label>
-	<textarea class="form-control" name="custom_prompt" rows="3"
+	<label class="form-label" for="customPrompt">Custom Prompt (optional)</label>
+	<textarea class="form-control" name="custom_prompt" id="customPrompt" rows="3"
 	    placeholder="Add additional instructions: tone, details, style..."></textarea>
     </div>
 
     <div class="mb-3">
-	<label class="form-label">Recipients (one per line as 'Name, Email')</label>
-	<textarea class="form-control" name="recipients" rows="4"
+	<label class="form-label" for="recipientsTextarea">Recipients (one per line as 'Name, Email')</label>
+	<textarea class="form-control" name="recipients" id="recipientsTextarea" rows="4"
 	    placeholder="Jane Doe, jane@example.com&#10;John Smith, john@example.com"></textarea>
     </div>
 
     <div class="mb-3">
-	<label class="form-label">Sender (Your Email)</label>
-	<input type="email" class="form-control" name="sender" required>
+	<label class="form-label" for="senderEmail">Sender (Your Email)</label>
+	<input type="email" class="form-control" name="sender" id="senderEmail" required>
     </div>
 
     <button type="submit" class="btn btn-primary">Generate Email(s)</button>
@@ -177,6 +284,56 @@ function generate_email($reason, $sender, $recipient_name, $recipient_email, $cu
 </div>
 
 <script>
+// Load unthanked donors when selecting an event
+const donorListEl        = document.getElementById('donorList');
+const eventSelectEl      = document.getElementById('eventSelect');
+const recipientsTextarea = document.getElementById('recipientsTextarea');
+
+if (eventSelectEl) {
+	eventSelectEl.addEventListener('change', async (e) => {
+	const eventId = e.target.value;
+	donorListEl.innerHTML = '';
+
+	if (!eventId) return;
+
+	try {
+		const resp = await fetch(`?action=unthanked_donors&event_id=${encodeURIComponent(eventId)}`);
+		const data = await resp.json();
+
+		if (!data.success) {
+			donorListEl.innerHTML =
+				`<li class="list-group-item text-danger">${data.error || 'Error loading donors.'}</li>`;
+			return;
+		}
+
+		if (!data.donors || data.donors.length === 0) {
+			donorListEl.innerHTML =
+				'<li class="list-group-item">No unthanked donors for this event.</li>';
+			return;
+		}
+
+		data.donors.forEach(d => {
+		const li = document.createElement('li');
+		li.className = 'list-group-item list-group-item-action';
+		li.style.cursor = 'pointer';
+		li.textContent = `${d.first} ${d.last} – ${d.email}`;
+
+		li.addEventListener('click', () => {
+		const line = `${d.first} ${d.last}, ${d.email}`;
+		const current = recipientsTextarea.value.trim();
+		recipientsTextarea.value = current ? current + "\n" + line : line;
+		});
+
+		donorListEl.appendChild(li);
+		});
+	} catch (err) {
+		donorListEl.innerHTML =
+			'<li class="list-group-item text-danger">Unexpected error loading donors.</li>';
+	}
+});
+}
+
+// Existing: submit → generate emails
 document.getElementById('emailForm').addEventListener('submit', async e => {
 e.preventDefault();
 
@@ -184,16 +341,21 @@ const formData = new FormData(e.target);
 const res = await fetch('', { method:'POST', body: formData });
 const data = await res.json();
 
+if (!data.success) {
+	alert(data.error || 'Failed to generate emails.');
+	return;
+}
+
 const container = document.getElementById('emailListContainer');
 container.innerHTML = '';
 
 data.emails.forEach((item, i) => {
 container.innerHTML += `
 	<div class="mb-4">
-	    <h6>${item.name} &lt;${item.email}&gt;</h6>
-	    <textarea class="form-control email-content" rows="8">${item.response}</textarea>
-	    <hr />
-	</div>`;
+		<h6>${item.name} &lt;${item.email}&gt;</h6>
+		<textarea class="form-control email-content" rows="8">${item.response}</textarea>
+		<hr />
+	    </div>`;
 });
 
 const modal = new bootstrap.Modal(document.getElementById('emailModal'));
