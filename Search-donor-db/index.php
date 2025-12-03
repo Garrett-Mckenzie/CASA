@@ -1,5 +1,5 @@
 <?php
-require_once '../database/dbinfo.php';
+require_once 'dbinfo.php';
 
 session_start();
 $con = connect();
