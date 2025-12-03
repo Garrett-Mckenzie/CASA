@@ -181,13 +181,13 @@ if (empty($query_types)) {
     
     }
 
-    /*
+    
     if (in_array('Thanked_donors', $query_types)) {
         $search_query_parts[] = "Thanked Donors"
-        $subquery = "SELECT DISTINCT d.id FROM donors d JOIN associations don ON d.id = don.donorID JOIN events e ON don.eventID = e.id WHERE e.thanked = 1";
+        $subquery = "SELECT DISTINCT donorID FROM donations WHERE thanked = 1";
         $where_clauses[] = "d.id IN ({$subquery})";
     } 
-    */
+    
     
     // 2. Combine all separate criteria (e.g., Name AND Zip AND Date) with 'AND'
     if (!empty($where_clauses)) {
