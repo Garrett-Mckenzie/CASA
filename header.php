@@ -306,7 +306,7 @@ if (isset($_SESSION['access_level'])) {
 
         <?php if ($_SESSION['access_level'] >= 2): ?>
             <div class="menu-section-title">Admin Tools</div>
-            <a href="/Search-donor-db/index.php">
+            <a href="/searchindex.php">
                 <img src="images/add-person.svg"> Search Database
             </a>
             <a href="emailgen.php">
