@@ -138,6 +138,9 @@ if ($con) {
                             params.append('end_date_not_in', formData.get('end_date_not_in'));
                             displayQuery += `Donations NOT IN Range | `;
                             break;
+                        case 'donor_thanked':
+                            displayQuery += `Thanked Donors | `;
+                            break;
                         case 'all_donors':
                             // Only set 'All Donors' if this is the ONLY selected query
                             if (selectedQueries.length === 1) displayQuery = 'All Donors';
@@ -318,18 +321,6 @@ if ($con) {
                     <label for="zip-input" class="block text-sm font-semibold text-gray-700 mb-2">Donor Zip Code</label>
                     <input type="text" id="zip-input" name="zip_query" placeholder="e.g., 22401" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
                 </div>
-                
-                    <!-- inputs needed for 'donor donations date range' -->
-    <!--
-                <div class="query-input-container hidden" data-query-type="donor_donations_date_range">
-                    <label for="donor-name-input-donations" class="block text-sm font-semibold text-gray-700 mb-2">Donor Name for Donation Count</label>
-                    <input type="text" id="donor-name-input-donations" name="donor_name_query_donations" placeholder="e.g., John Smith" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 mb-4" required-if-active>
-                    <label for="start-date-donations" class="block text-sm font-semibold text-gray-700 mb-2">Start Date (YYYY-MM-DD)</label>
-                    <input type="date" id="start-date-donations" name="start_date_donations" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
-                    <label for="end-date-donations" class="block text-sm font-semibold text-gray-700 mb-2 mt-4">End Date (YYYY-MM-DD)</label>
-                    <input type="date" id="end-date-donations" name="end_date_donations" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
-                </div>
-    -->
                     <!-- inputs needed for 'donor by donation range in' -->
                 <div class="query-input-container hidden" data-query-type="donors_by_donation_range_in">
                     <label for="start-date-in" class="block text-sm font-semibold text-gray-700 mb-2">Start Date (YYYY-MM-DD)</label>
@@ -344,9 +335,16 @@ if ($con) {
                     <label for="end-date-not-in" class="block text-sm font-semibold text-gray-700 mb-2 mt-4">End Date (YYYY-MM-DD)</label>
                     <input type="date" id="end-date-not-in" name="end_date_not_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
                 </div>
+                    
+                <!-- inputs needed for 'thanked_donors' -->
+                 <!--
                 <div class="query-input-container hidden" data-query-type="thanked_donors">
-                    <p class="text-sm text-gray-500 p-2 border border-gray-200 rounded-lg bg-gray-50">All thanked donors</p>
+                    <label for="thanked-input" class="block text-sm font-semibold text-gray-700 mb-2">search for those who haven't been thanked:</label>
+                    <input type="checkbox" id="thanked-input" name="thanked_donors" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                    
                 </div>
+                -->
+
                     <!-- No inputs needed for 'all_donors' -->
                 <div class="query-input-container hidden" data-query-type="all_donors">
                     <p class="text-sm text-gray-500 p-2 border border-gray-200 rounded-lg bg-gray-50">This returns a list of **ALL** donors because no specific criteria were selected. Click "Execute Query".</p>
