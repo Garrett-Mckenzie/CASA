@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	$responses = [];
 
-	// ALWAYS multi-mode now
+
 	$lines = array_filter(array_map('trim', explode("\n", $multiple)));
 	foreach ($lines as $line) {
 		if (strpos($line, ',') === false) continue;
