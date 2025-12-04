@@ -218,9 +218,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="text" name="location" value="<?php echo htmlspecialchars($location); ?>">
 
         <input type="submit" value="Save Changes">
+    	<a href="viewEvent.php?id=<?php echo $eventID; ?>">Cancel Changes</a>
     </form>
 
-    <a class="button cancel" href="viewEvent.php?id=<?php echo $eventID; ?>">Return to Event</a>
 
 </main>
 </body>
