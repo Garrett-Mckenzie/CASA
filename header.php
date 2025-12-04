@@ -324,7 +324,7 @@ if (isset($_SESSION['access_level'])) {
                  <img src="images/list-solid.svg"> Export Data
             </a>
 
-            <a href="eventmanagement.php">Event Management</a>
+            <a href="viewAllEvents.php">Event Management</a>
             <a href="volunteermanagement.php">Volunteer Management</a>
         <?php endif; ?>
 
