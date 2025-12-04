@@ -5,7 +5,7 @@
 
     session_cache_expire(30);
     session_start();
-
+    $_SESSION['logged_in'] = true;
     date_default_timezone_set("America/New_York");
     
     // Security Redirect
@@ -327,6 +327,15 @@
                 <div class="large-text-sub">Export Files</div>
                 <button class="arrow-button">→</button>
             </div>
+	    <div class="content-box-test" onclick="window.location.href='VolunteerRegister.php'">
+                <div class="icon-overlay">
+                    <img src="images/file-regular.svg" alt="Icon">
+                </div>
+                <img class="background-image" src="images/blank-white-background.jpg" />
+                <div class="large-text-sub">Create New User</div>
+                <button class="arrow-button">→</button>
+            </div>
+
 
             <div class="content-box-test" onclick="window.location.href='emailgen.php'">
                 <div class="icon-overlay">
