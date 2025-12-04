@@ -1,21 +1,8 @@
 <?php
-require_once 'dbinfo.php';
+require_once 'dbinfo.php'; // Include database info (likely for connection check, though not used here)
 
-session_start();
-$con = connect();
+session_start(); // Start PHP session (not used in the search logic)
 
-if ($con) {
-    $sql = "SELECT DISTINCT `location` FROM `dbevents` WHERE `location` IS NOT NULL AND `location` != '' ORDER BY `location` ASC";
-    $result = mysqli_query($con, $sql);
-    if ($result) {
-        $locations = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $locations[] = $row['location'];
-        }
-        mysqli_free_result($result);
-    }
-    mysqli_close($con);
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,145 +13,141 @@ if ($con) {
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
-        // Ensure the script runs only after the entire document is loaded
         document.addEventListener('DOMContentLoaded', () => {
-            // Get references to key DOM elements
+            // Get all query type checkboxes
             const queryTypeCheckboxes = document.querySelectorAll('input[name="query_type"]');
+            // Get all input containers, grouped by data-query-type
             const formContainers = document.querySelectorAll('.query-input-container');
             const searchForm = document.getElementById('search-form');
             const resultsContent = document.getElementById('results-content');
             
-            /**
-             * Updates the visibility and required status of the input fields
-             * based on which query type checkboxes are selected.
-             */
+            // Function to dynamically show/hide input fields based on checkbox selection
             function updateFormVisibility() {
-                // Determine which query types are selected
+                // Get a list of the values of all currently checked checkboxes
                 const selectedQueryTypes = Array.from(queryTypeCheckboxes)
                     .filter(checkbox => checkbox.checked)
                     .map(checkbox => checkbox.value);
 
-                // Default to 'all_donors' if no criteria are selected
+                // If no criteria are selected, default to 'all_donors' for visibility logic
                 if (selectedQueryTypes.length === 0) {
                     selectedQueryTypes.push('all_donors');
                 }
 
-                // Iterate over all input containers
+                // Iterate through all input containers
                 formContainers.forEach(container => {
                     const containerType = container.getAttribute('data-query-type');
                     
-                    // Show the container if its type is selected
+                    // Check if the container's type is in the list of selected criteria
                     if (selectedQueryTypes.includes(containerType)) {
+                        // Show the container and apply styling
                         container.classList.remove('hidden');
                         container.classList.add('space-y-4');
-                        // Make inputs required if they have the 'required-if-active' attribute
+                        // Set 'required' attribute for inputs inside the active container
                         container.querySelectorAll('[required-if-active]').forEach(input => {
                             input.setAttribute('required', 'required');
                         });
                     } else {
-                        // Hide the container if its type is not selected
+                        // Hide the container and remove styling
                         container.classList.add('hidden');
                         container.classList.remove('space-y-4');
-                        // Remove 'required' attribute and clear values for hidden inputs
+                        // Remove 'required' attribute and clear input values for inactive criteria
                         container.querySelectorAll('[required-if-active]').forEach(input => {
                             input.removeAttribute('required');
                             if (input.type === 'text' || input.type === 'date') {
-                                input.value = ''; // Clear value to prevent submitting stale data
+                                input.value = '';
                             }
                         });
                     }
                 });
             }
 
-            // Attach the visibility update function to all query type checkboxes
+            // Attach the visibility update function to all checkbox change events
             queryTypeCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', updateFormVisibility);
             });
             
-            // Run on initial load to set up the default state (which is 'all_donors')
+            // Run the visibility update once on page load to set initial state
             updateFormVisibility();
 
 
-            /**
-             * Asynchronously fetches search results from the backend PHP script.
-             * @param {FormData} formData - The data collected from the search form.
-             */
+            // Function to handle the actual data fetching from the PHP backend
             async function fetchResults(formData) {
-                // Re-read selected queries to ensure 'all_donors' is included if none are selected
+                // Get all selected query types again
                 const selectedQueries = formData.getAll('query_type');
                 
+                // If nothing selected, ensure 'all_donors' is processed
                 if (selectedQueries.length === 0) {
                     selectedQueries.push('all_donors');
                 }
 
-                let endpoint = 'search_multi_criteria.php'; // The backend script to call
-                let params = new URLSearchParams(); // Used to build the query string
-                let displayQuery = ''; // Human-readable summary of the query
+                let endpoint = 'search_multi_criteria.php';
+                let params = new URLSearchParams(); // Object to build the query string (e.g., `?query_types[]=donor_name&donor_name_query=...`)
+                let displayQuery = ''; // String to summarize the active query for display
 
-                // Iterate through selected queries to build the URL parameters and display string
+                // This variable is not used in the current form structure, as each input is distinct
+                const sharedDonorNameValue = formData.get('shared_donor_name_query');
+                
+                // Iterate over all selected query types to build the URL parameters
                 selectedQueries.forEach(queryType => {
-                    params.append('query_types[]', queryType);
+                    params.append('query_types[]', queryType); // Append the criterion name
                     
                     switch (queryType) {
                         case 'donor_name':
+                            // Append input value for donor name search
                             params.append('donor_name_query', formData.get('donor_name_query_name'));
                             displayQuery += `Name: ${formData.get('donor_name_query_name')} | `;
                             break;
                         case 'donor_zip':
+                            // Append input value for zip search
                             params.append('zip_query', formData.get('zip_query'));
                             displayQuery += `Zip: ${formData.get('zip_query')} | `;
                             break;
-                        case 'donor_events':
-                            params.append('donor_name_events', formData.get('donor_name_query_events'));
-                            displayQuery += `Events for: ${formData.get('donor_name_query_events')} | `;
-                            break;
                         case 'event_donors':
-                            params.append('event_query', formData.get('event_query'));
-                            displayQuery += `Event: ${formData.get('event_query')} | `;
-                            break;
-                        case 'donor_donations_date_range':
-                            params.append('donor_name_donations', formData.get('donor_name_query_donations'));
-                            params.append('start_date_donations', formData.get('start_date_donations'));
-                            params.append('end_date_donations', formData.get('end_date_donations'));
-                            displayQuery += `Donations Date Range | `;
+                            // Append input value for event name search
+                            params.append('event_query', formData.get('event_query_name'));
+                            displayQuery += `Event: ${formData.get('event_query_name')} | `;
                             break;
                         case 'donors_by_donation_range_in':
+                            // Append start and end dates for 'IN' range search
                             params.append('start_date_in', formData.get('start_date_in'));
                             params.append('end_date_in', formData.get('end_date_in'));
                             displayQuery += `Donations IN Range | `;
                             break;
                         case 'donors_by_donation_range_not_in':
+                            // Append start and end dates for 'NOT IN' range search
                             params.append('start_date_not_in', formData.get('start_date_not_in'));
                             params.append('end_date_not_in', formData.get('end_date_not_in'));
                             displayQuery += `Donations NOT IN Range | `;
                             break;
-                        case 'donor_thanked':
+                        case 'Thanked_donors':
+                            // Only display "Thanked Donors"
                             displayQuery += `Thanked Donors | `;
                             break;
                         case 'all_donors':
-                            // Only set 'All Donors' if this is the ONLY selected query
+                            // Only display "All Donors" if it's the *only* criterion
                             if (selectedQueries.length === 1) displayQuery = 'All Donors';
                             break;
                     }
                 });
                 
-                // Clean up trailing separator
+                // Clean up the trailing ' | ' from the display string
                 displayQuery = displayQuery.replace(/ \| $/, '');
                 
-                // Construct the final URL
+                // Construct the final URL with parameters
                 const url = `${endpoint}?${params.toString()}`;
                 console.log("Fetching URL:", url);
 
                 try {
+                    // Make the AJAX request
                     const response = await fetch(url); 
                     
-                    // Check if the response content type is JSON
+                    // Check if the server returned JSON data
                     const contentType = response.headers.get("content-type");
                     if (contentType && contentType.indexOf("application/json") === -1) {
                          throw new Error(`Server returned non-JSON data. Check your PHP script for errors.`);
                     }
 
-                    // Check for HTTP error status codes (e.g., 404, 500)
+                    // Check for HTTP error status (4xx or 5xx)
                     if (!response.ok) {
                         const errorData = await response.json();
                         throw new Error(`HTTP error! Status: ${response.status}. Details: ${errorData.details || errorData.error}`);
@@ -176,7 +159,7 @@ if ($con) {
                     return { results, displayQuery };
 
                 } catch (error) {
-                    // Handle any network or parsing errors
+                    // Handle fetch or JSON parsing errors
                     console.error("Fetch error:", error);
                     // Display a user-friendly error message
                     resultsContent.innerHTML = `<p class="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
@@ -188,44 +171,38 @@ if ($con) {
                 }
             }
 
-            // Event listener for form submission
+            // Attach the submit handler to the form
             searchForm.addEventListener('submit', async (e) => {
-                e.preventDefault(); // Prevent default form submission and page reload
+                e.preventDefault(); // Prevent default form submission
                 const formData = new FormData(searchForm); // Get all form data
                 
-                // Fetch the results and display them
+                // Fetch and get the results
                 const { results, displayQuery } = await fetchResults(formData);
+                // Render the results to the display area
                 renderResults(displayQuery, results);
             });
             
-            /**
-             * Renders the fetched data into the results content div.
-             * @param {string} displayQuery - Human-readable query string.
-             * @param {Array<Object>} data - The array of result objects.
-             */
+            // Function to format and display the returned data
             function renderResults(displayQuery, data) {
-                resultsContent.innerHTML = ''; // Clear previous results
+                resultsContent.innerHTML = '';
                 
                 if (data.length === 0) {
-                    // Display message if no results are found
+                    // Display message if no results found
                     resultsContent.innerHTML = `
                         <p class="text-sm text-yellow-600 bg-yellow-50 p-3 rounded-lg border border-yellow-200">
                             No data found for: **${displayQuery}**.
                         </p>
                     `;
                 } else {
-                    // Display count and start building the results HTML
+                    // Display result count and start building HTML list
                     let html = `<p class="text-sm font-medium text-gray-700 mb-3">${data.length} result(s) found for **"${displayQuery}"**:</p>`;
                     
+                    // Iterate over each result item
                     data.forEach(item => {
-                        // Extract and format donor/event name
                         const name = item.first && item.last ? `${item.first} ${item.last}` : item.name || 'Donor/Event Name';
-                        // Determine the secondary detail to display
                         const detail = item.email || item.name || `${item.city || 'N/A'}, ${item.state || 'N/A'}` || 'Details N/A';
-                        // Add donation count if available
-                        const count = item.donation_count ? ` | Donations: ${item.donation_count}` : '';
-
-                        // Append a result card to the HTML
+                        const count = item.donation_count ? ` | Donations: ${item.donation_count}` : ''; 
+                        // Append a formatted card for each donor
                         html += `
                             <div class="bg-white p-4 mb-2 rounded-lg shadow-sm border border-gray-100 transition duration-150 hover:shadow-md">
                                 <p class="text-base font-semibold text-gray-900">${name}${count}</p>
@@ -233,14 +210,13 @@ if ($con) {
                             </div>
                         `;
                     });
-                    resultsContent.innerHTML = html; // Inject the results HTML
+                    resultsContent.innerHTML = html;
                 }
             }
         });
     </script>
 
     <style>
-        /* Simple style to set a modern font */
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
@@ -266,15 +242,10 @@ if ($con) {
                         <input type="checkbox" name="query_type" value="donor_name" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
                         <span class="ml-2 text-sm font-medium text-gray-700">Donor by Name</span>
                     </label>
-                    <!-- makes Donor events checkbox -->
-                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
-                        <input type="checkbox" name="query_type" value="donor_events" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
-                        <span class="ml-2 text-sm font-medium text-gray-700">Donor by events</span>
-                    </label>
                     <!-- makes event Donors checkbox -->
                     <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
                         <input type="checkbox" name="query_type" value="event_donors" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
-                        <span class="ml-2 text-sm font-medium text-gray-700">Event return Donors</span>
+                        <span class="ml-2 text-sm font-medium text-gray-700">Event by Name</span>
                     </label>
                     <!-- makes Donors zip checkbox -->
                     <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
@@ -306,52 +277,41 @@ if ($con) {
                     <label for="donor-name-input-name" class="block text-sm font-semibold text-gray-700 mb-2">Donor Name (First or First & Last)</label>
                     <input type="text" id="donor-name-input-name" name="donor_name_query_name" placeholder="e.g., Jane Doe" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
                 </div>
-                    <!-- inputs needed for 'donor_events' -->
-                <div class="query-input-container hidden" data-query-type="donor_events">
-                    <label for="donor-name-input-events" class="block text-sm font-semibold text-gray-700 mb-2">Donor Name for Events (First or First & Last)</label>
-                    <input type="text" id="donor-name-input-events" name="donor_name_query_events" placeholder="e.g., Jane Doe" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
-                </div>
                     <!-- inputs needed for 'event_donors' -->
                 <div class="query-input-container hidden" data-query-type="event_donors">
-                    <label for="donor-name-input-events" class="block text-sm font-semibold text-gray-700 mb-2">Event Name for Donors </label>
-                    <input type="text" id="donor-name-input-events" name="donor_name_query_events" placeholder="e.g., Jane Doe" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                    <label for="donor-event-input-events" class="block text-sm font-semibold text-gray-700 mb-2">Event Name (shows donors who donated at event) </label>
+                    <input type="text" id="donor-event-input-events" name="event_query_name" placeholder="e.g., test" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
                 </div>
                     <!-- inputs needed for 'zip' -->
                 <div class="query-input-container hidden" data-query-type="donor_zip">
                     <label for="zip-input" class="block text-sm font-semibold text-gray-700 mb-2">Donor Zip Code</label>
                     <input type="text" id="zip-input" name="zip_query" placeholder="e.g., 22401" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
                 </div>
-                    <!-- inputs needed for 'donor by donation range in' -->
+                    <!-- inputs needed for 'donor by donation in range' -->
                 <div class="query-input-container hidden" data-query-type="donors_by_donation_range_in">
                     <label for="start-date-in" class="block text-sm font-semibold text-gray-700 mb-2">Start Date (YYYY-MM-DD)</label>
                     <input type="date" id="start-date-in" name="start_date_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
                     <label for="end-date-in" class="block text-sm font-semibold text-gray-700 mb-2 mt-4">End Date (YYYY-MM-DD)</label>
                     <input type="date" id="end-date-in" name="end_date_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
                 </div>
-                    <!-- inputs needed for 'donor by donation range not in' -->
+                    <!-- inputs needed for 'donor by donation not in range' -->
                 <div class="query-input-container hidden" data-query-type="donors_by_donation_range_not_in">
                     <label for="start-date-not-in" class="block text-sm font-semibold text-gray-700 mb-2">Start Date (YYYY-MM-DD)</label>
                     <input type="date" id="start-date-not-in" name="start_date_not_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
                     <label for="end-date-not-in" class="block text-sm font-semibold text-gray-700 mb-2 mt-4">End Date (YYYY-MM-DD)</label>
                     <input type="date" id="end-date-not-in" name="end_date_not_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
                 </div>
-                    
-                <!-- inputs needed for 'thanked_donors' -->
-                 <!--
-                <div class="query-input-container hidden" data-query-type="thanked_donors">
-                    <label for="thanked-input" class="block text-sm font-semibold text-gray-700 mb-2">search for those who haven't been thanked:</label>
-                    <input type="checkbox" id="thanked-input" name="thanked_donors" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
-                    
+                    <!-- inputs needed for 'thanked_donors' -->
+                <div class="query-input-container hidden" data-query-type="Thanked_donors">
+                    <p class="text-sm text-gray-500 p-2 border border-gray-200 rounded-lg bg-gray-50">returning only donors who have been thanked.</p>
                 </div>
-                -->
-
-                    <!-- No inputs needed for 'all_donors' -->
+                    <!-- inputs needed for 'all_donors' -->
                 <div class="query-input-container hidden" data-query-type="all_donors">
-                    <p class="text-sm text-gray-500 p-2 border border-gray-200 rounded-lg bg-gray-50">This returns a list of **ALL** donors because no specific criteria were selected. Click "Execute Query".</p>
+                    <p class="text-sm text-gray-500 p-2 border border-gray-200 rounded-lg bg-gray-50">This returns a list of **ALL** donors. Click "Execute Query".</p>
                 </div>
                 
-                </div>
-            
+            </div>
+            <!-- submit button -->
             <div class="pt-2">
                 <button type="submit"
                     class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-base font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 ease-in-out transform hover:scale-[1.01] active:scale-[0.99]">
@@ -370,25 +330,7 @@ if ($con) {
                 <p>Select one or more criteria above and click 'Execute Query'.</p>
             </div>
         </div>
-
-        <!--
-        <div class="mt-4">
-            <a href="test.php"
-                class="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-md text-base font-bold text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 ease-in-out transform hover:scale-[1.01] active:scale-[0.99]">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                Go to test.php Page
-            </a>
-        </div>
-        <div class="mt-4">
-            <a href="all.php"
-                class="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-md text-base font-bold text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 ease-in-out transform hover:scale-[1.01] active:scale-[0.99]">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                Go to test.db Page
-            </a>
-        </div>
-        -->
-
-    </div>
+    </div>  
 
 </body>
 </html>

@@ -291,19 +291,19 @@ INSERT IGNORE INTO `donors` (`id`, `first`, `last`, `email`, `zip`, `city`, `sta
 
 INSERT IGNORE INTO `donations` (`date`, `amount`, `reason`, `eventID`, `donorID`, `fee`, `thanked`) VALUES
 -- Donor ID 1: Phillip Jenkins
-('01/01/2015', 50.00, '2014, 2015 and 2016 Community Give', NULL, 1, 0.00, 0),
+('01/01/2015', 50.00, '2014, 2015 and 2016 Community Give', 3, 1, 0.00, 1),
 
 -- Donor ID 2: Jeri Phillips
-('01/01/2016', 50.00, 'Community Give; $100 in 2024 Giving Tuesday', NULL, 2, 0.00, 0),
+('01/01/2016', 50.00, 'Community Give; $100 in 2024 Giving Tuesday', 3, 2, 0.00, 1),
 
 -- Donor ID 3: Christine Repp
-('05/05/2015', 25.00, 'Community Give: gave $25 in 2014, 2015 & 2016', NULL, 3, 0.00, 0),
+('05/05/2015', 25.00, 'Community Give: gave $25 in 2014, 2015 & 2016', 3, 3, 0.00, 1),
 
 -- Donor ID 4: Adam Fried
-('01/01/2015', 1100.00, '$100 in 2014 Community Give; $1,100 in 2015; $1,000 in 2016 Community Give', NULL, 4, 0.00, 0),
+('01/01/2015', 1100.00, '$100 in 2014 Community Give; $1,100 in 2015; $1,000 in 2016 Community Give', 3, 4, 0.00, 1),
 
 -- Donor ID 5: Dr. Maha Alattar
-('05/01/2014', 100.00, 'In response to Community Give email from Janet; also $100 in 2015', NULL, 5, 0.00, 0),
+('05/01/2014', 100.00, 'In response to Community Give email from Janet; also $100 in 2015', 3, 5, 0.00, 1),
 
 -- Donor ID 6/7: Angela Glidden
 ('01/01/2024', 100.00, 'Step Up for CASA Kids team -- 2024 Downtown Mile; CASA volunteer; $100 2024 Giving Tues.', NULL, 6, 0.00, 0), -- Using main row data, amount is often null. Actual GT $100 applied later.
@@ -838,6 +838,10 @@ INSERT IGNORE INTO `donations` (`date`, `amount`, `reason`, `eventID`, `donorID`
 -- Donor ID 284: Michael & Marietta D'Ostilio
 ('06/27/2025', 50.00, 'In memory of Bobby Anderson', NULL, 284, 0.00, 1);
 
+INSERT IGNORE INTO `dbevents` (`id`, `name`, `goalAmount`, `date`, `startDate`, `endDate`, `startTime`, `endTime`, `description`, `completed`, `location`) VALUES
+(3, 'test', 1250.00, NULL, '2025-10-25', '2025-10-25', '00:00', '23:59', 'this is a test', '0', 'hcc'),
+(4, 'test2', 10.00, NULL, '2025-10-26', '2025-10-26', '12:00', '17:00', 'test 2 for not requiring location', '0', ''),
+(5, 'testOfViewEvents', 10000.00, NULL, '2025-10-30', '2026-01-31', '00:00', '23:59', 'this is a test of an ongoing event', '0', '');
 
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
