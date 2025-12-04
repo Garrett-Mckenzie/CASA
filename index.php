@@ -297,7 +297,7 @@
             <div class="content-box">
                 <img src="images/blank-white-background.jpg"/>
                 <div class="small-text">Let’s raise some money!</div>
-                <div class="large-text">Fundraiser Management</div>
+                <div class="large-text">Event Management</div>
                 <button class="circle-arrow-button" onclick="window.location.href='viewAllEvents.php'">
                     <span class="button-text">Go</span>
                     <div class="circle">&gt;</div>

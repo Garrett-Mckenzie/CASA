@@ -230,7 +230,6 @@ $permission_array['resources.php'] = 2;
 $permission_array['uploadresources.php'] = 2;
 $permission_array['deleteresources.php'] = 2;
 $permission_array['managemembers.php'] = 2;
-$permission_array['volunteermanagement.php'] = 2;
 $permission_array['eventmanagement.php'] = 2;
 $permission_array['deletediscussion.php'] = 2;
 $permission_array['clockoutbulk.php'] = 2;
@@ -325,7 +324,6 @@ if (isset($_SESSION['access_level'])) {
             </a>
 
             <a href="viewAllEvents.php">Event Management</a>
-            <a href="volunteermanagement.php">Volunteer Management</a>
         <?php endif; ?>
 
         <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.2);">
