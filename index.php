@@ -346,6 +346,16 @@
                 <button class="arrow-button">→</button>
             </div>
 
+	    <div class="content-box-test" onclick="window.location.href='addDonor.php'">
+                <div class="icon-overlay">
+                    <img src="images/clipboard-regular.svg" alt="Icon">
+                </div>
+                <img class="background-image" src="images/blank-white-background.jpg" />
+                <div class="large-text-sub">Add Donors</div>
+                <button class="arrow-button">→</button>
+            </div>
+
+
             <div class="content-box-test" onclick="window.location.href='donationAddEdit.php'">
                 <div class="icon-overlay">
                     <img src="images/clipboard-regular.svg" alt="Icon">

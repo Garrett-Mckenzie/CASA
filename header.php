@@ -310,6 +310,11 @@ if (isset($_SESSION['access_level'])) {
                 <img src="images/add-person.svg"> Add Users
             </a>
 
+	    <a href="/addDonor.php">
+                <img src="images/add-person.svg"> Add Donor
+            </a>
+
+
             <a href="/searchindex.php">
                 <img src="images/add-person.svg"> Search Database
             </a>
