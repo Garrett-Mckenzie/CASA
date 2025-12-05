@@ -213,7 +213,7 @@ def insertDonor(donorData,donor_columns,conn,cursor):
                 pass
 
         if insertData[insertCol.index("first")] == "" or insertData[insertCol.index("last")] == "" or insertData[insertCol.index("email")] == "":
-            print(f"Must have a complete first,last,email collection on the {i}th row")
+            print(f"Must have a complete first,last,email collection on row {i}")
             goodInsert = 0
 
         if goodInsert:
