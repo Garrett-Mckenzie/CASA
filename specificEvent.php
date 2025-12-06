@@ -123,8 +123,8 @@
 
             <script>
                 // ---- PHP VALUES (Use 'let' as values may be modified for calculation) ----
-                let raised = <?php echo $totalRaised; ?>;
-                let goal = <?php echo $goal; ?>;
+                const raised = <?php echo $totalRaised; ?>;
+                const goal = <?php echo $goal; ?>;
 
                 // ---- CHART DATA LOGIC ----
                 let data = [];
@@ -142,7 +142,7 @@
                 }
 
             // Determine overflow categories
-            if (raised <= safeGoal) {
+            if (raised <= goal) {
                 // No overflow
                 data = [safeRaised, safeGoal - safeRaised];
                 labels = ['Raised', 'Remaining'];
