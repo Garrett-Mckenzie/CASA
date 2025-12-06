@@ -121,19 +121,35 @@
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
             <script>
-            // ---- PHP VALUES ----
-            const raised = <?php echo $totalRaised; ?>;
-            const goal = <?php echo $goal; ?>;
-            if (goal == 0){
-                const goal = 1;
-                const raised = raised +1;
-            }
+                // ---- PHP VALUES (Use 'let' as values may be modified for calculation) ----
+                let raised = <?php echo $totalRaised; ?>;
+                let goal = <?php echo $goal; ?>;
 
-            // ---- CHART DATA LOGIC ----
-            let data = [];
-            let labels = [];
-            let colors = [];
-            let percent = Math.round((raised / goal) * 100);
+                // ---- CHART DATA LOGIC ----
+                let data = [];
+                let labels = [];
+                let colors = [];
+                let percent = 0; // Initialize percent
+
+                // --- Goal Safety Check & Percentage Calculation ---
+                if (goal <= 0) {
+                    if (raised > 0) {
+                        percent = Math.round(raised); // If raised is 100, percent is 100. If raised is 150, percent is 150.
+                        let denominator = 1; // A safe, non-zero denominator
+                        percent = Math.round(100 + raised); // This ensures 100% + $1 per raised dollar. (This is highly dependent on how you want the scale to look)
+                        let safeGoal = 1; 
+                        
+                        // If raised > 0, we calculate how many times the raised amount is over the minimum $1 goal
+                        percent = Math.round((raised / safeGoal) * 100); 
+                        if (raised > 0) {
+                            percent = 100;
+                        } else {
+                            percent = 100; // Nothing raised, so 0% progress shown.
+                        }
+                    }
+                } else {
+                    percent = Math.round((raised / goal) * 100);
+                }
 
             // Determine overflow categories
             if (raised <= goal) {
