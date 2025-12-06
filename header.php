@@ -181,7 +181,7 @@ $permission_array['index.php'] = 0;
 $permission_array['about.php'] = 0;
 $permission_array['apply.php'] = 0;
 $permission_array['logout.php'] = 0;
-$permission_array['volunteerregister.php'] = 0;
+$permission_array['volunteerregister.php'] = 3;
 $permission_array['leaderboard.php'] = 0;
 // Volunteers
 $permission_array['help.php'] = 1;
@@ -231,7 +231,6 @@ $permission_array['resources.php'] = 2;
 $permission_array['uploadresources.php'] = 2;
 $permission_array['deleteresources.php'] = 2;
 $permission_array['managemembers.php'] = 2;
-$permission_array['volunteermanagement.php'] = 2;
 $permission_array['eventmanagement.php'] = 2;
 $permission_array['deletediscussion.php'] = 2;
 $permission_array['clockoutbulk.php'] = 2;
@@ -247,6 +246,7 @@ $permission_array['adddonor.php'] = 3;
 $permission_array['donationaddedit.php'] = 3;
 $permission_array["editdonationhandler.php"] = 3;
 $permission_array["ReportGeneration.php"] = 3;
+$permission_array["VolunteerRegister.php"] = 3;
 
 // Security Redirect
 if (isset($_SESSION['access_level'])) {
@@ -304,7 +304,16 @@ if (isset($_SESSION['access_level'])) {
 
         <?php if ($_SESSION['access_level'] >= 2): ?>
             <div class="menu-section-title">Admin Tools</div>
-            <a href="/Search-donor-db/index.php">
+	    <a href="/VolunteerRegister.php">
+                <img src="images/add-person.svg"> Add Users
+            </a>
+
+	    <a href="/addDonor.php">
+                <img src="images/add-person.svg"> Add Donor
+            </a>
+
+
+            <a href="/searchindex.php">
                 <img src="images/add-person.svg"> Search Database
             </a>
             <a href="emailgen.php">
@@ -322,8 +331,7 @@ if (isset($_SESSION['access_level'])) {
                  <img src="images/list-solid.svg"> Export Data
             </a>
 
-            <a href="eventmanagement.php">Event Management</a>
-            <a href="volunteermanagement.php">Volunteer Management</a>
+            <a href="viewAllEvents.php">Event Management</a>
         <?php endif; ?>
 
         <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.2);">

@@ -1,5 +1,7 @@
 <?php
     require_once('include/input-validation.php');
+    session_start();
+    $_SESSION['logged_in'] = "true";
 ?>
 
 <!DOCTYPE html>
@@ -71,12 +73,8 @@ require_once('header.php');
         if (!$result) {
             $showPopup = true;
         } else {
-            echo '<script>document.location = "login.php?registerSuccess";</script>';
-            $title = $id . " has been added as a user";
-            $body = "New user account has been created";
+            echo '<script>document.location = "VolunteerRegister.php";</script>';
         }
-    } else {
-        require_once('registrationForm.php');
     }
 ?>
 
@@ -101,6 +99,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 </script>
+
+<?php require_once('registrationForm.php'); ?>
 
 </body>
 </html>

@@ -16,7 +16,10 @@ try {
 
     foreach ($emails as $email) {
 
-        $cmd = "python send_email.py";
+        $python = "/usr/bin/python3";
+	$script = "/home/u3214-ig86wwhdgupy/www/jenniferp216.sg-host.com/public_html/send_email.py";
+	$cmd    = "$python $script";
+
 
         $proc = proc_open($cmd, [
             0 => ["pipe", "r"],

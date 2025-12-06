@@ -58,16 +58,15 @@ else{
 				$os = "l";
 }
 
-if ($os == "l"){
+if ($os == "w"){
 	foreach ($args as $file){
-					exec("rm ".$file);
-					echo $file;
+		exec("del ".$file);
 	}
 }
 
 else{
 	foreach ($args as $file){
-		exec("del ".$file);
+		exec("rm ".$file);
 	}
 }
 

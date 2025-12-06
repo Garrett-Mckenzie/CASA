@@ -5,6 +5,31 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
+
+def queryDatesToDates(queryRows, col):
+    """helper function, grab dates from rows, return them as date time objects
+
+    Args:
+        queryRows (array of tuples): should have a date column
+
+    Returns:
+        array: array of datetime objects
+    """
+    rtnDates = []
+    for row in queryRows:
+        date = row[col]
+        if isinstance(date, (str)):
+            date = date.strip()
+            if date == "": #check if empty (null dates wont be in query)
+                continue
+            datetimeObj = datetime.strptime(date, "%m/%d/%Y")
+            rtnDates.append(datetimeObj)
+            
+        else:
+            datetimeObj = datetime.combine(date, datetime.min.time())
+            rtnDates.append(datetimeObj)
+    return rtnDates
+
 # Total donations over past time (by month, quarter, year)
 #general overall stats (all donations)
 def numDonationsOverTime(queryRows):
@@ -16,16 +41,7 @@ def numDonationsOverTime(queryRows):
     Returns:
         list: [monthTotal,quarterTotal,yearlyTotal]
     """
-    chungus = []
-    for date in queryRows:
-
-        if isinstance(date[0], (str)):
-            dateObj = datetime.strptime(date[0], "%m/%d/%Y")
-            chungus.append(dateObj)
-            
-        else:
-            datetimeObj = datetime.combine(date[0], datetime.min.time())
-            chungus.append(datetimeObj)
+    chungus = queryDatesToDates(queryRows,0)
     
     # cur date
     onFleek = datetime.today()
@@ -140,17 +156,8 @@ def donationGrowth(queryRows, rType):
     """
     #select date from donations:
 
-    donationsDates = []
-    for date in queryRows:
-
-        if isinstance(date[0], (str)):
-            dateObj = datetime.strptime(date[0], "%m/%d/%Y")
-            donationsDates.append(dateObj)
-            
-        else:
-            datetimeObj = datetime.combine(date[0], datetime.min.time())
-            donationsDates.append(datetimeObj)
-
+    donationsDates = queryDatesToDates(queryRows,0)
+    
     today = datetime.today()
     curDonations = 0
     pastDonations = 0
@@ -201,7 +208,14 @@ def goalAchievementRate(eventRows,donationRows):
         if tuple[1] in events["id"].values:
             events.loc[events["id"] == tuple[1],"aggDonations"] += float(tuple[0])
     
-    events["completion"] = ((events["aggDonations"]/events["goalAmount"].astype(float))*100).round(2)
+    goal = events["goalAmount"].astype(float)
+    agg = events["aggDonations"].astype(float)
+
+    events["completion"] = np.where(
+        goal <= 0, 
+        np.where(agg > 0, (100 * agg).round(2), 0.00), 
+        ((agg / goal) * 100).round(2)
+    )
     return events[["id","name","completion"]]
 
 
@@ -236,15 +250,7 @@ def donorAcqRate(queryRows):
         list: [newWithinMonth,newWithinQuarter,newWithinYear]
     """
     #query of every unique donors first donation date
-    donationsDates = []
-    for date in queryRows:
-        if isinstance(date[1], (str)):
-            dateObj = datetime.strptime(date[1], "%m/%d/%Y")
-            donationsDates.append(dateObj)
-            
-        else:
-            datetimeObj = datetime.combine(date[1], datetime.min.time())
-            donationsDates.append(datetimeObj)
+    donationsDates = queryDatesToDates(queryRows,1)
 
     today = datetime.today()
     monthAgo = today - timedelta(days=30)
@@ -279,14 +285,7 @@ def chartNumDonations(queryRows,rType='y',gType='hist',k=1, b=12):
     Returns:
         _type_: _description_
     """
-    donationsDates = []
-    for date in queryRows:
-        if isinstance(date[0], (str)):
-            dateObj = datetime.strptime(date[0], "%m/%d/%Y")
-            donationsDates.append(dateObj)      
-        else:
-            datetimeObj = datetime.combine(date[0], datetime.min.time())
-            donationsDates.append(datetimeObj)
+    donationsDates = queryDatesToDates(queryRows,0)
 
     today = datetime.today()
     if(rType.lower() == "y"):

@@ -55,10 +55,11 @@
                     foreach ($donations as $donation){
                         $totalRaised += $donation["amount"];
                     }
-                    $completion = round($totalRaised/$goal,2)*100;
+                    $safeGoal = ($goal == 0) ? 1: $goal;
+                    $completion = round($totalRaised/$safeGoal,2)*100;
                 }
                 else{
-                    $completion = 0;
+                    $completion = ($goal == 0) ? 100: 0;
                 }
 
                 $completed = ($completion>=100)? 1:0;
@@ -121,20 +122,29 @@
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
             <script>
-            // ---- PHP VALUES ----
-            const raised = <?php echo $totalRaised; ?>;
-            const goal = <?php echo $goal; ?>;
+                // ---- PHP VALUES (Use 'let' as values may be modified for calculation) ----
+                const raised = <?php echo $totalRaised; ?>;
+                const goal = <?php echo $goal; ?>;
 
-            // ---- CHART DATA LOGIC ----
-            let data = [];
-            let labels = [];
-            let colors = [];
-            let percent = Math.round((raised / goal) * 100);
+                // ---- CHART DATA LOGIC ----
+                let data = [];
+                let labels = [];
+                let colors = [];
+                let percent = 0; // Initialize percent
+
+                // --- Goal Safety Check & Percentage Calculation ---
+                if (goal <= 0) {
+                    safeRaised = (raised==0)? 1: raised;
+                    safeGoal = 1;
+                    percent = Math.round((safeRaised/1)*100);
+                } else {
+                    percent = Math.round((raised / goal) * 100);
+                }
 
             // Determine overflow categories
             if (raised <= goal) {
                 // No overflow
-                data = [raised, goal - raised];
+                data = [safeRaised, safeGoal - safeRaised];
                 labels = ['Raised', 'Remaining'];
                 colors = ['#4CAF50', '#e0e0e0']; // green + gray
             } else {

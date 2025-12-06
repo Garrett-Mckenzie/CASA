@@ -317,7 +317,7 @@ if (isset($_GET["editAttempt"]) and isset($_SESSION["editComplete"])){
 
         <div class="mb-3">
             <label>Date of Donation</label>
-            <input type="datetime-local" id="date" name="date">
+            <input type="date" id="date" name="date">
         </div>
 
         <div class="mb-3">

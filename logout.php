@@ -16,7 +16,7 @@ session_write_close();
         <nav>
             <span id="nav-top">
                 <span class="logo">
-                    <img src="images/RAPPAHANNOCK_v_RedBlue.png">
+                    <img src="images/RAPPAHANNOCK_v_RedBlue2.png">
                         <span id="vms-logo"> CASA Donation Management Web Application </span>
                         </span>
                     <img id="menu-toggle" src="images/menu.png">
