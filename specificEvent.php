@@ -47,6 +47,7 @@
             <?php
                 //event attributes
                 $goal = $event["goalAmount"];
+                $goal = ($goal == 0) ? 1 : $goal;
                 $desc = $event["description"];
 
                 $donations = fetch_donations_for_event($get["id"]);
