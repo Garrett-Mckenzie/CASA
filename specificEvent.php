@@ -47,7 +47,6 @@
             <?php
                 //event attributes
                 $goal = $event["goalAmount"];
-                $goal = ($goal == 0) ? 1 : $goal;
                 $desc = $event["description"];
 
                 $donations = fetch_donations_for_event($get["id"]);
@@ -125,6 +124,10 @@
             // ---- PHP VALUES ----
             const raised = <?php echo $totalRaised; ?>;
             const goal = <?php echo $goal; ?>;
+            if (goal == 0){
+                goal = 1;
+                raised = raised +1;
+            }
 
             // ---- CHART DATA LOGIC ----
             let data = [];
