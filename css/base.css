@@ -550,9 +550,9 @@ h1.calendar-header a {
     gap: 0.5rem;
 }
 
-button.cancel, a.cancel {
-    background-color: var(--cancel-button-background-color);
-}
+/*button.cancel, a.cancel {
+    background-color: var(--main-color);
+}*/
 
 button.cancel:hover, a.cancel:hover {
     background-color: var(--accent-color);

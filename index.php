@@ -36,7 +36,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap" rel="stylesheet">
     <title>CASA Donation Management Web Application</title>
-    <link rel="icon" type="image/x-icon" href="images/RAPPAHANNOCK_v_RedBlue2.png">
+    <link rel="icon" type="image/png" href="images/RAPPAHANNOCK_v_RedBlue2.png">
 
     <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
 

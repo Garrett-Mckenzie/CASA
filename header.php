@@ -171,6 +171,7 @@ date_default_timezone_set('America/New_York');
   </script>
 </head>
 
+
 <header>
 
 <?php
@@ -282,10 +283,7 @@ if (isset($_SESSION['access_level'])) {
 <div id="mySideMenu" class="side-menu">
 
     <?php if (!isset($_SESSION['logged_in'])): ?>
-        <div class="menu-section-title">Welcome</div>
-        <a href="index.php">Home</a>
-        <a href="about.php">About Us</a>
-        <a href="apply.php">Apply to Volunteer</a>
+
 
     <?php elseif ($_SESSION['logged_in']): ?>
 
