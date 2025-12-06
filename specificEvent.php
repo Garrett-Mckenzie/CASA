@@ -125,8 +125,8 @@
             const raised = <?php echo $totalRaised; ?>;
             const goal = <?php echo $goal; ?>;
             if (goal == 0){
-                goal = 1;
-                raised = raised +1;
+                const goal = 1;
+                const raised = raised +1;
             }
 
             // ---- CHART DATA LOGIC ----
