@@ -17,10 +17,11 @@ def queryDatesToDates(queryRows, col):
     """
     rtnDates = []
     for row in queryRows:
-        date = row[col].strip()
-        if date == "":
-            continue
-        elif isinstance(date, (str)):
+        date = row[col]
+        if isinstance(date, (str)):
+            date = date.strip()
+            if date == "": #check if empty (null dates wont be in query)
+                continue
             datetimeObj = datetime.strptime(date, "%m/%d/%Y")
             rtnDates.append(datetimeObj)
             
