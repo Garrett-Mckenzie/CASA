@@ -134,9 +134,9 @@
 
                 // --- Goal Safety Check & Percentage Calculation ---
                 if (goal <= 0) {
-                    raised = (raised==0)? 1: raised;
+                    safeRaised = (raised==0)? 1: raised;
                     safeGoal = 1;
-                    percent = Math.round((raised/1)*100);
+                    percent = Math.round((safeRaised/1)*100);
                 } else {
                     percent = Math.round((raised / goal) * 100);
                 }
@@ -144,7 +144,7 @@
             // Determine overflow categories
             if (raised <= safeGoal) {
                 // No overflow
-                data = [raised, safeGoal - raised];
+                data = [safeRaised, safeGoal - safeRaised];
                 labels = ['Raised', 'Remaining'];
                 colors = ['#4CAF50', '#e0e0e0']; // green + gray
             } else {
