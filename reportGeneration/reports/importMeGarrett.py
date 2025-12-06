@@ -213,7 +213,7 @@ def goalAchievementRate(eventRows,donationRows):
 
     events["completion"] = np.where(
         goal <= 0, 
-        np.where(agg > 0, (100 + agg).round(2), 0.00), 
+        np.where(agg > 0, (100 * agg).round(2), 0.00), 
         ((agg / goal) * 100).round(2)
     )
     return events[["id","name","completion"]]
