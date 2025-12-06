@@ -55,7 +55,8 @@
                     foreach ($donations as $donation){
                         $totalRaised += $donation["amount"];
                     }
-                    $completion = round($totalRaised/$goal,2)*100;
+                    $safeGoal = ($goal == 0) ? 1: $goal;
+                    $completion = round($totalRaised/$safeGoal,2)*100;
                 }
                 else{
                     $completion = 0;
