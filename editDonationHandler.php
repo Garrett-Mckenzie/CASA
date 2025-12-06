@@ -118,7 +118,7 @@ else if  (isset($_POST["goal"]) and $_POST["goal"] == "edit"){
 				$result = mysqli_query($con,$query);
 				if (mysqli_num_rows($result) == 0){
 								$_SESSION["editComplete"] = "f";
-								$_SESSION["reason"] = "Donor with info ".$first.", ".$lower.", and ".$email."was not found in our system. You may need to add them first.";
+								$_SESSION["reason"] = "Donor with info ".$first.", ".$lower.", and ".$email."was not found in our system. You may need to <a href='addDonor.php'>add them </a>first.";
 								header("Location: donationAddEdit.php?editAttempt=true");
 								exit();
 				}
