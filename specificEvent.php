@@ -59,7 +59,7 @@
                     $completion = round($totalRaised/$safeGoal,2)*100;
                 }
                 else{
-                    $completion = 0;
+                    $completion = ($goal == 0) ? 100: 0;
                 }
 
                 $completed = ($completion>=100)? 1:0;
@@ -134,20 +134,9 @@
 
                 // --- Goal Safety Check & Percentage Calculation ---
                 if (goal <= 0) {
-                    if (raised > 0) {
-                        percent = Math.round(raised); // If raised is 100, percent is 100. If raised is 150, percent is 150.
-                        let denominator = 1; // A safe, non-zero denominator
-                        percent = Math.round(100 + raised); // This ensures 100% + $1 per raised dollar. (This is highly dependent on how you want the scale to look)
-                        let safeGoal = 1; 
-                        
-                        // If raised > 0, we calculate how many times the raised amount is over the minimum $1 goal
-                        percent = Math.round((raised / safeGoal) * 100); 
-                        if (raised > 0) {
-                            percent = 100;
-                        } else {
-                            percent = 100; // Nothing raised, so 0% progress shown.
-                        }
-                    }
+                    raised = (raised==0)? 1: raised;
+                    goal = 1;
+                    percent = Math.round((raised/1)*100);
                 } else {
                     percent = Math.round((raised / goal) * 100);
                 }
