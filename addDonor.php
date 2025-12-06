@@ -169,7 +169,6 @@
             transform: scale(0.97);
         }
 
-        /* ---- Return Link ---- */
         .button.cancel {
             margin-top: 25px;
             font-size: 16px;
@@ -216,10 +215,6 @@
                 
             </form>
                     
-                <?php
-                    echo "<a class='button cancel' href='index.php' style='margin-top: -.5rem'>Return to Dashboard</a>";
-                ?>
-
                 <!-- Require at least one checkbox be checked -->
                 <script type="text/javascript">
                     $(document).ready(function(){

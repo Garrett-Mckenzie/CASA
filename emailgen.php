@@ -252,11 +252,6 @@ try {
 	    placeholder="Jane Doe, jane@example.com&#10;John Smith, john@example.com"></textarea>
     </div>
 
-    <div class="mb-3">
-	<label class="form-label" for="senderEmail">Sender (Your Email)</label>
-	<input type="email" class="form-control" name="sender" id="senderEmail" required>
-    </div>
-
     <button type="submit" class="btn btn-primary">Generate Email(s)</button>
 </form>
 
