@@ -207,7 +207,14 @@ def goalAchievementRate(eventRows,donationRows):
         if tuple[1] in events["id"].values:
             events.loc[events["id"] == tuple[1],"aggDonations"] += float(tuple[0])
     
-    events["completion"] = ((events["aggDonations"]/events["goalAmount"].astype(float))*100).round(2)
+    goal = events["goalAmount"].astype(float)
+    agg = events["aggDonations"].astype(float)
+
+    events["completion"] = np.where(
+        goal <= 0, 
+        np.where(agg > 0, (100 + agg).round(2), 0.00), 
+        ((agg / goal) * 100).round(2)
+    )
     return events[["id","name","completion"]]
 
 
