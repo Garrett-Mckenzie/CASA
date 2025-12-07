@@ -356,7 +356,7 @@ try {
 	    <div class = "mb-3">
 		<label class="form-label" for="senderText">Sender Name (defaults to Rap CASA)</label>
 		</br>
-		<input kind="text" id="sender" value="" style="width:50%;"> </input>
+		<input kind="text" id="sender" name="sender" value="" style="width:50%;"> </input>
 	    </div>
 
             <button type="submit" class="btn btn-primary">Generate Email(s)</button>
