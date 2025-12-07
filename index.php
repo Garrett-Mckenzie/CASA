@@ -269,13 +269,13 @@
        </div>
 
         <div style="margin-top: 50px; padding: 0 5%;">
-            <h2><b>Admin Dashboard</b></h2>
+            <h2><b>Dashboard</b></h2>
         </div>
 
         <div class="full-width-bar-sub">
             <div class="content-box-test" onclick="window.location.href='import.php'">
                 <div class="icon-overlay">
-                    <img src="images/file-regular.svg" alt="Icon">
+                    <img src="images/toppng.com-file-save-icon-vector-980x980.png" alt="Icon">
                 </div>
                 <img class="background-image" src="images/blank-white-background.jpg" />
                 <div class="large-text-sub">Import Files</div>
@@ -284,7 +284,7 @@
 
             <div class="content-box-test" onclick="window.location.href='export.php'">
                 <div class="icon-overlay">
-                    <img src="images/file-regular.svg" alt="Icon">
+                    <img src="images/toppng.com-ms-excel-icon-microsoft-powerpoint-icon-1557x1588.png" alt="Icon">
                 </div>
                 <img class="background-image" src="images/blank-white-background.jpg" />
                 <div class="large-text-sub">Export Files</div>
@@ -292,7 +292,7 @@
             </div>
 	    <div class="content-box-test" onclick="window.location.href='VolunteerRegister.php'">
                 <div class="icon-overlay">
-                    <img src="images/file-regular.svg" alt="Icon">
+                    <img src="images/add-person.svg" alt="Icon">
                 </div>
                 <img class="background-image" src="images/blank-white-background.jpg" />
                 <div class="large-text-sub">Create New User</div>
@@ -302,7 +302,7 @@
 
             <div class="content-box-test" onclick="window.location.href='emailgen.php'">
                 <div class="icon-overlay">
-                    <img src="images/clipboard-regular.svg" alt="Icon">
+                    <img src="images/toppng.com-email-icon-vector-circle-980x980.png" alt="Icon">
                 </div>
                 <img class="background-image" src="images/blank-white-background.jpg" />
                 <div class="large-text-sub">Generate Emails</div>
@@ -311,7 +311,7 @@
 
 	    <div class="content-box-test" onclick="window.location.href='addDonor.php'">
                 <div class="icon-overlay">
-                    <img src="images/clipboard-regular.svg" alt="Icon">
+                    <img src="images/plus-solid.svg" alt="Icon">
                 </div>
                 <img class="background-image" src="images/blank-white-background.jpg" />
                 <div class="large-text-sub">Add Donors</div>
