@@ -3,6 +3,10 @@ set_time_limit(120);
 ini_set('max_execution_time', 120);
 ini_set('display_errors', 0);
 
+session_start();
+$_SESSION['logged_in'] = "true";
+
+
 // === GLOBAL CONFIG ===
 $env = parse_ini_file(__DIR__ . '/.api_env');
 $OPENAI_API_KEY = $env['OPENAI_API_KEY'] ?? '';
