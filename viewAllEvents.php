@@ -314,8 +314,8 @@
                         $total = 0;
                         if ($donations){
                             foreach ($donations as $d){ $total += $d["amount"]; }
-                            $goal = ($goal==0)? 1: $goal;
-                            $completion = round($total / $goal * 100, 1);
+                            $safeGoal = ($goal==0)? 1: $goal;
+                            $completion = round($total / $safeGoal * 100, 1);
                         } else { $completion = 0; }
                         $isUpcoming = in_array($eventID, $upcomingIDs);
                     ?>
