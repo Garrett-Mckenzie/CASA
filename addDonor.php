@@ -76,6 +76,7 @@
 <html>
     <head>
         <title>Rappahannock CASA | Add Donor</title>
+        <link rel="icon" type="image/png" href="images/RAPPAHANNOCK_v_RedBlue2.png">
         <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap" rel="stylesheet">
         <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
 

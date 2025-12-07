@@ -27,6 +27,7 @@
         <link rel="stylesheet" href="css/messages.css"></link>
         <script src="js/messages.js"></script>
         <title>Rappahannock CASA | Fundraisers</title>
+        <link rel="icon" type="image/png" href="images/RAPPAHANNOCK_v_RedBlue2.png">
     </head>
     <body>
         <?php require_once('header.php') ?>

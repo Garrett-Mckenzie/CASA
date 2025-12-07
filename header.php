@@ -8,6 +8,9 @@ date_default_timezone_set('America/New_York');
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" type="image/png" href="images/RAPPAHANNOCK_v_RedBlue2.png">
+
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap" rel="stylesheet">
 
   <style>
@@ -33,7 +36,7 @@ date_default_timezone_set('America/New_York');
       align-items: center;
       padding: 0 20px;
       z-index: 1000;
-      box-sizing: border-box; /* Ensure padding doesn't widen page */
+      box-sizing: border-box;
     }
 
     /* Logo Container - FIXED STABILITY */
@@ -45,23 +48,24 @@ date_default_timezone_set('America/New_York');
       align-items: center;
       justify-content: center;
 
-      /* New Stability Rules */
-      box-sizing: border-box !important; /* Overrides Bootstrap/Tailwind differences */
-      height: 60px; /* Enforce rigid height (50px img + 10px padding) */
+      /* New Stability Rules to prevent "smashing" */
+      box-sizing: border-box !important;
+      height: 60px;
       width: auto;
-      flex-shrink: 0; /* Prevents logo from squishing on small screens */
+      flex-shrink: 0;
     }
 
     .logo-container a {
-        display: flex; /* Removes link underline spacing issues */
+        display: flex;
         align-items: center;
+        height: 100%;
     }
 
     .logo-container img {
       height: 50px !important; /* Force exact height */
       width: auto !important;  /* Force aspect ratio */
-      max-width: none !important; /* Prevents Bootstrap "max-width: 100%" override */
-      display: block; /* Removes inline text descender spacing */
+      max-width: none !important;
+      display: block;
       filter: brightness(1000%); /* Keeps your white logo effect */
     }
 
@@ -72,7 +76,7 @@ date_default_timezone_set('America/New_York');
       display: flex;
       flex-direction: column;
       gap: 6px;
-      z-index: 1002; /* Above the overlay */
+      z-index: 1002;
     }
     .bar {
       width: 30px;
@@ -90,20 +94,20 @@ date_default_timezone_set('America/New_York');
     /* side menu */
     .side-menu {
       height: 100%;
-      width: 0; /* Hidden by default */
+      width: 0;
       position: fixed;
       z-index: 1001;
       top: 0;
       right: 0;
-      background-color: #00447b; /* Brand Blue */
+      background-color: #00447b;
       overflow-x: hidden;
       transition: 0.4s;
-      padding-top: 80px; /* To start below header area */
+      padding-top: 80px;
       box-shadow: -4px 0 10px rgba(0,0,0,0.2);
     }
 
     .side-menu.open {
-      width: 300px; /* Width when open */
+      width: 300px;
     }
 
     /* Menu Links */
@@ -123,7 +127,7 @@ date_default_timezone_set('America/New_York');
     .side-menu a:hover {
       background-color: #005a9e;
       color: #fff;
-      padding-left: 40px; /* Slide effect */
+      padding-left: 40px;
     }
 
     .side-menu .menu-section-title {
@@ -139,7 +143,7 @@ date_default_timezone_set('America/New_York');
     .side-menu img {
         width: 24px;
         height: 24px;
-        filter: brightness(0) invert(1); /* Turns black icons to white */
+        filter: brightness(0) invert(1);
     }
 
     /* Overlay Background */
@@ -160,13 +164,13 @@ date_default_timezone_set('America/New_York');
       visibility: visible;
     }
 
-    /* --- DATE DISPLAY (Optional, streamlined) --- */
+    /* --- DATE DISPLAY --- */
     .header-date {
         font-weight: bold;
         color: #00447b;
         margin-right: 20px;
-        display: none; /* Hidden on small mobile */
-        white-space: nowrap; /* Prevent date wrapping */
+        display: none;
+        white-space: nowrap;
     }
     @media (min-width: 768px) {
         .header-date { display: block; }
@@ -191,7 +195,7 @@ date_default_timezone_set('America/New_York');
 <header>
 
 <?php
-// Permission Logic (Preserved from your original code)
+// Permission Logic
 $permission_array = [];
 $permission_array['index.php'] = 0;
 $permission_array['about.php'] = 0;
