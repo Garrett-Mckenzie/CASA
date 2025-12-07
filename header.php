@@ -16,7 +16,7 @@ date_default_timezone_set('America/New_York');
     <?php endif; ?>
     body {
       font-family: 'Quicksand', sans-serif;
-      padding-top: 80px; // Space for fixed header
+      padding-top: 80px; /* Space for fixed header */
     }
 
     /* nav */
@@ -33,9 +33,10 @@ date_default_timezone_set('America/New_York');
       align-items: center;
       padding: 0 20px;
       z-index: 1000;
+      box-sizing: border-box; /* Ensure padding doesn't widen page */
     }
 
-    /* Logo Container */
+    /* Logo Container - FIXED STABILITY */
     .logo-container {
       background: #00447b;
       padding: 5px 15px;
@@ -43,10 +44,24 @@ date_default_timezone_set('America/New_York');
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-    .logo-container img {
-      height: 50px;
+
+      /* New Stability Rules */
+      box-sizing: border-box !important; /* Overrides Bootstrap/Tailwind differences */
+      height: 60px; /* Enforce rigid height (50px img + 10px padding) */
       width: auto;
+      flex-shrink: 0; /* Prevents logo from squishing on small screens */
+    }
+
+    .logo-container a {
+        display: flex; /* Removes link underline spacing issues */
+        align-items: center;
+    }
+
+    .logo-container img {
+      height: 50px !important; /* Force exact height */
+      width: auto !important;  /* Force aspect ratio */
+      max-width: none !important; /* Prevents Bootstrap "max-width: 100%" override */
+      display: block; /* Removes inline text descender spacing */
       filter: brightness(1000%); /* Keeps your white logo effect */
     }
 
@@ -151,6 +166,7 @@ date_default_timezone_set('America/New_York');
         color: #00447b;
         margin-right: 20px;
         display: none; /* Hidden on small mobile */
+        white-space: nowrap; /* Prevent date wrapping */
     }
     @media (min-width: 768px) {
         .header-date { display: block; }

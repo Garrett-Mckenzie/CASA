@@ -75,147 +75,155 @@
 ?><!DOCTYPE html>
 <html>
     <head>
-        <?php require_once('universal.inc') ?>
         <title>Rappahannock CASA | Add Donor</title>
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
+
         <style>
-        /* ---- Page Layout ---- */
-        main.date {
+        /* --- GLOBAL RESET & FONTS --- */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f9f9f9;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 30px 20px;
+            min-height: 100vh;
         }
 
-        /* ---- Form Card ---- */
-        #new-event-form {
-            width: 100%;
-            max-width: 920px; /* WIDE FORM */
+        h1 {
+            text-align: center;
+            color: #333;
+            font-weight: 700;
+            margin-top: 30px;
+        }
+
+        /* --- CARD CONTAINER --- */
+        .content-card {
             background: #ffffff;
-            padding: 35px 32px;
-            border-radius: 14px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 900px;
+            margin: 30px auto;
         }
 
         /* ---- Headings ---- */
-        main.date h2 {
-            margin-bottom: 18px;
-            color: #024b79;
-            font-size: 26px;
+        h3 {
+            margin-top: 0;
+            color: #00447b;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-weight: bold;
         }
 
         /* ---- Required indicator note ---- */
         .required-note {
             font-size: 14px;
-            color: #666;
+            color: #d9534f;
             margin: -8px 0 14px 0;
             font-style: italic;
         }
 
         /* ---- Labels ---- */
-        #new-event-form label {
-            font-weight: 600;
-            color: #333;
-            margin-top: 10px;
-            font-size: 15px;
+        label {
+            display: block;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 8px;
+            font-size: 14px;
+            margin-top: 15px;
         }
 
         /* ---- Inputs + textarea ---- */
-        #new-event-form input[type="text"],
-        #new-event-form textarea {
+        input[type="text"], textarea {
             width: 100%;
-            padding: 12px 14px;
-            border-radius: 8px;
-            border: 1px solid #bbb;
+            padding: 12px;
             font-size: 16px;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            border-radius: 8px;
+            border: 1px solid #aaa;
+            font-family: 'Quicksand', sans-serif;
+            box-sizing: border-box;
         }
 
-        /* Large notes box */
-        #new-event-form textarea {
+        textarea {
             min-height: 120px;
             resize: vertical;
         }
 
         /* ---- Focus states ---- */
-        #new-event-form input:focus,
-        #new-event-form textarea:focus {
-            border-color: #2a6fb0;
-            box-shadow: 0 0 4px rgba(42,111,176,0.4);
-            outline: none;
+        input:focus, textarea:focus {
+            border-color: #00447b;
+            outline: 2px solid #00447b;
         }
 
         /* ---- Submit Button ---- */
-        #new-event-form input[type="submit"] {
-            margin-top: 12px;
-            padding: 14px;
-            background: #2a6fb0;
+        input[type="submit"] {
+            margin-top: 25px;
+            padding: 12px 24px;
+            background: #00447b;
             color: white;
             border: none;
             border-radius: 8px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+            width: 100%;
             transition: background 0.2s, transform 0.15s;
         }
 
-        #new-event-form input[type="submit"]:hover {
-            background: #1e5d94;
-        }
-
-        #new-event-form input[type="submit"]:active {
-            transform: scale(0.97);
-        }
-
-        .button.cancel {
-            margin-top: 25px;
-            font-size: 16px;
+        input[type="submit"]:hover {
+            background: #003366;
+            transform: translateY(-2px);
         }
         </style>
 
     </head>
     <body>
         <?php require_once('header.php') ?>
-        <h1>Add Donor</h1>
-        <main class="date">
-            <p style="font-size:14px; color:red; margin-top:-8px; margin-bottom:18px; padding-left:5rem;">
+
+        <div class="content-card">
+            <h3>Add Donor</h3>
+            <p class="required-note">
                 <em>* indicates required fields</em>
             </p>
             <form id="new-event-form" method="POST">
-                <label for="name">* first name</label>
-                <input type="text" id="first" name="first" required placeholder="Enter name"> 
+                <label for="name">* First name</label>
+                <input type="text" id="first" name="first" required placeholder="Enter name">
 
-                <label for="name">* last name</label>
+                <label for="name">* Last name</label>
                 <input type="text" id="last" name="last" required placeholder="Enter name">
 
-                <label for="name"> email</label>
+                <label for="name"> Email</label>
                 <input type="text" id="email" name="email" placeholder="somebody@gmail.com">
 
-                <label for="name"> zip code</label>
+                <label for="name"> Zip code</label>
                 <input type="text" id="zip" name="zip" placeholder="11234">
 
-                <label for="name"> city</label>
+                <label for="name"> City</label>
                 <input type="text" id="city" name="city" placeholder="">
 
-                <label for="name"> state</label>
+                <label for="name"> State</label>
                 <input type="text" id="state" name="state" placeholder="VA, WA, OR, etc">
 
-                <label for="name"> street</label>
+                <label for="name"> Street</label>
                 <input type="text" id="street" name="street" placeholder="">
 
-                <label for="name"> phone #</label>
+                <label for="name"> Phone #</label>
                 <input type="text" id="phone" name="phone" placeholder="">
 
-                <label for="notes">notes</label>
+                <label for="notes">Notes</label>
                 <textarea id="notes" name="notes" placeholder=""></textarea>
-                
-                <input type="submit" value="add donor">
-                
+
+                <input type="submit" value="Add Donor">
+
             </form>
-                    
-                <!-- Require at least one checkbox be checked -->
+
                 <script type="text/javascript">
                     $(document).ready(function(){
                         var checkboxes = $('.checkboxes');
@@ -228,6 +236,8 @@
                         });
                     });
                 </script>
-        </main>
+        </div>
+
+        <?php require_once('footer.php'); ?>
     </body>
 </html>

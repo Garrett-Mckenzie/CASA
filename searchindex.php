@@ -24,8 +24,9 @@ if ($con) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rappahannock CASA | Donor Search</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
 
-    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Get all query type checkboxes
@@ -34,7 +35,7 @@ if ($con) {
             const formContainers = document.querySelectorAll('.query-input-container');
             const searchForm = document.getElementById('search-form');
             const resultsContent = document.getElementById('results-content');
-            
+
             // Function to dynamically show/hide input fields based on checkbox selection
             function updateFormVisibility() {
                 // Get a list of the values of all currently checked checkboxes
@@ -50,7 +51,7 @@ if ($con) {
                 // Iterate through all input containers
                 formContainers.forEach(container => {
                     const containerType = container.getAttribute('data-query-type');
-                    
+
                     // Check if the container's type is in the list of selected criteria
                     if (selectedQueryTypes.includes(containerType)) {
                         // Show the container and apply styling
@@ -79,7 +80,7 @@ if ($con) {
             queryTypeCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', updateFormVisibility);
             });
-            
+
             // Run the visibility update once on page load to set initial state
             updateFormVisibility();
 
@@ -88,7 +89,7 @@ if ($con) {
             async function fetchResults(formData) {
                 // Get all selected query types again
                 const selectedQueries = formData.getAll('query_type');
-                
+
                 // If nothing selected, ensure 'all_donors' is processed
                 if (selectedQueries.length === 0) {
                     selectedQueries.push('all_donors');
@@ -100,11 +101,11 @@ if ($con) {
 
                 // This variable is not used in the current form structure, as each input is distinct
                 const sharedDonorNameValue = formData.get('shared_donor_name_query');
-                
+
                 // Iterate over all selected query types to build the URL parameters
                 selectedQueries.forEach(queryType => {
                     params.append('query_types[]', queryType); // Append the criterion name
-                    
+
                     switch (queryType) {
                         case 'donor_name':
                             // Append input value for donor name search
@@ -143,18 +144,18 @@ if ($con) {
                             break;
                     }
                 });
-                
+
                 // Clean up the trailing ' | ' from the display string
                 displayQuery = displayQuery.replace(/ \| $/, '');
-                
+
                 // Construct the final URL with parameters
                 const url = `${endpoint}?${params.toString()}`;
                 console.log("Fetching URL:", url);
 
                 try {
                     // Make the AJAX request
-                    const response = await fetch(url); 
-                    
+                    const response = await fetch(url);
+
                     // Check if the server returned JSON data
                     const contentType = response.headers.get("content-type");
                     if (contentType && contentType.indexOf("application/json") === -1) {
@@ -166,17 +167,17 @@ if ($con) {
                         const errorData = await response.json();
                         throw new Error(`HTTP error! Status: ${response.status}. Details: ${errorData.details || errorData.error}`);
                     }
-                    
+
                     // Parse the JSON response
                     const results = await response.json();
-                    
+
                     return { results, displayQuery };
 
                 } catch (error) {
                     // Handle fetch or JSON parsing errors
                     console.error("Fetch error:", error);
                     // Display a user-friendly error message
-                    resultsContent.innerHTML = `<p class="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
+                    resultsContent.innerHTML = `<p class="error-msg">
                         An error occurred while fetching data for **${displayQuery}**. Check the console for details. Error: ${error.message}
                         <br>
                         ***NOTE: This might be because the required PHP backend file (${endpoint}) does not exist or doesn't handle multiple criteria.***
@@ -189,38 +190,38 @@ if ($con) {
             searchForm.addEventListener('submit', async (e) => {
                 e.preventDefault(); // Prevent default form submission
                 const formData = new FormData(searchForm); // Get all form data
-                
+
                 // Fetch and get the results
                 const { results, displayQuery } = await fetchResults(formData);
                 // Render the results to the display area
                 renderResults(displayQuery, results);
             });
-            
+
             // Function to format and display the returned data
             function renderResults(displayQuery, data) {
                 resultsContent.innerHTML = '';
-                
+
                 if (data.length === 0) {
                     // Display message if no results found
                     resultsContent.innerHTML = `
-                        <p class="text-sm text-yellow-600 bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                        <p class="no-results">
                             No data found for: **${displayQuery}**.
                         </p>
                     `;
                 } else {
                     // Display result count and start building HTML list
-                    let html = `<p class="text-sm font-medium text-gray-700 mb-3">${data.length} result(s) found for **"${displayQuery}"**:</p>`;
-                    
+                    let html = `<p class="result-count">${data.length} result(s) found for **"${displayQuery}"**:</p>`;
+
                     // Iterate over each result item
                     data.forEach(item => {
                         const name = item.first && item.last ? `${item.first} ${item.last}` : item.name || 'Donor/Event Name';
                         const detail = item.email || item.name || `${item.city || 'N/A'}, ${item.state || 'N/A'}` || 'Details N/A';
-                        const count = item.donation_count ? ` | Donations: ${item.donation_count}` : ''; 
+                        const count = item.donation_count ? ` | Donations: ${item.donation_count}` : '';
                         // Append a formatted card for each donor
                         html += `
-                            <div class="bg-white p-4 mb-2 rounded-lg shadow-sm border border-gray-100 transition duration-150 hover:shadow-md">
-                                <p class="text-base font-semibold text-gray-900">${name}${count}</p>
-                                <p class="text-xs text-indigo-600 font-mono mt-1">${detail}</p>
+                            <div class="result-item">
+                                <p class="result-title">${name}${count}</p>
+                                <p class="result-detail">${detail}</p>
                             </div>
                         `;
                     });
@@ -230,190 +231,237 @@ if ($con) {
         });
     </script>
 		<style>
-    body{
-            font-family: 'Quicksand', sans-serif;
-            background-color: #f9f9f9;
-            margin: 0 auto;
-            padding: 0;
-						justify-content: center;
-						text-align: center;
-						align-self: center;
-						vertical-align: middle;
-        }
-				.footer {
-						background: #00447b;
-						display: flex;
-						justify-content: space-between;
-						align-items: flex-start;
-						padding: 30px 50px;
-						flex-wrap: wrap;
-						margin-top: 50px;
-				}
-				.footer-left { display: flex; flex-direction: column; align-items: center; }
-				.footer-logo { width: 150px; margin-bottom: 15px; }
-				.social-icons { display: flex; gap: 15px; }
-				.social-icons a { color: white; font-size: 20px; }
-				.footer-right { display: flex; gap: 50px; flex-wrap: wrap; }
-				.footer-section { display: flex; flex-direction: column; gap: 10px; color: white; }
-				.footer-topic { font-size: 18px; font-weight: bold; }
-				.footer a { color: white; text-decoration: none; padding: 5px 10px; border-radius: 5px; }
-				.footer a:hover { background: rgba(255, 255, 255, 0.1); }	
-				.box {
-								height: 100%;
-								width: 70%;
-								max-width: 700px;        
-								background: #ffffff;     
-								padding: 2rem;      
-								border-radius: 20px;     
-								box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); 
-								margin: 2rem auto;      
-								font-family: Inter, sans-serif;
-				}
+    /* --- GLOBAL RESET & FONTS --- */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Quicksand', sans-serif;
+        background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    /* --- LAYOUT --- */
+    .content-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        width: 100%;
+        max-width: 800px;
+        margin: 30px auto;
+        text-align: left;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+
+    p.subtitle {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+        margin-bottom: 25px;
+        font-size: 14px;
+    }
+
+    h3 {
+        color: #00447b;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    /* --- FORM ELEMENTS --- */
+    .checkbox-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+        background: #f0f7ff;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid #d0e3ff;
+        margin-bottom: 20px;
+    }
+
+    .checkbox-item {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .checkbox-item input {
+        transform: scale(1.2);
+        margin-right: 10px;
+    }
+
+    label.field-label {
+        display: block;
+        font-weight: bold;
+        color: #444;
+        margin-bottom: 5px;
+        font-size: 14px;
+        margin-top: 15px;
+    }
+
+    input[type="text"], input[type="date"] {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: 1px solid #aaa;
+        font-family: 'Quicksand', sans-serif;
+        background-color: #fff;
+    }
+
+    input:focus {
+        outline: 2px solid #00447b;
+        border-color: #00447b;
+    }
+
+    /* --- UTILITY CLASSES FOR JS --- */
+    .hidden { display: none !important; }
+    .space-y-4 > * { margin-bottom: 15px; }
+
+    /* --- BUTTONS --- */
+    .btn-primary {
+        background-color: #00447b;
+        color: white;
+        padding: 14px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 8px;
+        border: none;
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 20px;
+    }
+
+    .btn-primary:hover {
+        background-color: #003366;
+        transform: translateY(-2px);
+    }
+
+    /* --- RESULTS STYLING --- */
+    .result-item {
+        background: white;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        border: 1px solid #eee;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .result-title { font-weight: bold; color: #333; margin: 0; }
+    .result-detail { color: #666; font-size: 13px; margin: 5px 0 0 0; }
+    .result-count { margin-bottom: 15px; font-weight: bold; color: #00447b; }
+    .no-results { color: #856404; background-color: #fff3cd; padding: 10px; border-radius: 5px; }
+    .error-msg { color: #721c24; background-color: #f8d7da; padding: 10px; border-radius: 5px; }
     </style>
 </head>
 
 <body>
     <?php require_once('header.php') ?>
 
-    <div class = "box">
-        <header class="text-center">
-            <h1 class="text-3xl font-extrabold text-gray-900">
-                Donor Search
-            </h1>
-            <p class="mt-2 text-sm text-gray-500">
+    <div class="content-card">
+        <header>
+            <h1>Donor Search</h1>
+            <p class="subtitle">
                 Select one or more criteria below. Donors must match **ALL** selected criteria.
             </p>
         </header>
 
-        <form id="search-form" class="space-y-6">
-            
-            <div class="border p-4 rounded-lg bg-gray-50 border-gray-200">
-                <p class="block text-sm font-semibold text-gray-700 mb-3">Select Query Mode(s):</p>
-                <div class="grid grid-cols-2 gap-3 sm:grid-cols-3"> 
-                    <!-- makes Donor Name checkbox -->
-                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
-                        <input type="checkbox" name="query_type" value="donor_name" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
-                        <span class="ml-2 text-sm font-medium text-gray-700">Donor by Name</span>
-                    </label>
-                    <!-- makes event Donors checkbox -->
-                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
-                        <input type="checkbox" name="query_type" value="event_donors" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
-                        <span class="ml-2 text-sm font-medium text-gray-700">Event by Name</span>
-                    </label>
-                    <!-- makes Donors zip checkbox -->
-                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
-                        <input type="checkbox" name="query_type" value="donor_zip" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
-                        <span class="ml-2 text-sm font-medium text-gray-700">Donor zip</span>
-                    </label>
-                    <!-- makes Donor donations date range checkbox -->
-                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
-                        <input type="checkbox" name="query_type" value="donors_by_donation_range_in" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
-                        <span class="ml-2 text-sm font-medium text-gray-700">Donors *IN* Date Range</span>
-                    </label>
-                    <!-- makes Donors by donations date range not in checkbox -->
-                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
-                        <input type="checkbox" name="query_type" value="donors_by_donation_range_not_in" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
-                        <span class="ml-2 text-sm font-medium text-gray-700">Donors *NOT IN* Date Range</span>
-                    </label>
-                    <!-- makes Thankd Donors checkbox -->
-                    <label class="flex items-center p-3 rounded-lg border cursor-pointer hover:bg-white transition bg-white/50">
-                        <input type="checkbox" name="query_type" value="Thanked_donors" class="h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
-                        <span class="ml-2 text-sm font-medium text-gray-700">Thanked donors</span>
-                    </label>
+        <form id="search-form">
 
-                    </div>
+            <div class="checkbox-grid">
+                <label class="checkbox-item">
+                    <input type="checkbox" name="query_type" value="donor_name">
+                    Donor by Name
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="query_type" value="event_donors">
+                    Event by Name
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="query_type" value="donor_zip">
+                    Donor zip
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="query_type" value="donors_by_donation_range_in">
+                    Donors IN Date Range
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="query_type" value="donors_by_donation_range_not_in">
+                    Donors NOT IN Date Range
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="query_type" value="Thanked_donors">
+                    Thanked donors
+                </label>
             </div>
 
-            <div class="space-y-4" id="dynamic-inputs">
-                    <!-- inputs needed for 'donor_name' -->
-                <div class="query-input-container hidden" data-query-type="donor_name">
-                    <label for="donor-name-input-name" class="block text-sm font-semibold text-gray-700 mb-2">Donor Name (First or First & Last)</label>
-                    <input type="text" id="donor-name-input-name" name="donor_name_query_name" placeholder="e.g., Jane Doe" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+            <div id="dynamic-inputs">
+                    <div class="query-input-container hidden" data-query-type="donor_name">
+                    <label for="donor-name-input-name" class="field-label">Donor Name (First or First & Last)</label>
+                    <input type="text" id="donor-name-input-name" name="donor_name_query_name" placeholder="e.g., Jane Doe" required-if-active>
                 </div>
-                    <!-- inputs needed for 'event_donors' -->
-                <div class="query-input-container hidden" data-query-type="event_donors">
-                    <label for="donor-event-input-events" class="block text-sm font-semibold text-gray-700 mb-2">Event Name (shows donors who donated at event) </label>
-                    <input type="text" id="donor-event-input-events" name="event_query_name" placeholder="e.g., test" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                    <div class="query-input-container hidden" data-query-type="event_donors">
+                    <label for="donor-event-input-events" class="field-label">Event Name (shows donors who donated at event) </label>
+                    <input type="text" id="donor-event-input-events" name="event_query_name" placeholder="e.g., test" required-if-active>
                 </div>
-                    <!-- inputs needed for 'zip' -->
-                <div class="query-input-container hidden" data-query-type="donor_zip">
-                    <label for="zip-input" class="block text-sm font-semibold text-gray-700 mb-2">Donor Zip Code</label>
-                    <input type="text" id="zip-input" name="zip_query" placeholder="e.g., 22401" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                    <div class="query-input-container hidden" data-query-type="donor_zip">
+                    <label for="zip-input" class="field-label">Donor Zip Code</label>
+                    <input type="text" id="zip-input" name="zip_query" placeholder="e.g., 22401" required-if-active>
                 </div>
-                    <!-- inputs needed for 'donor by donation in range' -->
-                <div class="query-input-container hidden" data-query-type="donors_by_donation_range_in">
-                    <label for="start-date-in" class="block text-sm font-semibold text-gray-700 mb-2">Start Date (YYYY-MM-DD)</label>
-                    <input type="date" id="start-date-in" name="start_date_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
-                    <label for="end-date-in" class="block text-sm font-semibold text-gray-700 mb-2 mt-4">End Date (YYYY-MM-DD)</label>
-                    <input type="date" id="end-date-in" name="end_date_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                    <div class="query-input-container hidden" data-query-type="donors_by_donation_range_in">
+                    <label for="start-date-in" class="field-label">Start Date (YYYY-MM-DD)</label>
+                    <input type="date" id="start-date-in" name="start_date_in" required-if-active>
+                    <label for="end-date-in" class="field-label">End Date (YYYY-MM-DD)</label>
+                    <input type="date" id="end-date-in" name="end_date_in" required-if-active>
                 </div>
-                    <!-- inputs needed for 'donor by donation not in range' -->
-                <div class="query-input-container hidden" data-query-type="donors_by_donation_range_not_in">
-                    <label for="start-date-not-in" class="block text-sm font-semibold text-gray-700 mb-2">Start Date (YYYY-MM-DD)</label>
-                    <input type="date" id="start-date-not-in" name="start_date_not_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
-                    <label for="end-date-not-in" class="block text-sm font-semibold text-gray-700 mb-2 mt-4">End Date (YYYY-MM-DD)</label>
-                    <input type="date" id="end-date-not-in" name="end_date_not_in" class="w-full appearance-none bg-white p-3 border border-gray-300 rounded-lg shadow-inner text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required-if-active>
+                    <div class="query-input-container hidden" data-query-type="donors_by_donation_range_not_in">
+                    <label for="start-date-not-in" class="field-label">Start Date (YYYY-MM-DD)</label>
+                    <input type="date" id="start-date-not-in" name="start_date_not_in" required-if-active>
+                    <label for="end-date-not-in" class="field-label">End Date (YYYY-MM-DD)</label>
+                    <input type="date" id="end-date-not-in" name="end_date_not_in" required-if-active>
                 </div>
-                    <!-- inputs needed for 'thanked_donors' -->
-                <div class="query-input-container hidden" data-query-type="Thanked_donors">
-                    <p class="text-sm text-gray-500 p-2 border border-gray-200 rounded-lg bg-gray-50">returning only donors who have been thanked.</p>
+                    <div class="query-input-container hidden" data-query-type="Thanked_donors">
+                    <p style="color:#666; font-style:italic; margin-top:15px;">Returning only donors who have been thanked.</p>
                 </div>
-                    <!-- inputs needed for 'all_donors' -->
-                <div class="query-input-container hidden" data-query-type="all_donors">
-                    <p class="text-sm text-gray-500 p-2 border border-gray-200 rounded-lg bg-gray-50">This returns a list of **ALL** donors. Click "Execute Query".</p>
+                    <div class="query-input-container hidden" data-query-type="all_donors">
+                    <p style="color:#666; font-style:italic; margin-top:15px;">This returns a list of **ALL** donors. Click "Execute Query".</p>
                 </div>
-                
+
             </div>
-            <!-- submit button -->
-            <div class="pt-2">
-                <button type="submit"
-                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-base font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 ease-in-out transform hover:scale-[1.01] active:scale-[0.99]">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    Execute Query
-                </button>
-            </div>
-            
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-search"></i> Execute Query
+            </button>
+
         </form>
+    </div>
 
-        <div id="results-display" class="mt-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
-            <h3 class="text-lg font-semibold text-gray-800 mb-3">
-                <span class="text-indigo-600">Query</span> Results
-            </h3>
-            <div id="results-content" class="text-sm text-gray-600 space-y-2">
-                <p>Select one or more criteria above and click 'Execute Query'.</p>
-            </div>
+    <div class="content-card" id="results-display" style="margin-top:0;">
+        <h3>Query Results</h3>
+        <div id="results-content">
+            <p>Select one or more criteria above and click 'Execute Query'.</p>
         </div>
-    </div>  
-    <footer class="footer">
-        <div class="footer-left">
-            <img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">
-            <div class="social-icons">
-               <a href="#"><i class="fab fa-facebook"></i></a>
-               <a href="#"><i class="fab fa-twitter"></i></a>
-               <a href="#"><i class="fab fa-instagram"></i></a>
-               <a href="#"><i class="fab fa-linkedin"></i></a>
-            </div>
-        </div>
+    </div>
 
-        <div class="footer-right">
-            <div class="footer-section">
-               <div class="footer-topic">Connect</div>
-               <a href="https://www.facebook.com/RappCASA/" target="_blank">Facebook</a>
-               <a href="https://www.instagram.com/rappahannock_casa/" target="_blank">Instagram</a>
-               <a href="https://rappahannockcasa.com/" target="_blank">Main Website</a>
-            </div>
-            <div class="footer-section">
-               <div class="footer-topic">Contact Us</div>
-               <a href="mailto:rappcasa@gmail.com">rappcasa@gmail.com</a>
-               <a href="tel:5407106199">540-710-6199</a>
-            </div>
-        </div>
-    </footer>
-    <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
-
-
-
-
-
+    <?php require_once('footer.php'); ?>
 </body>
 </html>

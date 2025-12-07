@@ -191,92 +191,177 @@ try {
 <head>
 <meta charset="UTF-8">
 <title>Email Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
+
+<style>
+    /* --- GLOBAL RESET & FONTS --- */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    body {
+        font-family: 'Quicksand', sans-serif !important;
+        background-color: #f9f9f9 !important;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    /* Pushes footer to bottom */
+    .page-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    h3 {
+        margin-top: 0;
+        color: #00447b;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+
+    /* --- CARD CONTAINER --- */
+    .content-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        width: 100%;
+        max-width: 900px;
+        margin: 30px auto;
+    }
+
+    /* --- FORM ELEMENTS OVERRIDE --- */
+    label.form-label {
+        font-weight: bold;
+        color: #444;
+        font-size: 14px;
+    }
+
+    .form-control, .form-select {
+        border-radius: 8px !important;
+        border: 1px solid #aaa !important;
+        padding: 12px !important;
+        font-family: 'Quicksand', sans-serif;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #00447b !important;
+        box-shadow: 0 0 0 0.25rem rgba(0, 68, 123, 0.25) !important;
+    }
+
+    /* --- BUTTONS --- */
+    .btn-primary {
+        background-color: #00447b !important;
+        border-color: #00447b !important;
+        padding: 12px 24px;
+        font-weight: bold;
+        border-radius: 8px;
+        width: 100%;
+    }
+
+    .btn-primary:hover {
+        background-color: #003366 !important;
+        transform: translateY(-2px);
+    }
+</style>
 </head>
 
-<body class="p-4 bg-light">
-<div class="container mt-4 p-4 bg-white rounded shadow">
+<body>
+<?php require_once('header.php'); ?>
 
-<h3 class="mb-3">AI Email Generator</h3>
+<div class="page-wrapper">
+    <div class="content-card">
 
-<form id="emailForm">
+        <h3 class="mb-3">AI Email Generator</h3>
 
-    <!-- Event + Unthanked Donors UI -->
-    <div class="mb-3">
-	<label class="form-label" for="eventSelect">Select Event (optional)</label>
-	<select class="form-select" id="eventSelect">
-	    <option value="">-- Choose an event --</option>
-	    <?php foreach ($events as $ev): ?>
-		<option value="<?= htmlspecialchars($ev['id']) ?>">
-		    <?= htmlspecialchars($ev['name']) ?>
-		    <?php if (!empty($ev['startDate'])): ?>
-			(<?= htmlspecialchars($ev['startDate']) ?>
-			<?php if (!empty($ev['endDate']) && $ev['endDate'] !== $ev['startDate']): ?>
-			    – <?= htmlspecialchars($ev['endDate']) ?>
-			<?php endif; ?>
-			)
-		    <?php endif; ?>
-		</option>
-	    <?php endforeach; ?>
-	</select>
-	<div class="form-text">
-	    Pick an event to load donors who donated to it and have <strong>not yet been thanked</strong>.
-	    Click a donor to add them to the Recipients list below.
-	</div>
+        <form id="emailForm">
+
+            <div class="mb-3">
+            <label class="form-label" for="eventSelect">Select Event (optional)</label>
+            <select class="form-select" id="eventSelect">
+                <option value="">-- Choose an event --</option>
+                <?php foreach ($events as $ev): ?>
+                <option value="<?= htmlspecialchars($ev['id']) ?>">
+                    <?= htmlspecialchars($ev['name']) ?>
+                    <?php if (!empty($ev['startDate'])): ?>
+                    (<?= htmlspecialchars($ev['startDate']) ?>
+                    <?php if (!empty($ev['endDate']) && $ev['endDate'] !== $ev['startDate']): ?>
+                        – <?= htmlspecialchars($ev['endDate']) ?>
+                    <?php endif; ?>
+                    )
+                    <?php endif; ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
+            <div class="form-text">
+                Pick an event to load donors who donated to it and have <strong>not yet been thanked</strong>.
+                Click a donor to add them to the Recipients list below.
+            </div>
+            </div>
+
+            <div class="mb-3">
+            <label class="form-label">Unthanked Donors for Selected Event</label>
+            <ul id="donorList" class="list-group"></ul>
+            </div>
+
+            <div class="mb-3">
+            <label class="form-label" for="reasonSelect">Reason</label>
+            <select class="form-select" name="reason" id="reasonSelect">
+                <option>Thank Donor</option>
+                <option>Solicit Donation</option>
+                <option>Event Alert</option>
+            </select>
+            </div>
+
+            <div class="mb-3">
+            <label class="form-label" for="customPrompt">Custom Prompt (optional)</label>
+            <textarea class="form-control" name="custom_prompt" id="customPrompt" rows="3"
+                placeholder="Add additional instructions: tone, details, style..."></textarea>
+            </div>
+
+            <div class="mb-3">
+            <label class="form-label" for="recipientsTextarea">Recipients (one per line as 'Name, Email')</label>
+            <textarea class="form-control" name="recipients" id="recipientsTextarea" rows="4"
+                placeholder="Jane Doe, jane@example.com&#10;John Smith, john@example.com"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Generate Email(s)</button>
+        </form>
+
+        <div class="modal fade" id="emailModal" tabindex="-1">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+
+              <div class="modal-header">
+            <h5 class="modal-title">Preview Generated Email(s)</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+
+              <div class="modal-body" id="emailListContainer"></div>
+
+              <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success" id="sendAllBtn">Send All</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
     </div>
-
-    <div class="mb-3">
-	<label class="form-label">Unthanked Donors for Selected Event</label>
-	<ul id="donorList" class="list-group"></ul>
-    </div>
-
-    <div class="mb-3">
-	<label class="form-label" for="reasonSelect">Reason</label>
-	<select class="form-select" name="reason" id="reasonSelect">
-	    <option>Thank Donor</option>
-	    <option>Solicit Donation</option>
-	    <option>Event Alert</option>
-	</select>
-    </div>
-
-    <div class="mb-3">
-	<label class="form-label" for="customPrompt">Custom Prompt (optional)</label>
-	<textarea class="form-control" name="custom_prompt" id="customPrompt" rows="3"
-	    placeholder="Add additional instructions: tone, details, style..."></textarea>
-    </div>
-
-    <div class="mb-3">
-	<label class="form-label" for="recipientsTextarea">Recipients (one per line as 'Name, Email')</label>
-	<textarea class="form-control" name="recipients" id="recipientsTextarea" rows="4"
-	    placeholder="Jane Doe, jane@example.com&#10;John Smith, john@example.com"></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Generate Email(s)</button>
-</form>
-
-<!-- Modal -->
-<div class="modal fade" id="emailModal" tabindex="-1">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-
-      <div class="modal-header">
-	<h5 class="modal-title">Preview Generated Email(s)</h5>
-	<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body" id="emailListContainer"></div>
-
-      <div class="modal-footer">
-	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-	<button type="button" class="btn btn-success" id="sendAllBtn">Send All</button>
-      </div>
-
-    </div>
-  </div>
 </div>
 
-</div>
+<?php require_once('footer.php'); ?>
 
 <script>
 // Load unthanked donors when selecting an event

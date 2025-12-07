@@ -9,7 +9,6 @@
 <head>
     <title>Rappahannock CASA | Register</title>
     <link href="css/normal_tw.css" rel="stylesheet">
-<!-- BANDAID FIX FOR HEADER BEING WEIRD -->
 <?php
 $tailwind_mode = true;
 require_once('header.php');
@@ -29,9 +28,8 @@ require_once('header.php');
         padding-right: 50px;
     }
 </style>
-<!-- BANDAID END, REMOVE ONCE SOME GENIUS FIXES -->
 </head>
-<body class="relative">
+<body class="relative flex flex-col min-h-screen">
 <?php
     require_once('domain/Person.php');
     require_once('database/dbPersons.php');
@@ -44,7 +42,7 @@ require_once('header.php');
 
         $required = array(
             'first_name', 'last_name',
-            
+
             'username', 'password'
         );
 
@@ -84,7 +82,6 @@ require_once('header.php');
 </div>
 <?php endif; ?>
 
-<!-- Auto-hide popup -->
 <script>
 window.addEventListener('DOMContentLoaded', () => {
     const popup = document.getElementById('popupMessage');
@@ -101,6 +98,8 @@ window.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <?php require_once('registrationForm.php'); ?>
+
+<?php require_once('footer.php'); ?>
 
 </body>
 </html>

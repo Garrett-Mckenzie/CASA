@@ -47,6 +47,9 @@
         body {
             font-family: 'Quicksand', sans-serif;
             background-color: #f9f9f9; /* Subtle background color */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         h2 {
@@ -229,46 +232,6 @@
         }
         .content-box-test:hover .arrow-button {
             transform: translateX(5px);
-        }
-
-        /* --- FOOTER --- */
-        .footer {
-            background: #00447b;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 40px 5%;
-            color: white;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-
-        .footer-left {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .footer-logo { width: 120px; margin-bottom: 15px; }
-
-        .social-icons { display: flex; gap: 15px; }
-        .social-icons a { color: white; font-size: 20px; transition: 0.3s; }
-        .social-icons a:hover { color: #dcdcdc; }
-
-        .footer-right {
-            display: flex;
-            gap: 40px;
-        }
-
-        .footer-section { display: flex; flex-direction: column; gap: 8px; }
-        .footer-topic { font-weight: bold; font-size: 18px; margin-bottom: 5px; }
-        .footer-section a { color: #e0e0e0; text-decoration: none; font-size: 15px; }
-        .footer-section a:hover { text-decoration: underline; color: white; }
-
-        /* Responsive Fixes */
-        @media (max-width: 768px) {
-            .footer { flex-direction: column; text-align: center; }
-            .footer-right { flex-direction: column; gap: 20px; }
         }
    </style>
 </head>
@@ -465,31 +428,7 @@
 
     <div style="width: 90%; height: 1px; background: #ddd; margin: 70px auto;"></div>
 
-    <footer class="footer">
-        <div class="footer-left">
-            <img src="images/RAPPAHANNOCK_v_White-300x300.png" alt="Logo" class="footer-logo">
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin"></i></a>
-            </div>
-        </div>
-
-        <div class="footer-right">
-            <div class="footer-section">
-                <div class="footer-topic">Connect</div>
-                <a href="https://www.facebook.com/RappCASA/" target="_blank">Facebook</a>
-                <a href="https://www.instagram.com/rappahannock_casa/" target="_blank">Instagram</a>
-                <a href="https://rappahannockcasa.com/" target="_blank">Main Website</a>
-            </div>
-            <div class="footer-section">
-                <div class="footer-topic">Contact Us</div>
-                <a href="mailto:rappcasa@gmail.com">rappcasa@gmail.com</a>
-                <a href="tel:5407106199">540-710-6199</a>
-            </div>
-        </div>
-    </footer>
+    <?php require_once('footer.php'); ?>
 
 </body>
 </html>
