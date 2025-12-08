@@ -11,23 +11,25 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST)){
 				$req = $_POST['export'];
 				if($req === 'donor'){
 								$query = "SELECT * FROM donors";
-								$export_file = "exports" . DIRECTORY_SEPARATOR . "donorExport.xlsx";
 				}
 				elseif($req === 'donation'){
 								$query = "SELECT * FROM donations";
-								$export_file = "exports" . DIRECTORY_SEPARATOR . "donationExport.xlsx";
 				}
 				else{
 								header("Location: ../export.php?success=0");
 				}
 
-				if(file_exists($export_file)){
-								if($_POST['overwrite'] !== 'true'){
-												header("Location: ../export.php?success=0&error=file_exists");
-												exit;
-								}
-								unlink($export_file);
+				#fuck siteground useless fucking ass shit hosting service
+				$count = 25;
+				$randomVar = "Export";
+				while ($count > 0){
+								$num = rand(0,9);
+								$randomVar = $randomVar . strval($num);
+								$count -= 1;
 				}
+
+				$export_file = "exports" . DIRECTORY_SEPARATOR . $randomVar . ".xlsx";
+
 				if($export_file != null) { 
 								exec("python -u \"$python_script\" -e \"$query\" \"$export_file\"", $output, $return_var);
 				}

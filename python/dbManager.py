@@ -41,13 +41,16 @@ def export_excel():
         data = []
         for row in cursor:
             data.append(list(row))
+
         df = pd.DataFrame(data,columns = cols) 
+
         try:
-            os.system("rm exports/Export.xlsx")
+            os.system("rm exports/*.xlsx")
         except Exception as e:
+            print("here")
             print(e)
             pass
-        df.to_excel('exports/Export.xlsx', index=False)
+        df.to_excel(output_file, index=False)
         return 0
 
     except Exception as e:
