@@ -406,14 +406,14 @@ if (isset($_GET["searchAttempt"]) and isset($_SESSION["searchComplete"]) and iss
        echo '<table class="casa-table">';
        echo '<thead>';
        echo '<tr>';
-       echo '<th>Amount</th>';
-       echo '<th>Reason</th>';
+       echo '<th>Amount Donated</th>';
+       echo '<th>Reason For Donation</th>';
        echo '<th>Date (mm-dd-yyyy)</th>';
-       echo '<th>Fees</th>';
+       echo '<th>Associated Fees</th>';
        echo '<th>Thanked</th>';
        echo '<th>First Name</th>';
        echo '<th>Last Name</th>';
-       echo '<th>Email</th>';
+       echo '<th>Email Address</th>';
        echo '<th>Zip</th>';
        echo '<th>City</th>';
        echo '<th>Save</th>';

@@ -3,6 +3,10 @@ set_time_limit(120);
 ini_set('max_execution_time', 120);
 ini_set('display_errors', 0);
 
+session_start();
+$_SESSION['logged_in'] = "true";
+
+
 // === GLOBAL CONFIG ===
 $env = parse_ini_file(__DIR__ . '/.api_env');
 $OPENAI_API_KEY = $env['OPENAI_API_KEY'] ?? '';
@@ -41,7 +45,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'unthanked_donors') {
 	}
 	$lines = array_filter(array_map('trim', explode("\n", $multiple)));
 	foreach ($lines as $line) {
-		if (strpos($line, ',') === false) continue;
+		if (strpos($line, ',') === false){
+			continue;
+		}
 		list($rname, $remail) = array_map('trim', explode(',', $line, 2));
 		$responses[] = generate_email($reason, $sender, $rname, $remail, $custom_prompt);
 	}
@@ -81,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	header('Content-Type: application/json');
 
 	$reason        = $_POST['reason'] ?? '';
-	$sender        = $_POST['sender'] ?? '';
+	$sender        = $_POST['sender'] ?? 'Rap CASA';
 	$multiple      = trim($_POST['recipients'] ?? '');
 	$custom_prompt = $_POST['custom_prompt'] ?? '';
 
@@ -94,7 +100,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	$lines = array_filter(array_map('trim', explode("\n", $multiple)));
 	foreach ($lines as $line) {
-		if (strpos($line, ',') === false) continue;
+		if (strpos($line, ',') === false){
+			$responses[] = generate_email($reason, $sender, $rname, $remail, $custom_prompt);
+		}
 		list($rname, $remail) = array_map('trim', explode(',', $line, 2));
 		$responses[] = generate_email($reason, $sender, $rname, $remail, $custom_prompt);
 	}
@@ -109,6 +117,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 function generate_email($reason, $sender, $recipient_name, $recipient_email, $custom_prompt)
 {
 	global $OPENAI_API_KEY, $OPENAI_MODEL;
+
+	if ($recipient_name == "" or $recipient_email == ""){
+		return [
+			'success'  => true,
+			'name'     => $recipient_name,
+			'email'    => $recipient_email,
+			'response' => "Inputs for name,email do not follow the correct format of first name last name, email"
+		];
+	}
 
 	$prompt =
 		"Write a short, warm, professional donor email.\n" .
@@ -336,6 +353,12 @@ try {
                 placeholder="Jane Doe, jane@example.com&#10;John Smith, john@example.com"></textarea>
             </div>
 
+	    <div class = "mb-3">
+		<label class="form-label" for="senderText">Sender Name (defaults to Rap CASA)</label>
+		</br>
+		<input kind="text" id="sender" name="sender" value="" style="width:50%;"> </input>
+	    </div>
+
             <button type="submit" class="btn btn-primary">Generate Email(s)</button>
         </form>
 
@@ -423,7 +446,7 @@ const res = await fetch('', { method:'POST', body: formData });
 const data = await res.json();
 
 if (!data.success) {
-	alert(data.error || 'Failed to generate emails.');
+	alert(data.error || 'Failed to generate emails check the name,email input for errors.');
 	return;
 }
 

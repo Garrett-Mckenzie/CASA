@@ -16,6 +16,7 @@ if (isset($_POST["goal"]) and $_POST["goal"] == "search"){
 				$min =$_POST["minAmount"];
 
 				#extract date
+				$date = trim($date);
 				if ($date != ""){
 								$year = substr($date,0,4);
 								$month = substr($date,5,2);
@@ -122,12 +123,19 @@ else if  (isset($_POST["goal"]) and $_POST["goal"] == "edit"){
 								header("Location: donationAddEdit.php?editAttempt=true");
 								exit();
 				}
+				else if (mysqli_num_rows($result) > 1){
+								$_SESSION["editComplete"] = "f";
+								$_SESSION["reason"] = "Duplicate Donor detected. There are problems in our database contact someone technical";
+								header("Location: donationAddEdit.php?editAttempt=true");
+								exit();
+
+				}
 				else{
-								$donorID = $result->fetch_all()[0][0][0];
+								$donorID = ($result->fetch_all())[0][0];
 				}
 
 				#handle date
-				$date = $_POST["date"];
+				$date = trim($_POST["date"]);
 				if ($date != ""){
 								try{
 												$datetime = DateTime::createFromFormat('m#d#Y',$date);
@@ -152,7 +160,7 @@ else if  (isset($_POST["goal"]) and $_POST["goal"] == "edit"){
 				}
 
 				#edit
-				#note that there is not logic here, everytime there is an edit
+				#note that there is no logic here, everytime there is an edit
 				#that information gets put into the database as long as there are no
 				#flaws in the edit request.
 

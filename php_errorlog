@@ -83,3 +83,55 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/editDonationHandler.php on line 3
+[06-Dec-2025 13:34:15 America/New_York] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php:80
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php on line 80
+[06-Dec-2025 13:34:15 America/New_York] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/customer/www/jenniferp216.sg-host.com/public_html/specificEvent.php:58
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/specificEvent.php on line 58
+[06-Dec-2025 14:20:36 America/New_York] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php:80
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php on line 80
+[06-Dec-2025 14:20:48 America/New_York] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php:80
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php on line 80
+[06-Dec-2025 14:26:28 America/New_York] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php:80
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php on line 80
+[06-Dec-2025 14:48:39 America/New_York] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php:80
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php on line 80
+[06-Dec-2025 14:54:27 America/New_York] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php:80
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php on line 80
+[06-Dec-2025 14:56:16 America/New_York] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php:80
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php on line 80
+[06-Dec-2025 14:57:46 America/New_York] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php:80
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php on line 80
+[06-Dec-2025 21:28:51 America/New_York] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/customer/www/jenniferp216.sg-host.com/public_html/viewAllEvents.php:317
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/viewAllEvents.php on line 317
+[06-Dec-2025 21:29:11 America/New_York] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/customer/www/jenniferp216.sg-host.com/public_html/viewAllEvents.php:317
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/viewAllEvents.php on line 317
+[06-Dec-2025 21:29:27 America/New_York] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php:80
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/date.php on line 80
+[06-Dec-2025 21:30:19 America/New_York] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/customer/www/jenniferp216.sg-host.com/public_html/viewAllEvents.php:317
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/jenniferp216.sg-host.com/public_html/viewAllEvents.php on line 317

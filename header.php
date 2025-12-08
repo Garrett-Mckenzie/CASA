@@ -309,6 +309,7 @@ if (isset($_SESSION['access_level'])) {
 
         <a href="index.php">Home / Dashboard</a>
         <a href="calendar.php">Calendar</a>
+        <a href="viewAllEvents.php">Event Management</a>
 
         <?php if ($_SESSION['access_level'] <= 1): ?>
             <div class="menu-section-title">Volunteering</div>
@@ -323,35 +324,34 @@ if (isset($_SESSION['access_level'])) {
         <?php endif; ?>
 
         <?php if ($_SESSION['access_level'] >= 2): ?>
-            <div class="menu-section-title">Admin Tools</div>
+            <div class="menu-section-title">Tools</div>
 	    <a href="/VolunteerRegister.php">
                 <img src="images/add-person.svg"> Add Users
             </a>
 
 	    <a href="/addDonor.php">
-                <img src="images/add-person.svg"> Add Donor
+                <img src="images/plus-solid.svg"> Add Donor
             </a>
 
 
             <a href="/searchindex.php">
-                <img src="images/add-person.svg"> Search Database
+                <img src="images/search.svg"> Seairch Database
             </a>
             <a href="emailgen.php">
-                <img src="images/add-person.svg"> Email Gen
+                <img src="images/toppng.com-email-icon-vector-circle-980x980.png"> Email Gen
             </a>
             <a href="ReportGeneration.php">
-                <img src="images/add-person.svg"> Report Gen
+                <img src="images/clipboard-regular.svg"> Report Gen
             </a>
 
             <div class="menu-section-title">Data Management</div>
             <a href="import.php">
-                 <img src="images/plus-solid.svg"> Import Data
+                 <img src="images/toppng.com-file-save-icon-vector-980x980.png"> Import Data
             </a>
             <a href="export.php">
-                 <img src="images/list-solid.svg"> Export Data
+                 <img src="images/toppng.com-ms-excel-icon-microsoft-powerpoint-icon-1557x1588.png"> Export Data
             </a>
 
-            <a href="viewAllEvents.php">Event Management</a>
         <?php endif; ?>
 
         <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.2);">
