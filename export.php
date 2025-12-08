@@ -14,6 +14,7 @@ if (isset($_SESSION['_id'])) {
     $accessLevel = $_SESSION['access_level'];
     $userID = $_SESSION['_id'];
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -198,9 +199,10 @@ if (isset($_SESSION['_id'])) {
                 echo '</div>';
             }
             else if ($status == 1){
+
                 echo '<div class="message-box message-success">';
                 echo '<i class="fas fa-check-circle"></i> The file was exported successfully! <br>';
-                echo 'Your download should begin shortly, or <a href="./python/exports/Export.xlsx" download="Export.xlsx">Click Here</a>.';
+                echo 'Your download should begin shortly, or <a href="'.$_GET["file"].'" download="'.$_GET["file"].'">Click Here</a>.';
                 echo '</div>';
             }
         }
