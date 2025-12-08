@@ -321,7 +321,7 @@
 
             <div class="content-box-test" onclick="window.location.href='donationAddEdit.php'">
                 <div class="icon-overlay">
-                    <img src="images/clipboard-regular.svg" alt="Icon">
+                    <img src="images/toppng.com-dollar-sign-circle-svg-icon-free-dollar-sign-svg-icon-980x982.png" alt="Icon">
                 </div>
                 <img class="background-image" src="images/blank-white-background.jpg" />
                 <div class="large-text-sub">Add/Edit Donations</div>

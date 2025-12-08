@@ -329,11 +329,6 @@ if (isset($_SESSION['access_level'])) {
                 <img src="images/add-person.svg"> Add Users
             </a>
 
-	    <a href="/addDonor.php">
-                <img src="images/plus-solid.svg"> Add Donor
-            </a>
-
-
             <a href="/searchindex.php">
                 <img src="images/search.svg"> Seairch Database
             </a>
@@ -345,6 +340,16 @@ if (isset($_SESSION['access_level'])) {
             </a>
 
             <div class="menu-section-title">Data Management</div>
+
+	    <a href="/addDonor.php">
+                <img src="images/plus-solid.svg"> Add Donor
+            </a>
+
+	    <a href="/donationAddEdit.php">
+                <img src="images/toppng.com-dollar-sign-circle-svg-icon-free-dollar-sign-svg-icon-980x982.png"> Add/Edit Donations
+            </a>
+
+
             <a href="import.php">
                  <img src="images/toppng.com-file-save-icon-vector-980x980.png"> Import Data
             </a>
