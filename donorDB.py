@@ -1,14 +1,9 @@
 #!/usr/bin/env python
 # Server interaction script
 import sys
-from importlib.metadata import distributions
-from pathlib import Path
-from python.credentials import HOST, USER, PASSWORD, DATABASE
-import pandas as pd
-import random
-import numpy as np
 from python.insertFunctions import *
 import mysql.connector
+import os
 
 SYSTEM = os.name
 
@@ -26,8 +21,6 @@ def connect():
 
 # Export
 def search_donors(info):
-    query = sys.argv[2]
-    output_file = sys.argv[3]
     try:
         conn = connect()
         cursor = conn.cursor(buffered=True)
@@ -67,7 +60,7 @@ def search_donors(info):
                 city = item.split("=")[1]
                 city = city.replace('"', '').replace("'", "")
                 city = city.strip()
-                
+
             elif "state=" in item:
                 state = item.split("=")[1]
                 state = state.replace('"', '').replace("'", "")
@@ -88,17 +81,20 @@ def search_donors(info):
                 gender = gender.replace('"', '').replace("'", "")
                 gender = gender.strip()
         
-        queryFrom = "SELECT (" + ("first, " if first is not None else "") + ("last, " if last is not None else "") + ("email, " if email is not None else "") + ("zip, " if zipcode is not None else "") + ("city, " if city is not None else "") + ("state, " if state is not None else "") + ("street, " if street is not None else "") + ("phone, " if phone is not None else "") + ("gender, " if gender is not None else "") + ")"
+        queryFrom = "SELECT (" + ("first, " if first is not None else "") + ("last, " if last is not None else "") + ("email, " if email is not None else "") + ("zip, " if zipcode is not None else "") + ("city, " if city is not None else "") + ("state, " if state is not None else "") + ("street, " if street is not None else "") + ("phone, " if phone is not None else "") + ("gender, " if gender is not None else "")
         queryLimit = " FROM donors WHERE " + ("first=%s AND " if first is not None else "") + ("last=%s AND " if last is not None else "") + ("email=%s AND " if email is not None else "") + ("zip=%s AND " if zipcode is not None else "") + ("city=%s AND " if city is not None else "") + ("state=%s AND " if state is not None else "") + ("street=%s AND " if street is not None else "") + ("phone=%s AND " if phone is not None else "") + ("gender=%s AND " if gender is not None else "")
         queryFrom = queryFrom[:-2]  # Remove the last ', '
+        queryFrom += ")"
 
         queryLimit = queryLimit[:-5]  # Remove the last ' AND '
         query = queryFrom + queryLimit
         query += ";"
 
+        open(r"C:\xampp\apache\logs\error.log", "a").write(f"Executing query: {query} with params: {tuple(filter(None, [first, last, email, zipcode, city, state, street, phone, gender]))}\n")
         cursor.execute(query, tuple(filter(None, [first, last, email, zipcode, city, state, street, phone, gender])))
+        open(r"C:\xampp\apache\logs\error.log", "a").write(f"Query executed successfully.\n")
         res = cursor.fetchall()
-        open("pyLog.txt", "a").write(f"Query returned {len(res)} results\n")
+        open(r"C:\xampp\apache\logs\error.log", "a").write(f"Query result: {res}\n")
         return res
         
 

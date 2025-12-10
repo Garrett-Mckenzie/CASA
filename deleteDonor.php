@@ -45,10 +45,10 @@
 		<div>
             <form id="donorSearch" method="post">
                 <table id="step1H">
-                    <tr><th>1</th><th>Search Donor</th></tr>
+                    <tr><th><strong>1</strong></th><th><strong>Search Donor</strong></th></tr>
                     <tr><td>First Name</td><td><input id="firstname" name="firstSearch" type="text"></td></tr>
                     <tr><td>Last Name</td><td><input id="lastname" name="lastSearch" type="text"></td></tr>
-                    <tr><td><button type="submit">Search</button></td></tr>
+                    <tr class="searchButton"><td class="searchButton"><button class="searchButton" type="submit">Search</button></td></tr>
                 </table>
             </form>
             <?php
@@ -67,14 +67,40 @@
                         echo file_exists("donorDB.py") ? "<p>py file exists</p>" : "<p>donorDB.py file not found.</p>";
                     }
 
-                    echo $res ? "<p>Python script executed successfully. Output:</br>$res</p>" : "<p>No output from Python script.</p>";
+                    echo <<<RES
+                        <table>
+                            <tr><th>Select</th><th>Donor ID</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Phone</th></tr>
+                        RES;
+                        foreach($res as $row){
+                            $cols = explode(",", $row);
+                            if(count($cols) < 6) {
+                                continue; // Skip malformed rows
+                            }
+                            $donorID = htmlspecialchars($cols[0]);
+                            $firstName = htmlspecialchars($cols[1]);
+                            $lastName = htmlspecialchars($cols[2]);
+                            $email = htmlspecialchars($cols[3]);
+                            $phone = htmlspecialchars($cols[4]);
+                            echo <<<ROW
+                                <tr>
+                                    <td><input type="checkbox" name="deleteDonor[]" value="{$donorID}"></td>
+                                    <td>{$donorID}</td>
+                                    <td>{$firstName}</td>
+                                    <td>{$lastName}</td>
+                                    <td>{$email}</td>
+                                    <td>{$phone}</td>
+                                </tr>
+                            ROW;
+                        }
+                        echo "</table>";
+                        
                 }
             ?>
             <form id="donorDelete" method="post">
                 <table id="step2H">
                     <tr><th>2</th><td>Delete Donor</td></tr>
                     <tr id="donorList"></tr>
-                    <tr><td><button type="submit">Delete</button></td></tr>
+                    <tr class="delButton"><td class="delButton"><button class="delButton" type="submit">Delete</button></td></tr>
                 </table>
             </form>
         </div>

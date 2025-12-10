@@ -10,3 +10,16 @@ th, td {
     border: 20px;
     text-align: left;
 }
+
+.delButton, .searchButton {
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+strong{
+    font-weight: bold;
+    color: #1926e0;
+}
