@@ -42,61 +42,41 @@
         <?php include('header.php'); ?>
 	</head>
 	<main>
-        <script type="text/javascript">
-            // Fetches donors based on first and last name input
-            function showDonors(){
-                var first = document.getElementById("firstname").value;
-                var last = document.getElementById("lastname").value;
-
-                if(first !== "" && last !== ""){
-                    exec("donorDB.py -s " + first + " " + last, function(output){
-                        var donors = output.trim().split("\n");
-                        var select = document.getElementById("donors");
-                        select.innerHTML = "";
-
-                        donors.forEach(function(donor){
-                            var parts = donor.split(" - ");
-                            if(parts.length === 2){
-                                var nameEmail = parts[0];
-                                var email = parts[1];
-                                var nameParts = nameEmail.split(" ");
-                                var firstName = nameParts[0];
-                                var lastName = nameParts.slice(1).join(" ");
-                                var option = document.createElement("option");
-                                option.value = donor; // Assuming donor string is unique identifier
-                                option.text = nameEmail + " - " + email;
-                                select.appendChild(option);
-                            }
-                        });
-                    });
-                }
-            }
-            // Removes selected donors from the database
-            function removeDonors(){
-                var select = document.getElementById("donors");
-                var selected = Array.from(select.selectedOptions).map(option => option.value);
-
-                var xhttp = new XMLHttpRequest();
-                xhttp.open("POST", "deleteDonor.php", true);
-                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhttp.send("deleteIDs=" + JSON.stringify(selected));
-            }
-        </script>
 		<div>
-            <table id="step1H">
-                <tr><th>1</th><th>Search Donor</th></tr>
-                <tr><td>First Name</td><td><input id="firstname" type="text"></td></tr>
-                <tr><td>Last Name</td><td><input id="lastname" type="text"></td></tr>
-                <tr><td><button onclick="showDonors()">Search</button></td></tr>
-            </table>
-            <table id="step2H">
-                <tr><th>2</th><td>Delete Donor</td></tr>
-                <tr id="donorList"><td>
-                    <select id="donors" multiple size="10" style="width:300px;">
-                    </select>
-                </tr>
-                <tr><td><button onclick="removeDonors()">Delete</button></td></tr>
-            </table>
+            <form id="donorSearch" method="post">
+                <table id="step1H">
+                    <tr><th>1</th><th>Search Donor</th></tr>
+                    <tr><td>First Name</td><td><input id="firstname" name="firstSearch" type="text"></td></tr>
+                    <tr><td>Last Name</td><td><input id="lastname" name="lastSearch" type="text"></td></tr>
+                    <tr><td><button type="submit">Search</button></td></tr>
+                </table>
+            </form>
+            <?php
+                if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['firstSearch']) && isset($_POST['lastSearch'])){
+                    
+                    $call = 'python -u "donorDB.py" -s "first=' . escapeshellarg($_POST['firstSearch']) . '" "last=' . escapeshellarg($_POST['lastSearch']) . '"';
+                    
+                    echo <<<TEST
+                    <p>Call: {$call}</p>
+                    <p>POST Requests: "{$_POST['firstSearch']} {$_POST['lastSearch']}"</p>
+                    TEST;
+
+                    exec($call, $res, $return_var);
+                    if($return_var != 0) {
+                        echo "<p>Error executing Python script. Return code: $return_var</p>";
+                        echo file_exists("donorDB.py") ? "<p>py file exists</p>" : "<p>donorDB.py file not found.</p>";
+                    }
+
+                    echo $res ? "<p>Python script executed successfully. Output:</br>$res</p>" : "<p>No output from Python script.</p>";
+                }
+            ?>
+            <form id="donorDelete" method="post">
+                <table id="step2H">
+                    <tr><th>2</th><td>Delete Donor</td></tr>
+                    <tr id="donorList"></tr>
+                    <tr><td><button type="submit">Delete</button></td></tr>
+                </table>
+            </form>
         </div>
 	</main>
 </html>
